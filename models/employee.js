@@ -1,4 +1,4 @@
-﻿var mongoose = require('mongoose');
+﻿﻿var mongoose = require('mongoose');
 var User = require('./user');
 
 var clientSchema = User.discriminator('employee', new mongoose.Schema(
