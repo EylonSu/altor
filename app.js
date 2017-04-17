@@ -27,6 +27,8 @@ var clientSignUp = require('./routes/client-sign-up')(router, passport);
 var businessSignUp = require('./routes/business-sign-up')(router, passport);
 var login = require('./routes/login')(router, passport);
 var admin = require('./routes/admin')(router, passport);
+var fakeNet =require('./routes/fakeNetwork')(router);
+var fakeBranch = require('./routes/fakeBranch')(router);
 /// ====================other routing==========================
 var routes = require('./routes/routes')(router);
 

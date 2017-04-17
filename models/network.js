@@ -1,6 +1,6 @@
 ﻿﻿var mongoose = require('mongoose');
 
-var networkSchema = mongoose.Schema(
+var networkSchema =  mongoose.Schema(
     {
         name: { type: String, required: true, trim: true },
         managers: [mongoose.Schema.Types.ObjectId],
@@ -18,4 +18,4 @@ var networkSchema = mongoose.Schema(
         branches: [mongoose.Schema.Types.ObjectId]
     });
 
-module.exports = networkSchema;
+module.exports = mongoose.model('network', networkSchema);

@@ -2,7 +2,7 @@
 
 var branchSchema = mongoose.Schema(
     {
-        //network: ObjectId //TODO altor+
+        //branch: ObjectId //TODO altor+
         name: { type: String, required: true, trim: true },
         managers: [{ type: [mongoose.Schema.Types.ObjectId], required: true }],
         email: { type: String, required: true, trim: true },
