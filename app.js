@@ -30,6 +30,7 @@ var admin = require('./routes/admin')(router, passport);
 var fakeNet =require('./routes/fakeNetwork')(router);
 var fakeBranch = require('./routes/fakeBranch')(router);
 var network =require ('./routes/network')(router);
+var searchResults = require('./routes/searchResults')(router);
 /// ====================other routing==========================
 var routes = require('./routes/routes')(router);
 

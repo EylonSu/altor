@@ -10,25 +10,15 @@
             <div class="col-lg-12">
                 <div class="intro-message">
                     <h1><%= title %></h1>
-                    <h3><%= network.email %>  :צור קשר  </h3>
+                    <h3> Mange your life </h3>
                     <hr class="intro-divider">
-
-                        <h3>בחר סניף</h3>
+                    <h3>תוצאות החיפוש</h3>
 
                         <div class="list-group">
-                            <% branches.forEach(function(branch){ %>
-                            <a href=/network?branch=<%= branch.name %> class="list-group-item list-group-item-action"><%= branch.name %></a>
+                            <% serachResults.forEach(function(result){ %>
+                            <a href=/network?net=<%= result.tempStr %> class="list-group-item list-group-item-action"><%= result.tempStr %></a>
                             <% }); %>
                         </div>
-                    <h3>בחר סוג שרות</h3>
-                    <div class="dropdown">
-                        <button class="btn btn-default dropdown-toggle" type="button" id="menu1" data-toggle="dropdown">Categories
-                            <span  class="caret"></span></button>
-                        <ul  class="dropdown-menu col-lg-12" role="menu" aria-labelledby="menu1">
-                            <% network.categories.forEach(function(category){ %>
-                            <li role="presentation"><a role="menuitem" tabindex="-1" href=/network/<%= category %>><%= category %></a></li>
-                            <% }); %>
-                        </ul>
                     <% if (user && user.role == 'client') { %>
                     <div> You are logged in as a user! email: <%= user.email %></div>
                     <% } else if (user) { %>

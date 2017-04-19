@@ -7,8 +7,8 @@ module.exports = function (router ) {
     router.get('/fakeBranch', function (req, res, next) {
 
         var newBranch = new branch();
-        newBranch.name = 'branch Beit dagan';
-        newBranch.email = 'roniBranch@walla.com';
+        newBranch.name = 'branch';
+        newBranch.email = 'michal@walla.com';
         //newBranch.categories = {'פן','תספורת גברים'};
         newBranch.categories.push("פן");
         newBranch.categories.push("גבות");
