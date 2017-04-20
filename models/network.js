@@ -15,7 +15,6 @@ var networkSchema =  mongoose.Schema(
             number: Number
         },
         messages: [require('../models/schemes/message')],
-      //  branches: [mongoose.Schema.Types.ObjectId]
         branches:  [{ type: mongoose.Schema.Types.ObjectId, ref: "Branch" }]
     });
 

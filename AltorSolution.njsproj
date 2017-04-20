@@ -45,9 +45,17 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="models\user.js" />
+    <Compile Include="public\js\network.js">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="public\js\search_results.js">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="routes\admin.js" />
+    <Compile Include="routes\branch.js" />
     <Compile Include="routes\business-sign-up.js" />
     <Compile Include="routes\client-sign-up.js" />
+    <Compile Include="routes\blank.js" />
     <Compile Include="routes\index.js" />
     <Compile Include="routes\login.js" />
     <Compile Include="routes\routes.js" />
@@ -56,9 +64,11 @@
     <Content Include="public\stylesheets\bootstrap.min.css" />
     <Content Include="public\stylesheets\style.css" />
     <Content Include="views\pages\admin.ejs" />
+    <Content Include="views\pages\branch.ejs" />
     <Content Include="views\pages\business-sign-up.ejs" />
     <Content Include="views\pages\client-sign-up.ejs" />
     <Content Include="views\pages\error.ejs" />
+    <Content Include="views\pages\blank.ejs" />
     <Content Include="views\pages\index.ejs" />
     <Content Include="views\pages\login.ejs" />
     <Content Include="views\partials\header.ejs" />

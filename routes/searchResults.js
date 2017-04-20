@@ -1,59 +1,32 @@
-/**
- * Created by MaorDavidzon on 4/17/2017.
- */
 var similarity = require("similarity")
 var network = require('../models/network');
 var branch = require('../models/branch');
-module.exports = function (router ) {
-    /* GET signup page. */
+
+module.exports = function (router)
+{
     router.get('/searchResults', function (req, res, next) {
         var query = req.query.srchItem;
-        network.find({}, function (err, networks)
+		network.find({}, { name: true }, function (err, networks)
         {
-            var strSimilarArr = [];
-            var temp = networks;
+            var searchResults = [];
+
             for(var i = 0; i < networks.length ; i++ ){
-                var tempStr =networks[i].name;
-                var tempSim = similarity(query,tempStr);
-                if(tempSim > 0.17){
-                    strSimilarArr.push({tempStr, tempSim});
+				var network_name = networks[i].name;
+				var network_id = networks[i]._id.toString();
+				var howMuchSimilar = similarity(query, network_name);
+				if (howMuchSimilar > 0.17)
+				{
+					searchResults.push({ network_name, network_id });
                 }
             }
-            strSimilarArr.sort(function (a,b)
+            searchResults.sort(function (a,b)
             {
-                return a.tempSim < b.tempSim;
+                return a.howMuchSimilar < b.howMuchSimilar;
             })
 
-            res.render('pages/searchResults', {title: 'תוצאות חיפוש עבור:' + query, user: req.user , serachResults : strSimilarArr});
+            res.render('pages/searchResults', {title: 'תוצאות חיפוש עבור:' + query, user: req.user , serachResults : searchResults});
         })
 
     });
-
-    router.post('/network', function(req, res, next){
-        network.findOne({'name': req.body.srchItem})
-               .populate('branches')
-               .exec(function (err, f_network)
-               {
-                   var nir = f_network.branches[1].name;
-               });
-
-
-
-
-        network.findOne({'name': req.body.srchItem}, function (err, f_network)
-        {
-            branch.find({'_id' : '58f4c4f76d161f2f34d3d114'}, function (err, data){
-                data
-            });
-            //var temp2 = temp.then();
-            if (err)
-            {
-                res.redirect('/error');
-            }
-
-            res.render('pages/network', {title: 'Wellcome to ' + f_network.name + ' bussines page!', user: req.user, network: f_network});
-        });
-    });
-
 };
 
