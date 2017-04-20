@@ -17,7 +17,7 @@
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'" />
   <PropertyGroup Condition="'$(Configuration)' == 'Release'" />
   <ItemGroup>
-    <Compile Include="shared\client_signup.js">
+    <Compile Include="public\js\client_signup.js">
       <SubType>Code</SubType>
     </Compile>
     <Content Include="package.json" />
@@ -69,7 +69,7 @@
     <Folder Include="config" />
     <Folder Include="models" />
     <Folder Include="models\schemes\" />
-    <Folder Include="shared\" />
+    <Folder Include="public\js\" />
     <Folder Include="public" />
     <Folder Include="public\stylesheets" />
     <Folder Include="routes" />
