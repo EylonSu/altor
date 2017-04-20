@@ -1,7 +1,6 @@
 <% layout('boilerplate') %>
 
 <div class="container">
-    <% include ../partials/messages.ejs%>
     <div class="row">
         <div class="col-md-12">
             <h1>Registered Users</h1>
@@ -11,14 +10,6 @@
     <div class="row">
         <div class="col-lg-2 well well-sm">
             <%= user.email %> (<%= user.role %>)
-        </div>
-        <div class="col-lg-7">
-            <form action="/send-message?email=<%= user.email %>" method="post">
-                <div class="form-group">
-                    <input type="text" class="form-control" placeholder="Type message..." name="content">
-                    <button type="submit" class="btn btn-default">Send message</button>
-                </div>
-            </form>
         </div>
         <div class="col-lg-3">
             <a href="/del-user?email=<%= user.email %>" class="btn btn-default">delete</a>

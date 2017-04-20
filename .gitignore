@@ -1,6 +1,13 @@
 ﻿################################################################################
 # This .gitignore file was automatically created by Microsoft(R) Visual Studio.
 ################################################################################
-
+/.idea
+/.vs
+/AltorSolution
+/bin/*.dll
+/obj
 /node_modules
-.suo
+*.suo
+*.njsproj
+*.sln
+*.gitignore

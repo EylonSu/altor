@@ -4,11 +4,12 @@ var PassportUtils = require('../config/passport-utils');
 var userSchema = new mongoose.Schema(
     {
         full_name: { type: String, required: true, trim: true },
-        firstName: String,
-        lastName: String,
+        first_name: String,
+        last_name: String,
         email: { type: String, required: true, trim: true },
         password: { type: String, required: true },
-        phone: { type: String, trim: true },
+		phone: { type: String, trim: true },
+		join_date: Date,
         mesaages: [require('../models/schemes/message')]
     },
     { discriminatorKey: 'role' });
