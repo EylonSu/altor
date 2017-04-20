@@ -12,11 +12,11 @@ module.exports = function (router, passport)
 	{
 		if (req.user)
 		{
-			res.render('pages/index', { title: 'Altor - Home', user: req.user });
+			res.render('pages/index', { title: 'Altor - Home', user: req.user , messege:""});
 		}
 		else
 		{
-			res.render('pages/index', { title: 'Altor - Home', user: req.user });
+			res.render('pages/index', { title: 'Altor - Home', user: req.user , messege:"" });
 		}
 	});
 };

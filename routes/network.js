@@ -10,6 +10,9 @@ module.exports = function (router)
 			.populate('branches')
 			.exec(function (err, network)
 			{
+				if(err){
+                    res.render('pages/index', { title: 'Altor - Home', user: req.user , messege : "אירעה תקלה במערכת. אנא נסה שנית" });
+                }
 				res.render('pages/network', { user: req.user, network: network});
 			});
 	});
