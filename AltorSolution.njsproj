@@ -17,7 +17,6 @@
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'" />
   <PropertyGroup Condition="'$(Configuration)' == 'Release'" />
   <ItemGroup>
-    <Content Include="מסכים.jpg" />
     <Content Include="package.json" />
     <Content Include="README.md" />
     <Compile Include="app.js" />
@@ -60,6 +59,7 @@
     <Content Include="views\pages\index.ejs" />
     <Content Include="views\pages\login.ejs" />
     <Content Include="views\partials\header.ejs" />
+    <Content Include="מסכים.jpg" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="bin" />
