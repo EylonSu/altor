@@ -10,7 +10,8 @@ module.exports = function (router, passport)
 			.populate('managers', 'employees')
 			.exec(function (err, branch)
 			{
-				res.render('pages/branch', { user: req.user, branch: branch });
+				var adr = branch.address.street + " " + branch.address.number + " " + branch.address.city + " " + branch.address.country;
+				res.render('pages/branch', { user: req.user, branch: branch ,address :adr });
 			}
 	)});
 };

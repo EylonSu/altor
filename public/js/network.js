@@ -1,13 +1,14 @@
 ﻿var geocoder;
 var map;
-var address = "beit dagan , israel";
 
-function initialize()
+
+function initialize(adr)
 {
+    var address = adr;
 	geocoder = new google.maps.Geocoder();
 	var latlng = new google.maps.LatLng(-34.397, 150.644);
 	var myOptions = {
-		zoom: 8,
+		zoom: 15,
 		center: latlng,
 		mapTypeControl: true,
 		mapTypeControlOptions: { style: google.maps.MapTypeControlStyle.DROPDOWN_MENU },
