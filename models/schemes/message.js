@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 
-var messageSchema = mongoose.Schema(
+var messageSchema =  mongoose.Schema(
     {
         subject: { type: String, required: true },
         from: { type: mongoose.Schema.Types.ObjectId, required: true },
@@ -11,3 +11,4 @@ var messageSchema = mongoose.Schema(
     });
 
 module.exports = messageSchema;
+
