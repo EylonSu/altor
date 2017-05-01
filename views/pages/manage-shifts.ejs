@@ -1,0 +1,32 @@
+<% layout('boilerplate') %>
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <h1><span class="fa fa-sign-in"></span>Add branch</h1>
+            <% services.forEach(function(service){ %>
+            <div class="row">
+                <div class="col-md-12">
+                    <%= service.name %> (<%= service.duration %>) <%= service.note %>
+                </div>
+            </div>
+            <% }); %>
+            <!-- Add Branch -->
+            <form action="/add-shift" method="post">
+                <div class="form-group">
+                    <label>Branch name:</label>
+                    <input type="text" class="form-control" name="branchName">
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="text" class="form-control" name="email">
+                </div>
+                <div class="form-group">
+                    <label>Phone</label>
+                    <input type="text" class="form-control" name="phone">
+                </div>
+                <button type="submit" class="btn btn-warning btn-lg">Add branch</button>
+            </form>
+            <hr>
+        </div>
+    </div>
+</div>

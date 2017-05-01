@@ -4,6 +4,7 @@ var PassportUtils = require('./passport-utils');
 var User = require('../models/user');
 var Business = require('../models/business');
 var Client = require('../models/client');
+var Network = require('../models/network');
 
 module.exports = function (passport)
 {
@@ -83,31 +84,46 @@ module.exports = function (passport)
 			// asynchronous
 			process.nextTick(function ()
 			{
-				// TODO: Add input email format validation
-				// if the user is not already logged in:
-				if (!req.user)
-				{
-					User.findOne({ 'email': email }, function (err, business)
-					{
-						// if there are any errors, return the error
-						if (err)
-							return done(err);
+                if (PassportUtils.ValidateEmail(email) == false)
+                {
+                    return done(null, false, req.flash('signupMessage', 'the email is not valid.'));
+                }
+                var error = { errorDes: '' };
+                if (!PassportUtils.validatePassword(password, error))
+                {
+                    return done(null, false, req.flash('signupMessage', error.errorDes));
+                }
+                if (!req.user)
+                {
+                    User.findOne({ 'email': email }, function (err, user)
+                    {
+                        // if there are any errors, return the error
+                        if (err)
+                            return done(err);
 
-						// check to see if there's already a user with that email
-						if (business)
-						{
-							return done(null, false, req.flash('signupMessage', 'That email is already taken.'));
-						}
-						else
-						{
-
-							// create the user
+                        // check to see if theres already a user with that email
+                        if (user)
+                        {
+                            return done(null, false, req.flash('signupMessage', 'That email is already taken.'));
+                        }
+                        else
+                        {
+							// create the business
 							var newBusiness = new Business();
 							newBusiness.role = 'business';
 							newBusiness.email = email;
 							newBusiness.password = newBusiness.generateHash(password);
 							newBusiness.joinDate = new Date();
-
+							// Create the network
+							var network = new Network();
+							network.name = req.body.name;
+                            network.categories.push(req.body.category);
+                            network.address.country = req.body.country;
+                            network.address.city = req.body.city;
+                            network.address.street = req.body.street;
+                            network.save();
+                            newBusiness.network = network.id;
+                            console.log(newBusiness.business);
 							newBusiness.save(function (err)
 							{
 								if (err)

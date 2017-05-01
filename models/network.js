@@ -4,15 +4,13 @@ var networkSchema =  mongoose.Schema(
     {
         name: { type: String, required: true, trim: true },
         managers: [mongoose.Schema.Types.ObjectId],
-        email: { type: String, required: true, trim: true },
         categories: [String],
         logo_path: { type: String },
         address:
         {
             country: String,
             city: String,
-            street: String,
-            number: Number
+            street: String
         },
         messages: [require('../models/schemes/message')],
         branches:  [{ type: mongoose.Schema.Types.ObjectId, ref: "Branch" }]

@@ -14,9 +14,7 @@ var clientSchema = User.discriminator('employee', new mongoose.Schema(
                 start_time: Date,
                 end_time: Date
             }],
-
             availability_str: String,
-
             appointments:
             [{
                 client: mongoose.Schema.Types.ObjectId,

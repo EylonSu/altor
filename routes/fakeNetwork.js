@@ -14,8 +14,7 @@ module.exports = function (router ) {
         newNetwork.categories.push("גבות");
         newNetwork.address.city = 'בית דגן';
         newNetwork.address.country = 'ישראל';
-        newNetwork.address.street = 'החבצלת';
-        newNetwork.address.number =1;
+        newNetwork.address.street = 'החבצלת 1';
 
         newNetwork.managers.push("58cd79c1e7730001b0b8faf3");
         newNetwork.managers.push("58e6336c7e58b72c149f2078");
