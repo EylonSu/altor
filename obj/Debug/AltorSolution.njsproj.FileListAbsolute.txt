@@ -1,2 +1,0 @@
-C:\Users\eylon\Source\Repos\altor\bin\Microsoft.NodejsTools.WebRole.dll
-C:\Users\eylon\Source\Repos\altor\obj\Debug\AltorSolution.njsprojResolveAssemblyReference.cache
