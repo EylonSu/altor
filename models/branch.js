@@ -1,5 +1,4 @@
-﻿
-﻿var mongoose = require('mongoose');
+﻿﻿var mongoose = require('mongoose');
 var branchSchema = mongoose.Schema(
     {
         //branch: ObjectId //TODO altor+
