@@ -2,8 +2,11 @@
 
 var shiftSchema = mongoose.Schema(
     {
-        duration: Number,
-        working_employees: [mongoose.Schema.Types.ObjectId]
+        shiftId: Number,
+        working_employees: [{
+            service: {type: [mongoose.Schema.ObjectId], ref: "service", required: true},
+            numOfServiceProviders: Number
+        }]
     });
 
 module.exports = shiftSchema;

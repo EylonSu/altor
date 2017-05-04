@@ -1,4 +1,3 @@
-
 var network = require('../models/network');
 var branch = require('../models/branch');
 module.exports = function (router)

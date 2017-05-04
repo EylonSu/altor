@@ -1,5 +1,4 @@
 ﻿﻿var mongoose = require('mongoose');
-
 var branchSchema = mongoose.Schema(
     {
         //branch: ObjectId //TODO altor+
@@ -18,10 +17,9 @@ var branchSchema = mongoose.Schema(
         },
         //queues: [require('../models/queue')], //TODO altor+
         employees: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }], //        branches:  [{ type: mongoose.Schema.Types.ObjectId, ref: "Branch" }]
-
-        shifts: [require('../models/schemes/shift')],
+        workdays: [require('../models/schemes/workday')],
         messages: [require('../models/schemes/message')],
-        services: [require('../models/schemes/service')],
+        services: [require('../models/schemes/service')]
     });
 
 module.exports = mongoose.model('Branch', branchSchema);
