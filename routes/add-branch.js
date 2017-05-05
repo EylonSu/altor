@@ -12,7 +12,7 @@ module.exports = function (router, passport)
     router.post('/add-branch', [function (req, res, next)
     {
         Network.findOne({'_id' : req.user.network }, function(err, network){
-            console.log(network);
+            console.log(network);//TODO restrict access to this page unless signed in
             if (err) {
                 console.log(err);
             }

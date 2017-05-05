@@ -1,30 +1,13 @@
-/**
- * Created by dell on 01/05/2017.
- */
 var mongoose = require('mongoose');
 
 var workDaySchema = mongoose.Schema(
     {
         date: Date,
-        shifts: [{
-            capabality: require('./shift'),
-            active_hours: [{
-                start_time: Date,
-                end_time: Date
-            }]
-        }],
+        shifts: [require('./shift')],
         appointments: [{
             client: { type: mongoose.Schema.Types.ObjectId, ref: "client" },
             start_time: Date,
-            service: {
-                type: require('./service'),
-                validat: {
-                    validator: function (v) {
-                        return this.services.includes(v);
-                    },
-                    message: "You can only set appointments that is within the employyee services"
-                }
-            }
+            service: {type: require('./service')}
         }]
     });
 

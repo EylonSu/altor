@@ -1,0 +1,15 @@
+﻿﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+/.idea/*
+/.idea/workspace.xml
+.idea
+/bin/*.dll
+/obj
+/node_modules
+*.suo
+*.njsproj
+*.sln
+/.vs/AltorSolution/v15/.suo
+.vs/AltorSolution/
+.vs/altor/

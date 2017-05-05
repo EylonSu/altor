@@ -3,10 +3,13 @@ var PassportUtils = require('../config/passport-utils');
 
 var userSchema = new mongoose.Schema(
     {
+        first_name: String,
+        last_name: String,
+        phone: { type: String, trim: true },
         email: { type: String, required: true, trim: true },
         password: { type: String, required: true },
 		join_date: Date,
-        mesaages: [require('../models/schemes/message')]
+        messages: [require('../models/schemes/message')]
     },
     { discriminatorKey: 'role' });
 

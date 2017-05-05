@@ -2,10 +2,14 @@
 
 var shiftSchema = mongoose.Schema(
     {
-        shiftId: Number,
-        working_employees: [{
+        Title: String,
+        services: [{
             service: [{type: [mongoose.Schema.ObjectId], ref: "service", required: true}],
-            numOfServiceProviders: Number
+            numOfServiceProviders: Number,
+            hours: [{
+                start_time: Date,
+                end_time: Date
+            }]
         }]
     });
 

@@ -11,4 +11,3 @@ var messageSchema =  mongoose.Schema(
     });
 
 module.exports = messageSchema;
-

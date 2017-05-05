@@ -28,7 +28,6 @@ var businessSignUp = require('./routes/business-sign-up')(router, passport);
 var login = require('./routes/login')(router, passport);
 var admin = require('./routes/admin')(router, passport);
 var fakeNet =require('./routes/fakeNetwork')(router);
-var fakeBranch = require('./routes/fakeBranch')(router);
 var network =require ('./routes/network')(router);
 var searchResults = require('./routes/searchResults')(router);
 var branch = require('./routes/branch')(router);
@@ -50,7 +49,8 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(path.join(__dirname, 'client-app\dist')));
 
 app.use(session({
     secret: 'ilovescotchscotchyscotchscotch', // session secret
