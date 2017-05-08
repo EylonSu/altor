@@ -13,18 +13,16 @@ module.exports = function (router)
 		var newNetwork = new network();
 		newNetwork.name = 'שופרסל';
 		newNetwork.email = 'supersal@walla.com';
-
 		newNetwork.categories.push("סופרים");
 		newNetwork.address.city = 'בית שמש';
 		newNetwork.address.country = 'ישראל';
 		newNetwork.address.street = 'הלה';
 		newNetwork.address.number = 1;
-
 		newNetwork.managers.push(mngr._id);
 		newNetwork.branches.push(branchId);
 
-		mngr.networks.push(newNetwork._id);
-		mngr.branches.push(branchId);
+		mngr.networks_own.push(newNetwork._id);
+		mngr.branches_own.push(branchId);
 
 		newNetwork.save(function (err)
 		{
@@ -43,37 +41,52 @@ module.exports = function (router)
 		res.redirect('/');
 	});
 
-	var service = {
-		name: "פן",
-		duration: 15, // in minutes
-		note: "נא לא לעשות רולים לפני"
-	}
-
 	function createBranch(mngr)
 	{
 		var newBranch = new branch();
-		var empsId = createEmployee(newBranch.id);
+		//var empsId = createEmployee(newBranch.id);
 
 		newBranch.name = 'הסופר של תקווה';
 		newBranch.managers.push(mngr);
 		newBranch.email = 'tikva@walla.com';
-		newBranch.categories.push("סופרים");
 		newBranch.phone = "05252525252";
 
 		newBranch.address.city = 'בית דגן';
 		newBranch.address.country = 'ישראל';
 		newBranch.address.street = 'החבצלת';
 		newBranch.address.number = 1;
+        newBranch.services.push(
+            {
+                name: "תספורת נשים",
+                duration: 15,
+                note:
+                    "נא לעשות חפיפה לפני"
+            },
+            {
+                name: "תספורת גברים",
+                duration: 30,
+                note: "נא לנקות את כל הכינים לפני התור"
+            });
+        var service0_id=newBranch.services[0]._id;
+        var service1_id=newBranch.services[1]._id;
 
-		newBranch.employees.push(empsId);
+        newBranch.default_shifts.push({
+            title: "משמרת ברירת מחדל",
+            services: {
+                service:[service0_id, service1_id],
+                numOfServiceProviders: 2,
+                hours: {
+                    start_time: "08:00",
+                    end_time: "18:00"
+                }
+            }
+        });
 
-		var shift =
-			{
-				duration: 120, //in minutes
-				working_employees: empsId
-			};
-		newBranch.shifts.push(shift);
-		newBranch.services.push(service);
+        var now = new Date();
+        newBranch.workdays.push({
+            date: now,
+            shifts: newBranch.default_shifts[0]
+        });
 
 		newBranch.save(function (err)
 		{
@@ -86,54 +99,17 @@ module.exports = function (router)
 
 	function createManager()
 	{
-		var manager = new manager();
+		var mana = new manager();
+        mana.role = 'manager';
+		mana.first_name = "shimon";
+		mana.last_name = "hagever";
+		mana.email = "shimon@gmail.com";
+		mana.password = mana.generateHash("12345");
+		mana.phone = "05258888888";
+		mana.join_date = new Date();
 
-		manager.full_name = "shimon hagever";
-		manager.first_name = "shimon";
-		manager.last_name = "hagever";
-		manager.email = "shimon@gmail.com";
-		manager.password = manager.generateHash("12345");
-		manager.phone = "05258888888";
-		manager.join_date = new Date();
+		mana.save(function (err) { if(err) console.log(err) });
 
-		manager.save(function (err) { console.log(err) });
-
-		return manager;
-	}
-
-	function createEmployee(branchId)
-	{
-		var emp = new employee();
-
-		emp.full_name = "shmulik Sudai";
-		emp.first_name = "shmulik";
-		emp.last_name = "Sudai";
-		emp.email = "shmulik@gmail.com";
-		emp.password = emp.generateHash("12345");
-		emp.phone = "052599999999";
-		emp.join_date = new Date();
-		emp.services.push(service);
-		emp.branches.push(branchId);
-
-		emp.days = (
-			[{
-				is_working_today: true,
-				date: new Date(),
-				active_hours: [{
-					start_time: new Date("01 / 06 / 2017, 07:00"),
-					end_time: new Date("01/06/2017, 15:00")
-				}],
-				availability_str: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-				appointments:
-				[{
-					client: "58f871b50655ef182c9684f8",
-					start_time: new Date("1/6/2017, 08:00"),
-					service: service
-				}]
-			}]);
-
-		emp.save(function (err) { console.log(err) });
-
-		return emp._id;
+		return mana;
 	}
 };

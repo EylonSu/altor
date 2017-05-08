@@ -32,6 +32,8 @@ var network =require ('./routes/network')(router);
 var searchResults = require('./routes/searchResults')(router);
 var branch = require('./routes/branch')(router);
 var addBranch = require('./routes/add-branch')(router);
+var api = require('./routes/api')(router);
+
 /// ====================other routing==========================
 var routes = require('./routes/routes')(router);
 
@@ -50,7 +52,6 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
-app.use(express.static(path.join(__dirname, 'client-app\dist')));
 
 app.use(session({
     secret: 'ilovescotchscotchyscotchscotch', // session secret
@@ -62,6 +63,7 @@ app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 app.use(flash()); // use connect-flash for flash messages stored in session
 app.use(router);
+app.use(express.static(path.join(__dirname, '/appointment/dist')));
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next)
