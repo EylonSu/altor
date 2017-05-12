@@ -167,3 +167,7 @@ footer {
 p.copyright {
     margin: 15px 0 0;
 }
+
+.ui-timepicker-container {
+    z-index: 3000!important;
+}

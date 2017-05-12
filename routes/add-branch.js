@@ -2,6 +2,7 @@ var Network = require('../models/network');
 var Branch = require('../models/branch');
 var Service = require('../models/schemes/service');
 var shift = require('../models/schemes/shift');
+var workDay = require('../models/schemes/workday');
 
 module.exports = function (router, passport)
 {
@@ -87,10 +88,6 @@ module.exports = function (router, passport)
                 var newShift = {
                     title : req.body.shiftTitle,
                     stations: [],
-                    hours: {
-                        start_time: req.body.shiftHoursFrom,
-                        end_time: req.body.shiftHoursUntil
-                    }
                 };
                 var types = req.body.types;
                 for (var i=0;i<types;i++) {
@@ -116,4 +113,71 @@ module.exports = function (router, passport)
                 res.render('pages/add-shift', { user: req.user, services: network.branches[0].services});
             });
     });
+
+    router.get('/assign-shifts', function (req, res, next)
+    {
+        Network.findOne({ '_id': req.user.networks_own[0] })
+            .populate('branches')
+            .exec(function (err, network)
+            {
+                if(err){
+                    res.render('pages/index', { title: 'Altor | Error!', user: req.user , messege : "אירעה תקלה במערכת. אנא נסה שנית" });
+                }
+                res.render('pages/assign-shifts', { user: req.user, shifts: network.branches[0].default_shifts});
+            });
+    });
+
+    function getManpowerById(branchDefaultShiftsArr, selectedManpowerId) {
+        for (var i=0;i<branchDefaultShiftsArr.length;i++) {
+            if (branchDefaultShiftsArr[i]._id == selectedManpowerId) {
+                return branchDefaultShiftsArr[i];
+            }
+        }
+        return undefined;
+    }
+
+    router.post('/assign-shift', [
+        // Handle the shift assignment request
+        function (req, res, next) {
+        Network.findOne({ '_id': req.user.networks_own[0] })
+            .populate('branches')
+            .exec(function (err, network)
+            {
+                if(err){
+                    res.render('pages/index', { title: 'Altor | Error!', user: req.user , messege : "אירעה תקלה במערכת. אנא נסה שנית" });
+                }
+            var selectedWorkday = new Date(req.body.date);
+                // TODO: Validate the workday doesn't exist
+                var workDay = {};
+                workDay.date = selectedWorkday;
+                workDay.shifts = [];
+                workDay.shifts.push({
+                    manpower: getManpowerById(network.branches[0].default_shifts, req.body.templateShift),
+                    hours: {
+                        startTime: req.body.shiftHoursFrom,
+                        endTime: req.body.shiftHoursUntil
+                    }
+                });
+                network.branches[0].workdays.push(workDay);
+                network.branches[0].save(function (err)
+                {
+                    if(err){
+                        res.render('pages/index', { title: 'Altor | Error!', user: req.user , messege : "אירעה תקלה במערכת. אנא נסה שנית" });
+                    }
+                    res.render('pages/assign-shifts', { user: req.user, shifts: network.branches[0].default_shifts});
+                });
+            });
+    },
+        // Redirect back to the shifts page
+        function (req, res, next) {
+        Network.findOne({ '_id': req.user.networks_own[0] })
+            .populate('branches')
+            .exec(function (err, network)
+            {
+                if(err){
+                    res.render('pages/index', { title: 'Altor | Error!', user: req.user , messege : "אירעה תקלה במערכת. אנא נסה שנית" });
+                }
+                res.render('pages/assign-shifts', { user: req.user, shifts: network.branches[0].default_shifts});
+            });
+    }]);
 };
