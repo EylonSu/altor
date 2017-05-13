@@ -1,0 +1,61 @@
+<% layout('boilerplate') %>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12">
+            <h1>Manage provided services</h1>
+            <% services.forEach(function(service){ %>
+            <div class="row">
+                <div class="col-md-12">
+                    <%= service.name %>
+                </div>
+            </div>
+            <% }); %>
+            <!-- Add services button -->
+            <button type="submit" class="btn btn-default" data-toggle="modal" data-target="#addServiceModal">Add Service</button>
+        </div>
+    </div>
+</div>
+<!-- Assign shift Modal -->
+<div class="modal fade" id="addServiceModal" tabindex="-1" role="dialog" aria-labelledby="addServiceModalLabel">
+    <div class="modal-dialog" role="document">
+        <form id="serviceAdditionForm" action="/add-service" method="post">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Add service</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Service name:</label>
+                        <input type="text" class="form-control" name="serviceName" placeholder="Service name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Service length:</label>
+                        <input type="number" class="form-control" name="serviceLength" placeholder="Expected duration of each appointment in minutes" min="5" max="240" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Notes:</label>
+                        <input type="text" class="form-control" name="serviceNotes" placeholder="Add notes about your service">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-warning">Add service</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    $(document).ready(function() {
+
+        $('#serviceAdditionForm').validate({
+            rules: {
+                serviceLength: {
+                    number: true
+                }
+            }
+        })});
+</script>
