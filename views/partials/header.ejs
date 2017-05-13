@@ -17,6 +17,11 @@
                 <li>
                     <a href="#about">About</a>
                 </li>
+                <% if (user && user.role == 'manager') { %>
+                <li>
+                    <a href="/manage-business">Manage</a>
+                </li>
+                <% } %>
                 <li>
                     <a href="#services">Services</a>
                 </li>
@@ -26,7 +31,6 @@
             </ul>
             <% if (user) { %>
             <ul class="nav navbar-nav navbar-right">
-
                 <li class="navbar-text">Hello <%= user.email %></li>
                 <li><a href='/logout'>Log out</a></li>
             </ul>

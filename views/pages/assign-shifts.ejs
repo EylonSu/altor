@@ -10,6 +10,7 @@
 <div class="modal fade" id="assignShiftModal" tabindex="-1" role="dialog" aria-labelledby="assignShiftModalLabel">
     <div class="modal-dialog" role="document">
         <form id="shiftAssignmentForm" action="/assign-shift" method="post">
+            <input id="chosenDate" type="hidden" name="date" value="@" />
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -47,6 +48,40 @@
         </form>
     </div>
 </div>
+<div class="modal fade" id="editShiftModal" tabindex="-1" role="dialog" aria-labelledby="editShiftModalLabel">
+    <div class="modal-dialog" role="document">
+        <form id="shiftEditionForm" action="/edit-shift" method="post">
+            <input type="hidden" id="workdayId" name="workdayId" value="@" />
+            <input type="hidden" id="shiftId" name="shiftId" value="@" />
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Assign shift</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Start time:</label>
+                                <input class="form-control timepicker" name="shiftHoursFrom">
+                            </div>
+                            <div class="col-md-6">
+                                <label>End time:</label>
+                                <input class="form-control timepicker" name="shiftHoursUntil">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-info" name="action" value="update">Update shift</button>
+                    <button type="submit" class="btn btn-warning" name="action" value="delete">Delete shift</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
 <script src="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>
 <script>
     $(document).ready(function() {
@@ -54,14 +89,28 @@
         $('#calendar').fullCalendar({
             // put your options and callbacks here
             defaultView: "agendaWeek",
-            // timeFormat: 'H(:mm)',
             locale: 'he',
+            timezone: 'local',
+            events: '/get-events',
             dayClick: function(date, jsEvent, view) {
                 // Adding the selected date to the sent form data
-                $('#shiftAssignmentForm').append('<input type="hidden" name="date" value="@" />'.replace('@', date));
+                $('#shiftAssignmentForm').find('#chosenDate').attr('value', date.toDate());
                 // Opening the modal
                 $('#assignShiftModal').find('.modal-title').html('Assign Shift - ' + date.format('L'));
                 $('#assignShiftModal').modal('show');
+            },
+            eventClick: function(calEvent, jsEvent, view) {
+                $.get( "/get-event", { workdayId: calEvent.workdayId, shiftId: calEvent.shiftId },
+                    function(data) {
+                        $('#editShiftModal').find('.modal-title').html('View shift - ' + data.name);
+                        $('#shiftEditionForm').find('#workdayId').attr('value', calEvent.workdayId);
+                        $('#shiftEditionForm').find('#shiftId').attr('value', calEvent.shiftId);
+                        $('#editShiftModal').find('.modal-title').html('WorkdayId - ' + calEvent.workdayId + ' shiftId - ' + calEvent.shiftId);
+                        $('#editShiftModal').modal('show');
+                    });
+                // change the border color just for fun
+                $(this).css('border-color', 'red');
+
             }
         });
         $('.timepicker').timepicker({
