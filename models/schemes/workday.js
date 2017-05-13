@@ -6,8 +6,8 @@ var workDaySchema = mongoose.Schema(
         shifts: [{
             manpower: require('./shift'),
             hours: {
-                startTime: Date,
-                endTime: Date
+                startTime: String,
+                endTime: String
             }
         }],
         appointments: [{
