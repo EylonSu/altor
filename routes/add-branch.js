@@ -259,33 +259,6 @@ module.exports = function (router, passport)
 			});
 	});
 
-	function getManpowerById(branchDefaultShiftsArr, selectedManpowerId)
-	{
-		for (var i = 0; i < branchDefaultShiftsArr.length; i++)
-		{
-			if (branchDefaultShiftsArr[i]._id == selectedManpowerId)
-			{
-				return branchDefaultShiftsArr[i];
-			}
-		}
-		return undefined;
-	}
-
-	function findWorkday(workdays, selectedWorkdayDate)
-	{
-		for (var i = 0; i < workdays.length; i++)
-		{
-			if (moment(selectedWorkdayDate).isSame(workdays[i].date, 'year') &&
-				moment(selectedWorkdayDate).isSame(workdays[i].date, 'month') &&
-				moment(selectedWorkdayDate).isSame(workdays[i].date, 'day'))
-			{
-				return workdays[i];
-			}
-		}
-
-		return null;
-	}
-
 	router.post('/assign-shift', [
 		// Handle the shift assignment request
 		function (req, res, next)
@@ -361,6 +334,33 @@ module.exports = function (router, passport)
 					res.render('pages/assign-shifts', { user: req.user, shifts: network.branches[0].default_shifts });
 				});
 		}]);
+
+	function getManpowerById(branchDefaultShiftsArr, selectedManpowerId)
+	{
+		for (var i = 0; i < branchDefaultShiftsArr.length; i++)
+		{
+			if (branchDefaultShiftsArr[i]._id == selectedManpowerId)
+			{
+				return branchDefaultShiftsArr[i];
+			}
+		}
+		return undefined;
+	}
+
+	function findWorkday(workdays, selectedWorkdayDate)
+	{
+		for (var i = 0; i < workdays.length; i++)
+		{
+			if (moment(selectedWorkdayDate).isSame(workdays[i].date, 'year') &&
+				moment(selectedWorkdayDate).isSame(workdays[i].date, 'month') &&
+				moment(selectedWorkdayDate).isSame(workdays[i].date, 'day'))
+			{
+				return workdays[i];
+			}
+		}
+
+		return null;
+	}
 
 	function parseEventFromShift(workday, shift)
 	{
