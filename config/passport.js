@@ -121,15 +121,17 @@ module.exports = function (passport)
                             network.address.country = req.body.country;
                             network.address.city = req.body.city;
                             network.address.street = req.body.street;
+
                             network.save();
-                            newManager.network = network.id;
+                            newManager.networks_own.push(network.id);
                             newManager.save(function (err)
                             {
                                 if (err)
                                     return done(err);
 
-                                return done(null, newManager);
+                                network.managers.push(newManager.id);
                                 console.log(newManager.name + "was saved");
+                                return done(null, newManager);
                             });
                         }
                     });

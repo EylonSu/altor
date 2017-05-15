@@ -16,12 +16,11 @@ var branchSchema = mongoose.Schema(
             number: Number
         },
         //queues: [require('../models/queue')], //TODO altor+
-
-        messages: [require('../models/schemes/message')],
         employees: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+        workdays: [require('../models/schemes/workday')],
+        messages: [require('../models/schemes/message')],
         services: [require('../models/schemes/service')],
-        default_shifts: [require('../models/schemes/shift')],
-        workdays: [require('../models/schemes/workday')]
+        default_shifts: [require('../models/schemes/shift')]
     });
 
 module.exports = mongoose.model('Branch', branchSchema);

@@ -2,31 +2,18 @@
 <div class="container">
     <div class="row">
         <div class="col-md-6">
-            <h1><span class="fa fa-sign-in"></span>Add branch</h1>
-            <% services.forEach(function(service){ %>
+            <h1>Manage default shifts</h1>
+            <% shifts.forEach(function(shift){ %>
             <div class="row">
                 <div class="col-md-12">
-                    <%= service.name %> (<%= service.duration %>) <%= service.note %>
+                    <%= shift.title %>
                 </div>
             </div>
             <% }); %>
-            <!-- Add Branch -->
-            <form action="/add-shift" method="post">
-                <div class="form-group">
-                    <label>Branch name:</label>
-                    <input type="text" class="form-control" name="branchName">
-                </div>
-                <div class="form-group">
-                    <label>Email</label>
-                    <input type="text" class="form-control" name="email">
-                </div>
-                <div class="form-group">
-                    <label>Phone</label>
-                    <input type="text" class="form-control" name="phone">
-                </div>
-                <button type="submit" class="btn btn-warning btn-lg">Add branch</button>
+            <!-- Add shifts -->
+            <form action="/add-shift" method="get">
+                <button type="submit" class="btn btn-warning btn-lg">Add shift</button>
             </form>
-            <hr>
         </div>
     </div>
 </div>

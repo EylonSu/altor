@@ -8,6 +8,8 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var session = require('express-session');
+var expressValidator = require('express-validator');
+var moment = require('moment');
 
 var router = express.Router();
 var passport = require('passport');
@@ -50,6 +52,19 @@ app.engine('ejs', engine);
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
+app.use(expressValidator({
+    customValidators: {
+        isArray: function(value) {
+            return Array.isArray(value);
+        },
+        gte: function(param, num) {
+            return param >= num;
+        },
+        lte: function(param, num) {
+            return param <= num;
+        }
+    }
+}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
