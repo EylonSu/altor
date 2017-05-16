@@ -42,6 +42,17 @@ branchSchema.methods.findWorkday = function (date)
 	return res;
 };
 
+branchSchema.methods.GetDurationbyServiceId = function (serviceId)
+{
+	this.services.forEach(function (service)
+	{
+		if (service._id.toString() == serviceId)
+		{
+			return service.duration;
+		}
+	})
+}
+
 branchSchema.methods.AddAppintmnt = function (date, appintmnt)
 {
 	var workday = this.findWorkday(date);

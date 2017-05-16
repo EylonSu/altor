@@ -3,7 +3,7 @@ var mongoose = require('mongoose');
 var workDaySchema = mongoose.Schema(
 	{
 		date: Date,
-		shifts: [{
+		shifts: [{//shifts=station
 			manpower: require('./shift'),
 			hours: {
 				startTime: String,
