@@ -11,10 +11,12 @@ module.exports = function (router, passport)
 			.populate('managers', 'employees')
 			.exec(function (err, branch)
 			{
+				//TODO check if branch exists
 				var adr = branch.address.street + " " + branch.address.number + " " + branch.address.city + " " + branch.address.country;
-				res.render('pages/branch', { user: req.user, branch: branch ,address :adr });
+				res.render('pages/branch', { user: req.user, branch: branch, address: adr });
 			}
-	)});
+			)
+	});
 
 	router.post('/set-appintmnt', function (req, res)
 	{
@@ -45,25 +47,30 @@ module.exports = function (router, passport)
 		})
 	});
 
-	function getScheduledEvents(branch, serviceId)
+	function getScheduledEvents(branch, serviceId, date)
 	{
-		var result = [];
-		var workdays = branch.workdays;
-
-		workdays.forEach(function (workday)
+		var result=[];
+		var workday;
+		branch.workdays.forEach(function (_workday)
 		{
-			workday.appointments.forEach(function (appointment)
+			var wdd = new Date(_workday.date.getTime()).setHours(0, 0, 0, 0);
+			if (_workday.date.setHours(0, 0, 0, 0) == wdd)
 			{
-				var serviceDuration = appointment.service.duration;
-
-				var event = {};
-				event.backgroundColor = '#ff0000'; //red
-				event.start = moment(appointment.start_time);
-				event.end = event.start.add(serviceDuration, 'minutes');
-
-				result.push(event);
-			})
+				workday = _workday;
+			}
 		})
+
+		workday.shifts.forEach(function (shift)
+		{
+			var service = branch.GetServiceById(serviceId);
+			result.push(shift.shift.GetOpenSpots(service));
+		})
+		//event.backgroundColor = '#ff0000'; //red
+		//event.start = moment(appointment.start_time);
+		//event.end = event.start.add(serviceDuration, 'minutes');
+
+		//result.push(event);
+
 
 		return result;
 	}

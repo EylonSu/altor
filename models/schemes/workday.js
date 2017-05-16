@@ -3,8 +3,8 @@ var mongoose = require('mongoose');
 var workDaySchema = mongoose.Schema(
 	{
 		date: Date,
-		shifts: [{//shifts=station
-			manpower: require('./shift'),
+		shifts: [{
+			shift: require('./shift'),
 			hours: {
 				startTime: String,
 				endTime: String
@@ -13,7 +13,8 @@ var workDaySchema = mongoose.Schema(
 		appointments: [{
 			client: { type: mongoose.Schema.Types.ObjectId, ref: "client" },
 			start_time: Date,
-			service: { type: require('./service') }
+			service: { type: require('./service') },
+			station_title: String
 		}]
 	});
 

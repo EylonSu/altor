@@ -121,7 +121,7 @@ module.exports = function (router, passport)
 		else
 		{
 			var networkId = req.user.networks_own[0].toString();
-			Network.findOne({ '_id':  networkId}, function (err, network)
+			Network.findOne({ '_id': networkId }, function (err, network)
 			{
 				console.log(network);//TODO restrict access to this page unless signed in
 				if (err)
@@ -216,9 +216,12 @@ module.exports = function (router, passport)
 				for (var i = 0; i < types; i++)
 				{
 					var shiftStation = {
+						title: "Nir  & avihai should do this",//TODO
 						services: [],
-						numOfServiceProviders: req.body["[" + i + "].typeRepeats"]
+						numOfServiceProviders: req.body["[" + i + "].typeRepeats"],
+						availbleArrs: [["B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "B", "A", "B", "A", "B", "A", "B", "A", "B", "A", "B", "A", "B", "A", "B", "B", "A", "B", "B", "A", "B", "A", "B", "B", "B", "B", "A", "A", "A", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B"]]
 					};
+					//TODO fix this crap
 					var services = req.body["[" + i + "].serviceName"];
 					if (services.constructor === Array)
 					{
@@ -288,7 +291,7 @@ module.exports = function (router, passport)
 					}
 					// Add the shift
 					workDay.shifts.push({
-						manpower: getManpowerById(network.branches[0].default_shifts, req.body.templateShift),
+						shift: getManpowerById(network.branches[0].default_shifts, req.body.templateShift),
 						hours: {
 							startTime: req.body.shiftHoursFrom,
 							endTime: req.body.shiftHoursUntil
@@ -364,7 +367,7 @@ module.exports = function (router, passport)
 
 	function parseEventFromShift(workday, shift)
 	{
-		var currEvent = { title: shift.manpower.title };
+		var currEvent = { title: shift.shift.title };
 		var startTime = moment(workday.date);
 		var startTimeHours = shift.hours.startTime.split(":");
 		currEvent.start = startTime.hours(startTimeHours[0]).minutes(startTimeHours[1]);
