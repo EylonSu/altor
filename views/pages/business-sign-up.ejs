@@ -1,4 +1,6 @@
 <% layout('boilerplate') %>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
 <div class="container">
     <div class="row">
         <div class="col-md-6">
@@ -7,10 +9,10 @@
             <div class="alert alert-danger"><%= message %></div>
             <% } %>
             <!-- SignUp FORM -->
-            <form action="/business-sign-up" method="post">
+            <form action="/business-sign-up" id="businessSignUpForm" method="post">
                 <div class="form-group">
                     <label>Business Name</label>
-                    <input type="text" class="form-control" name="name">
+                    <input type="text" class="form-control" name="name" required>
                 </div>
                 <div class="form-group">
                     <label>Manager name</label>//to insert here a js code that create n input text box
@@ -18,11 +20,11 @@
                 </div>
                 <div class="form-group">
                     <label>Email</label>
-                    <input type="text" class="form-control" name="email">
+                    <input type="email" class="form-control" name="email" required>
                 </div>
                 <div class="form-group">
                     <label>Category</label><!-- to insert here a js code that create n input text box -->
-                    <input type="text" class="form-control" name="category">
+                    <input type="text" class="form-control" name="category" required>
                 </div>
                 <div class="form-group">
                     <label>Enter logo-picture path</label>
@@ -30,19 +32,19 @@
                 </div>
                 <div class="form-group">
                     <label>Password</label>
-                    <input type="password" class="form-control" name="password">
+                    <input type="password" class="form-control" name="password" required>
                 </div>
                 <div class="form-group">
                     <label>Country</label>
-                    <input type="text" class="form-control" name="country">
+                    <input type="text" class="form-control" name="country" required>
                 </div>
                 <div class="form-group">
                     <label>City</label>
-                    <input type="text" class="form-control" name="city">
+                    <input type="text" class="form-control" name="city" required>
                 </div>
                 <div class="form-group">
                     <label>Street</label>
-                    <input type="text" class="form-control" name="street">
+                    <input type="text" class="form-control" name="street" required>
                 </div>
                 <button type="submit" class="btn btn-warning btn-lg">Signup</button>
             </form>
@@ -52,3 +54,7 @@
         </div>
     </div>
 </div>
+<script>
+$(document).ready(function() {
+$('#businessSignUpForm').validate()});
+</script>
