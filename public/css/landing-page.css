@@ -171,3 +171,9 @@ p.copyright {
 .ui-timepicker-container {
     z-index: 3000!important;
 }
+
+@media screen {
+    .navbar {
+        margin-bottom: 0!important;
+    }
+}
