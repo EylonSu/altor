@@ -4,6 +4,7 @@ var networkSchema =  mongoose.Schema(
     {
         name: { type: String, required: true, trim: true },
         managers: [{type: mongoose.Schema.Types.ObjectId, ref: "User"}],
+        email : { type: String, required: true, trim: true },
         categories: [String],
         logo_path: { type: String },
         address:
