@@ -1,5 +1,6 @@
 ﻿var mongoose = require('mongoose');
 var moment = require('moment');
+var _ = require('underscore-node');
 "use strict";
 
 var shiftSchema = mongoose.Schema(
@@ -53,9 +54,26 @@ shiftSchema.methods.GetOpenSpots = function (service)
                 }
             })
         }
-	})
+	});
 
+    res =uniq(res);
 	return res;
+};
+
+function uniq(a) {
+    var uniqueArray = a
+        .map(function (date) {
+            return date.getTime()
+        })
+        .filter(function (date, i, array)
+        {
+            return array.indexOf(date) === i;
+        })
+        .map(function (time) {
+            return new Date(time);
+        });
+
+   return uniqueArray;
 }
 
 function getTimeFromIndex(index)

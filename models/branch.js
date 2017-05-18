@@ -78,4 +78,40 @@ branchSchema.methods.AddAppintmnt = function (date, appintmnt)
 	})
 };
 
+branchSchema.methods.GetOpenSpots = function(iServiceId, iMonth)
+{
+
+	var res = [];
+	var service = this.GetServiceById(iServiceId);
+	var i=0;
+
+	this.workdays.forEach(function (iWorkday)
+	{
+		if(iWorkday.date.getFullYear() == iMonth.getFullYear() && iWorkday.date.getMonth() == iMonth.getMonth())
+		{
+		    var temp = [];
+
+            iWorkday.shifts.forEach(function (iShift)
+			{
+				temp.push(iShift.shift.GetOpenSpots(service));
+			});
+            if(temp.length > 0)
+            {
+                var prototype = {};
+
+                prototype.date = iWorkday.date;
+                prototype.openSpots = temp;
+
+                res[i] = prototype;
+                //res[i].openSpots
+                i++;
+            }
+		}
+	});
+
+    return res;
+};
+
+
+
 module.exports = mongoose.model('Branch', branchSchema);
