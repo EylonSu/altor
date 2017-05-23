@@ -101,6 +101,7 @@ $(document).ready(function ()
 
 function showApp()
 {
+    $('#date-app').show();
 	$('#appintmnt-app').show();
 }
 
