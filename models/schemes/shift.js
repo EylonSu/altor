@@ -1,6 +1,6 @@
 ﻿var mongoose = require('mongoose');
 var moment = require('moment');
-var _ = require('underscore-node');
+//var _ = require('underscore-node');
 "use strict";
 
 var shiftSchema = mongoose.Schema(
