@@ -1,28 +1,79 @@
 "use strict";
-var _serviceId;
-var availbleEvents;
-var chosenDate;
+var mServiceId;
+var mAvailbleEvents;
+var mChosenDate;
+var mCurrentMonth;
+var mUpdated = false;
+
+$.fn.bindFirst = function (name, fn)
+{
+	// bind as you normally would
+	// don't want to miss out on any jQuery magic
+	this.on(name, fn);
+
+	// Thanks to a comment by @Martin, adding support for
+	// namespaced events too.
+	this.each(function ()
+	{
+		var handlers = $._data(this, 'events')[name.split('.')[0]];
+		console.log(handlers);
+		// take out the handler we just inserted from the end
+		var handler = handlers.pop();
+		// move it at the beginning
+		handlers.splice(0, 0, handler);
+	});
+};
 
 function serviceHasChosen(duration, serviceId)
 {
+	var month = new Date();
 	var branchId = getUrlParameter('branch');
-	_serviceId = serviceId;
-	$.get("/get-branch-events?branch=" + branchId + '&serviceId=' + serviceId, function (data)
+	mServiceId = serviceId;
+	$.get("/get-branch-events?branch=" + branchId + '&serviceId=' + serviceId + '&month=' + month.getTime(), function (data)
 	{
-		availbleEvents = data;
+		mAvailbleEvents = data;
 		initCalendar(serviceId);
-	});
 
+		$('.fc-prev-button').bindFirst('click', function ()
+		{
+			var m = $('#calendar').fullCalendar('getDate').toDate();
+			m = new Date(m.setMonth(m.getMonth() - 1));
+			mUpdated = false;
+			setAvlbleEventsSync(m);
+		});
+		$('.fc-next-button').bindFirst('click', function ()
+		{
+			var m = $('#calendar').fullCalendar('getDate').toDate();
+			m = new Date(m.setMonth(m.getMonth() + 1));
+			mUpdated = false;
+			setAvlbleEventsSync(m);
+		});
+	});
 	$('#calendar').show();
+
+}
+
+function setAvlbleEventsSync(iMonth)
+{
+	var branchId = getUrlParameter('branch');
+	
+	jQuery.ajaxSettings.async = false;
+	$.get("/get-branch-events?branch=" + branchId + '&serviceId=' + mServiceId + '&month=' + iMonth.getTime(),
+		function (data)
+		{
+			mAvailbleEvents = data;
+			mUpdated = true;
+		});
+	jQuery.ajaxSettings.async = true;
 }
 
 function setAppintmnt(iTime)
 {
 	var dateTime = iTime.split(':');
-	chosenDate.setHours(dateTime[0]);
-	chosenDate.setMinutes(dateTime[1]);
+	mChosenDate.setHours(dateTime[0]);
+	mChosenDate.setMinutes(dateTime[1]);
 
-	$.post('/set-appintmnt', { branchId: getUrlParameter('branch'), serviceId: _serviceId, dateTime: chosenDate });
+	$.post('/set-appintmnt', { branchId: getUrlParameter('branch'), serviceId: mServiceId, dateTime: mChosenDate });
 }
 
 function initCalendar(serviceId)
@@ -48,7 +99,7 @@ function initCalendar(serviceId)
 
 			// Opening the modal
 			$('#setAppintmnt').find('.modal-title').html('Set appointment - ' + date.format('L'));
-			chosenDate = new Date(date);
+			mChosenDate = new Date(date);
 			var openSpotsArr = getOpenSpotsPerDate(date);
 			openSpotsArr.forEach(function (iOpenSpot)
 			{
@@ -57,7 +108,7 @@ function initCalendar(serviceId)
 				var min = date.getMinutes();
 				var time = hours + ":" + min;
 				var listItem = '<li><a onclick="setAppintmnt(';
-				listItem = listItem + "'" + time + "')" +'"' +" href='#'>" + time + '</a></li>';
+				listItem = listItem + "'" + time + "')" + '"' + " href='#'>" + time + '</a></li>';
 				$('#openSpots').append(listItem);
 			});
 
@@ -65,25 +116,38 @@ function initCalendar(serviceId)
 		},
 		dayRender: function (date, cell)
 		{
-			var isDayValid = false;
-			availbleEvents.forEach(function myfunction(iEvent)
+			if (mUpdated)
 			{
-				if (new Date(iEvent.date).getDate() == new Date(date.toString()).getDate())
-				{
-					cell.css("background-color", "#266526");
-					cell.removeClass('disabled');
-					isDayValid = true;
-				}
-				else
-				{
-					if (!isDayValid)
-					{
-						cell.css("background-color", "#DADADA");
-						cell.addClass('disabled');
-					}
-				}
-			});
+				paintDay(date, cell);
+			}
+			else
+			{
+				setAvlbleEventsSync(date.add(8, 'days').toDate());
+				paintDay(date, cell);
+			}
 		},
+	});
+}
+
+function paintDay(date,cell)
+{
+	var isDayValid = false;
+	mAvailbleEvents.forEach(function myfunction(iEvent)
+	{
+		if (new Date(iEvent.date).getDate() == new Date(date.toString()).getDate())
+		{
+			cell.css("background-color", "#266526");
+			cell.removeClass('disabled');
+			isDayValid = true;
+		}
+		else
+		{
+			if (!isDayValid)
+			{
+				cell.css("background-color", "#DADADA");
+				cell.addClass('disabled');
+			}
+		}
 	});
 }
 
@@ -91,7 +155,7 @@ function getOpenSpotsPerDate(iDate)
 {
 	var res;
 
-	availbleEvents.forEach(function myfunction(iEvent)
+	mAvailbleEvents.forEach(function myfunction(iEvent)
 	{
 		if (new Date(iEvent.date).getDate() == new Date(iDate.toString()).getDate())
 		{
@@ -122,18 +186,6 @@ var getUrlParameter = function getUrlParameter(sParam)
 
 $(document).ready(function ()
 {
-	//$('.timepicker').timepicker({
-	//	timeFormat: 'HH:mm',
-	//	interval: 15,
-	//	minTime: '00',
-	//	maxTime: '23',
-	//	defaultTime: '08',
-	//	startTime: '08:00',
-	//	dynamic: false,
-	//	dropdown: true,
-	//	scrollbar: true
-	//});
-
 	$("#setAppintmntForm").submit(function (e)
 	{
 		var url = "/set-appintmnt";
@@ -150,7 +202,7 @@ $(document).ready(function ()
 
 		e.preventDefault(); // avoid to execute the actual submit of the form.
 		$('#setAppintmnt').modal('hide');
-		initCalendar(_serviceId);
+		initCalendar(mServiceId);
 	});
 });
 

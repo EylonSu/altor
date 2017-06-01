@@ -14,8 +14,7 @@ module.exports = function (router, passport)
 				//TODO check if branch exists
 				var adr = branch.address.street + " " + branch.address.number + " " + branch.address.city + " " + branch.address.country;
 				res.render('pages/branch', { user: req.user, branch: branch, address: adr });
-			}
-			)
+			});
 	});
 
 	router.post('/set-appintmnt', function (req, res)
@@ -39,8 +38,7 @@ module.exports = function (router, passport)
 	{
 		var branchId = req.query.branch;
 		var serviceId = req.query.serviceId;
-		//var month = req.query.month;
-		var month = new Date();
+		var month = new Date(parseInt(req.query.month));
 
 		Branch.findById(branchId, function (err, branch)
 		{
