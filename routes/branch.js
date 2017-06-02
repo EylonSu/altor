@@ -19,7 +19,7 @@ module.exports = function (router, passport)
 
 	router.post('/set-appintmnt', function (req, res)
 	{
-		var date = new Date(req.body.chosenDate);
+		var date = new Date(req.body.dateTime);
 		var appintmnt = {
 			client: req.user._id,
 			start_time: date,

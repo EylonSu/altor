@@ -57,7 +57,6 @@ function serviceHasChosen(duration, serviceId)
 	initCalendar(serviceId);
 	$('#calendar').show();
 	$('#calendar').fullCalendar('render');
-
 }
 
 function setAppintmnt(iTime)
@@ -118,8 +117,8 @@ function initCalendar(serviceId)
 			openSpotsArr.forEach(function (iOpenSpot)
 			{
 				var date = new Date(iOpenSpot);
-				var hours = date.getHours();
-				var min = date.getMinutes();
+				var hours = make2chars(date.getHours());
+				var min = make2chars(date.getMinutes());
 				var time = hours + ":" + min;
 				var listItem = '<li><a onclick="setAppintmnt(';
 				listItem = listItem + "'" + time + "')" + '"' + " href='#'>" + time + '</a></li>';
@@ -130,6 +129,17 @@ function initCalendar(serviceId)
 		},
 	});
 
+}
+
+function make2chars(iNum)
+{
+	var str = iNum.toString();
+	if (str.length < 2)
+	{
+		str = '0' + str;
+	}
+
+	return str;
 }
 
 function getOpenSpotsPerDate(iDate)

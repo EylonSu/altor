@@ -42,7 +42,6 @@ branchSchema.methods.findWorkday = function (date)
 	return res;
 };
 
-
 branchSchema.methods.GetServiceById = function (serviceId)
 {
 	var res;
@@ -111,7 +110,5 @@ branchSchema.methods.GetOpenSpots = function(iServiceId, iMonth)
 
     return res;
 };
-
-
 
 module.exports = mongoose.model('Branch', branchSchema);
