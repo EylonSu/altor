@@ -1,6 +1,6 @@
 ﻿var mongoose = require('mongoose');
 var moment = require('moment');
-//var _ = require('underscore-node');
+
 "use strict";
 
 var shiftSchema = mongoose.Schema(
@@ -16,8 +16,71 @@ var shiftSchema = mongoose.Schema(
 
 shiftSchema.methods.SetAvailbleArrs = function (appintmnt)
 {
-	//TODO
+	var startIndex = getIndexFromDate(appintmnt.start_time);
+	//var durationIn5Packets = appintmnt.service.duration / 5;
+	var stationIndexes = getRelevantStation(startIndex, appintmnt.service._id);
+
+	for (var i = startIndex; i < durationIn5Packets; i++)
+	{
+		if (this.stations[stationIndex[0]].availbleArrs[stationIndex[1]][startIndex] != "A")
+		{
+			throw "error";
+		}
+		else
+		{
+			this.stations[stationIndex[0]].availbleArrs[stationIndex[1]][startIndex] = "B";
+		}
+	}
 };
+
+shiftSchema.methods.getRelevantStation = function (startIndex, iServiceId)
+{
+	var res;
+	var found;
+	var index = 0;
+
+	this.stations.forEach(function (iStation)
+	{
+		if (iStation.services.includes(iServiceId))
+		{
+			var durationIn5Packets = 
+			iStation.availbleArrs.forEach(function (iAvalArr)
+			{
+				found = true;
+				for (var i = startIndex; i < durationIn5Packets; i++)
+				{
+					if (iAvalArr[i] != "A")
+					{
+						found = false;
+						return;
+					}
+				}
+			});
+
+			if (found)
+			{
+				res = index;
+				return;
+			}
+		}
+
+		index++;
+	});
+
+	return res;
+}
+function getIndexFromDate(iStartTimeStr)
+{
+	var hourInt = iStartTimeStr.getHours();
+	hourInt = hourInt * (60 / 5);
+
+	var minInt = iStartTimeStr.getMinutes();
+	minInt = minInt / 5;
+
+	var sum = hourInt + minInt;
+
+	return sum;
+}
 
 shiftSchema.methods.GetOpenSpots = function (service)
 {

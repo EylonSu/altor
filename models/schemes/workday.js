@@ -13,7 +13,7 @@ var workDaySchema = mongoose.Schema(
 		appointments: [{
 			client: { type: mongoose.Schema.Types.ObjectId, ref: "client" },
 			start_time: Date,
-			service: { type: require('./service') },
+			service: require('./service'),
 			station_title: String
 		}]
 	});
@@ -21,9 +21,9 @@ var workDaySchema = mongoose.Schema(
 workDaySchema.methods.AddAppintmnt = function (appintmnt)
 {
 	//TODO validation
-	this.appointments.push(appintmnt);
 	var relevantShift = this.getShiftByTime(appintmnt.start_time);
-	relevantShift.SetAvailbleArrs(appintmnt);
+	appintmnt.station_title = relevantShift.SetAvailbleArrs(appintmnt);
+	this.appointments.push(appintmnt);
 };
 
 workDaySchema.methods.getShiftByTime = function(iStart_time)
