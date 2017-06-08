@@ -45,8 +45,12 @@ shiftSchema.methods.SetAvailbleArrs = function (appintmnt)
         })
         if(isArrUpdate)
         {
+
             this.stations[relevantStationsIndex[i]].availbleArrs[index] = res;
-            this.save; //TODO save the subdocument
+            var result= {stationTitle : this.stations[relevantStationsIndex[i]].title ,
+            workDay :  this };
+            return result;
+           // this.save; //TODO save the subdocument
         }
     }
 

@@ -42,6 +42,38 @@ branchSchema.methods.findWorkday = function (date)
     return res;
 };
 
+branchSchema.methods.setWorkDay = function (date,workD)
+{
+    var res;
+    var d = new Date(date.getTime());
+    d.setHours(0, 0, 0, 0);
+
+    for(var i = 0; i< this.workdays.length; i++)
+    {
+        var tempWorkday = this.workdays[i];
+        tempWorkday.date.setHours(0, 0, 0, 0);
+
+        if (tempWorkday.date.valueOf() == d.valueOf())
+        {
+            this.workdays[i] = workD;
+            this.save(function (err, branch)
+            {
+                if (err)
+                {
+                    console.log(err)
+                }
+                else
+                {
+                    var b = branch;
+                }
+            })
+        break;
+        }
+    };
+
+    return res;
+};
+
 branchSchema.methods.GetServiceById = function (serviceId)
 {
     var res;
@@ -58,7 +90,8 @@ branchSchema.methods.GetServiceById = function (serviceId)
 
 branchSchema.methods.AddAppintmnt = function (date, appintmnt)
 {
-    var workday = this.findWorkday(date);
+    var sDate = new Date(date.toString());
+
     var fullService = this.GetServiceById(appintmnt.service);
 
     var fullappintment ={
@@ -66,22 +99,21 @@ branchSchema.methods.AddAppintmnt = function (date, appintmnt)
         start_time: appintmnt.start_time,
         service: fullService
     };
+
+    var workday = this.findWorkday(date);
     if (workday)
+    {
+        //workday = workday.AddAppintmnt(fullappintment);
         workday.AddAppintmnt(fullappintment);
+        this.save(function (err) {
+            if (err) throw "error";
+            // saved!
+        })
+    }
     else
         return "no such workday";
 
-    this.save(function (err, branch)
-    {
-        if (err)
-        {
-            console.log(err)
-        }
-        else
-        {
-            var b = branch;
-        }
-    })
+
 };
 
 branchSchema.methods.GetOpenSpots = function(iServiceId, iMonth)

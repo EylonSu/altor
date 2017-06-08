@@ -22,8 +22,11 @@ workDaySchema.methods.AddAppintmnt = function (appintmnt)
 {
 	//TODO validation
 	var relevantShift = this.getShiftByTime(appintmnt.start_time);
-	appintmnt.station_title = relevantShift.SetAvailbleArrs(appintmnt);
+    var result = relevantShift.SetAvailbleArrs(appintmnt);
+	appintmnt.station_title = result.stationTitle;
+	//var resWorkDay = result.workDay;
 	this.appointments.push(appintmnt);
+	//return resWorkDay;
 };
 
 workDaySchema.methods.getShiftByTime = function(iStart_time)
