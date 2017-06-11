@@ -102,23 +102,28 @@ branchSchema.methods.AddAppintmnt = function (date, appintmnt)
 
     var workday = this.findWorkday(date);
     if (workday)
-    {
-        //workday = workday.AddAppintmnt(fullappintment);
-        workday.AddAppintmnt(fullappintment);
-        this.save(function (err) {
-            if (err) throw "error";
-            // saved!
-        })
+	{
+		workday = workday.AddAppintmnt(fullappintment);
+		return this;
+		//var xbranch = this;
+		//this.update(function (err)
+		//{
+		//	if (err)
+		//	{
+		//		console.log("error in saving branch");
+		//	}
+		//	else
+		//	{
+		//		//console.log('branch saved with the title: ' + xbranch.workdays[0].shifts[0].shift.stations[0].title);
+		//	}
+		//});
     }
     else
         return "no such workday";
-
-
 };
 
 branchSchema.methods.GetOpenSpots = function(iServiceId, iMonth)
 {
-
     var res = [];
     var service = this.GetServiceById(iServiceId);
     var i=0;
@@ -130,8 +135,12 @@ branchSchema.methods.GetOpenSpots = function(iServiceId, iMonth)
             var temp = [];
 
             iWorkday.shifts.forEach(function (iShift)
-            {
-                temp.push(iShift.shift.GetOpenSpots(service));
+			{
+				var shiftOpenSpots = iShift.shift.GetOpenSpots(service);
+				if (shiftOpenSpots.length > 0)
+				{
+					temp.push(shiftOpenSpots);
+				}
             });
             if(temp.length > 0)
             {
@@ -141,7 +150,6 @@ branchSchema.methods.GetOpenSpots = function(iServiceId, iMonth)
                 prototype.openSpots = temp;
 
                 res[i] = prototype;
-                //res[i].openSpots
                 i++;
             }
         }

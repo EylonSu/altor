@@ -7,6 +7,7 @@ var mCurrentMonth;
 var mUpdated = false;
 var mBranchId;
 var mEventAfterRenderHelper = true;
+var mCalendar;
 
 $.fn.bindFirst = function (name, fn)
 {
@@ -29,34 +30,42 @@ $.fn.bindFirst = function (name, fn)
 
 $(document).ready(function ()
 {
-	$("#setAppintmntForm").submit(function (e)
-	{
-		var url = "/set-appintmnt";
+	//$("#setAppintmntForm").submit(function (e)
+	//{
+	//	var url = "/set-appintmnt";
 
-		$.ajax({
-			type: "POST",
-			url: url,
-			data: $("#setAppintmntForm").serialize(), // serializes the form's elements.
-			success: function (data)
-			{
-				console.log(data);
-			}
-		});
+	//	$.ajax({
+	//		type: "POST",
+	//		url: url,
+	//		data: $("#setAppintmntForm").serialize(), // serializes the form's elements.
+	//		success: function (data)
+	//		{
+	//			console.log(data);
+	//		}
+	//	});
 
-		e.preventDefault(); // avoid to execute the actual submit of the form.
-		$('#setAppintmnt').modal('hide');
-		initCalendar(mServiceId);
-	});
+	//	e.preventDefault(); // avoid to execute the actual submit of the form.
+	//	$('#setAppintmnt').modal('hide');
+	//	initCalendar(mServiceId);
+	//});
 
 	mBranchId = getUrlParameter('branch');
+	mCalendar = $('#calendar');
 });
 
 function serviceHasChosen(duration, serviceId)
 {
 	mServiceId = serviceId;
-	initCalendar(serviceId);
-	$('#calendar').show();
-	$('#calendar').fullCalendar('render');
+	if (mCalendar.is(":visible"))
+	{
+		refreshCalendarView();
+	}
+	else
+	{
+		initCalendar(serviceId);
+		mCalendar.show();
+		mCalendar.fullCalendar('render');
+	}
 }
 
 function setAppintmnt(iTime)
@@ -66,11 +75,20 @@ function setAppintmnt(iTime)
 	mChosenDate.setMinutes(dateTime[1]);
 
 	$.post('/set-appintmnt', { branchId: getUrlParameter('branch'), serviceId: mServiceId, dateTime: mChosenDate });
+	$('#setAppintmnt').modal('hide');
+	refreshCalendarView()
+}
+
+function refreshCalendarView()
+{
+	//mCalendar.fullCalendar('refetchEvents');
+	mCalendar.fullCalendar('prev');
+	mCalendar.fullCalendar('next');
 }
 
 function initCalendar(serviceId)
 {
-	$('#calendar').fullCalendar({
+	mCalendar.fullCalendar({
 		// put your options and callbacks here
 		defaultView: "month",
 		locale: 'he',
@@ -93,27 +111,24 @@ function initCalendar(serviceId)
 			event.allDay = true;
 			if (mEventAfterRenderHelper)
 			{
-				$('#calendar').fullCalendar('renderEvent', event);
+				mCalendar.fullCalendar('renderEvent', event);
 				mEventAfterRenderHelper = false;
 			}
 		},
 		dayClick: function (date, jsEvent, view)
 		{
-			if ($(jsEvent.target).hasClass("disabled"))
-			{
-				return false;
-			}
 			// Adding the selected date to the sent form data
-			$('#setAppintmntForm').find('#chosenDate').attr('value', date.toDate());
-			$('#setAppintmntForm').find('#serviceId').attr('value', serviceId);
-			$('#setAppintmntForm').find('#branchId').attr('value', branchId);
+			var setAppintmntForm = $('#setAppintmntForm');
+			setAppintmntForm.find('#chosenDate').attr('value', date.toDate());
+			setAppintmntForm.find('#serviceId').attr('value', serviceId);
+			setAppintmntForm.find('#branchId').attr('value', branchId);
 
 			// Opening the modal
 			$('#setAppintmnt').find('.modal-title').html('Set appointment - ' + date.format('L'));
 			mChosenDate = new Date(date);
 
 			var openSpotsArr = getOpenSpotsPerDate(date);
-			if (!openSpotsArr) return; /// no available spots on this day- return
+			if (!openSpotsArr) return; /// no available spots on this day - return
 			openSpotsArr.forEach(function (iOpenSpot)
 			{
 				var date = new Date(iOpenSpot);
@@ -128,7 +143,6 @@ function initCalendar(serviceId)
 			$('#setAppintmnt').modal('show');
 		},
 	});
-
 }
 
 function make2chars(iNum)
@@ -145,8 +159,7 @@ function make2chars(iNum)
 function getOpenSpotsPerDate(iDate)
 {
 	var res;
-
-	mAvailbleEvents = $('#calendar').fullCalendar('clientEvents');
+	mAvailbleEvents = mCalendar.fullCalendar('clientEvents');
 
 	mAvailbleEvents.forEach(function myfunction(iEvent)
 	{
@@ -176,8 +189,6 @@ var getUrlParameter = function getUrlParameter(sParam)
 		}
 	}
 };
-
-
 
 function showApp()
 {

@@ -21,25 +21,39 @@ var workDaySchema = mongoose.Schema(
 workDaySchema.methods.AddAppintmnt = function (appintmnt)
 {
 	//TODO validation
-	var relevantShift = this.getShiftByTime(appintmnt.start_time);
-    var result = relevantShift.SetAvailbleArrs(appintmnt);
-	appintmnt.station_title = result.stationTitle;
-	//var resWorkDay = result.workDay;
+	var relevantShiftIndex = this.getShiftIndexByTime(appintmnt.start_time);
+	var res = this.shifts[relevantShiftIndex].shift.SetAvailbleArrs(appintmnt);
+	this.shifts[relevantShiftIndex].shift = res.shift;
+	appintmnt.station_title = res.stationTitle;//.stationTitle;
 	this.appointments.push(appintmnt);
-	//return resWorkDay;
+
+	return this;
+	//var xwd = this;
+	//this.save(function (err)
+	//{
+	//	if (err)
+	//	{
+	//		console.log("error in saving workday");
+	//	}
+	//	else
+	//	{
+	//		//console.log('workday saved with the title: ' + xwd.shifts[0].shift.stations[0].title);
+	//	}
+	//});
 };
 
-workDaySchema.methods.getShiftByTime = function(iStart_time)
+workDaySchema.methods.getShiftIndexByTime = function(iStart_time)
 {
-	var res;
+	var res = 0;
 
 	iStart_time.setFullYear(1970);
 	iStart_time.setMonth(0);
 	iStart_time.setDate(1);
 	iStart_time = iStart_time.getTime();
-
-	this.shifts.forEach(function (iShift)
+	
+	for (var i = 0; i < this.shifts.length; i++)
 	{
+		var iShift = this.shifts[i];
 		var startStr = iShift.hours.startTime.split(":");
 		var ishiftStart = new Date(0);
 		ishiftStart.setHours(parseInt(startStr[0]));
@@ -54,10 +68,10 @@ workDaySchema.methods.getShiftByTime = function(iStart_time)
 
 		if (iStart_time >= ishiftStart && iStart_time <= ishiftEnd)
 		{
-			res = iShift.shift;
-			return;
+			res = i;
+			break;
 		}
-	});
+	}
 
 	return res;
 };

@@ -1,6 +1,6 @@
 var Branch = require('../models/branch.js');
 var moment = require('moment');
-//var _ = require('underscore-node');
+
 module.exports = function (router, passport)
 {
 	router.get('/branch', function (req, res, next)
@@ -20,18 +20,42 @@ module.exports = function (router, passport)
 	router.post('/set-appintmnt', function (req, res)
 	{
 		var date = new Date(req.body.dateTime);
+
+		//for debug TODO remove
+		var id;
+		if (req.user)
+		{
+			id = req.user._id;
+		}
+		else
+		{
+			id = "591b51d294c9e040348244ec";
+		}
+
 		var appintmnt = {
-			client: req.user._id,
+			client: id,
 			start_time: date,
 			service: req.body.serviceId
 		};
 
 		Branch.findById(req.body.branchId, function (err, branch)
 		{
-			var _err = branch.AddAppintmnt(date, appintmnt);
-			if (_err)
-				console.log(_err);
+			var newBranch = branch.AddAppintmnt(date, appintmnt);
+			if (newBranch)
+			{
+				branch = newBranch;
+				branch.markModified('workdays');
+				branch.save(function (err, updatedDoc)
+				{
+					if (err)
+					{
+						console.log(err);
+					}
+				});
+			}
 		});
+
+		res.send('yeahhhh');
 	});
 
 	router.get('/get-branch-events', function (req, res)
