@@ -1,13 +1,9 @@
 "use strict";
-
 var mServiceId;
 var mAvailbleEvents;
 var mChosenDate;
 var mCurrentMonth;
 var mUpdated = false;
-var mBranchId;
-var mEventAfterRenderHelper = true;
-var mCalendar;
 
 $.fn.bindFirst = function (name, fn)
 {
@@ -20,7 +16,7 @@ $.fn.bindFirst = function (name, fn)
 	this.each(function ()
 	{
 		var handlers = $._data(this, 'events')[name.split('.')[0]];
-		//console.log(handlers);
+		console.log(handlers);
 		// take out the handler we just inserted from the end
 		var handler = handlers.pop();
 		// move it at the beginning
@@ -28,44 +24,47 @@ $.fn.bindFirst = function (name, fn)
 	});
 };
 
-$(document).ready(function ()
-{
-	//$("#setAppintmntForm").submit(function (e)
-	//{
-	//	var url = "/set-appintmnt";
-
-	//	$.ajax({
-	//		type: "POST",
-	//		url: url,
-	//		data: $("#setAppintmntForm").serialize(), // serializes the form's elements.
-	//		success: function (data)
-	//		{
-	//			console.log(data);
-	//		}
-	//	});
-
-	//	e.preventDefault(); // avoid to execute the actual submit of the form.
-	//	$('#setAppintmnt').modal('hide');
-	//	initCalendar(mServiceId);
-	//});
-
-	mBranchId = getUrlParameter('branch');
-	mCalendar = $('#calendar');
-});
-
 function serviceHasChosen(duration, serviceId)
 {
+	var month = new Date();
+	var branchId = getUrlParameter('branch');
 	mServiceId = serviceId;
-	if (mCalendar.is(":visible"))
+	$.get("/get-branch-events?branch=" + branchId + '&serviceId=' + serviceId + '&month=' + month.getTime(), function (data)
 	{
-		refreshCalendarView();
-	}
-	else
-	{
+		mAvailbleEvents = data;
 		initCalendar(serviceId);
-		mCalendar.show();
-		mCalendar.fullCalendar('render');
-	}
+
+		$('.fc-prev-button').bindFirst('click', function ()
+		{
+			var m = $('#calendar').fullCalendar('getDate').toDate();
+			m = new Date(m.setMonth(m.getMonth() - 1));
+			mUpdated = false;
+			setAvlbleEventsSync(m);
+		});
+		$('.fc-next-button').bindFirst('click', function ()
+		{
+			var m = $('#calendar').fullCalendar('getDate').toDate();
+			m = new Date(m.setMonth(m.getMonth() + 1));
+			mUpdated = false;
+			setAvlbleEventsSync(m);
+		});
+	});
+	$('#calendar').show();
+
+}
+
+function setAvlbleEventsSync(iMonth)
+{
+	var branchId = getUrlParameter('branch');
+	
+	jQuery.ajaxSettings.async = false;
+	$.get("/get-branch-events?branch=" + branchId + '&serviceId=' + mServiceId + '&month=' + iMonth.getTime(),
+		function (data)
+		{
+			mAvailbleEvents = data;
+			mUpdated = true;
+		});
+	jQuery.ajaxSettings.async = true;
 }
 
 function setAppintmnt(iTime)
@@ -75,65 +74,38 @@ function setAppintmnt(iTime)
 	mChosenDate.setMinutes(dateTime[1]);
 
 	$.post('/set-appintmnt', { branchId: getUrlParameter('branch'), serviceId: mServiceId, dateTime: mChosenDate });
-	$('#setAppintmnt').modal('hide');
-	refreshCalendarView()
-}
-
-function refreshCalendarView()
-{
-	//mCalendar.fullCalendar('refetchEvents');
-	mCalendar.fullCalendar('prev');
-	mCalendar.fullCalendar('next');
 }
 
 function initCalendar(serviceId)
 {
-	mCalendar.fullCalendar({
+	var branchId = getUrlParameter('branch');
+
+	$('#calendar').fullCalendar({
 		// put your options and callbacks here
 		defaultView: "month",
 		locale: 'he',
 		timezone: 'local',
-		events: function (start, end, timezone, callback)
-		{
-			mEventAfterRenderHelper = true;
-
-			var m = start.add(7, 'days');
-			m = m.toDate();
-			$.get("/get-branch-events?branch=" + mBranchId + '&serviceId=' + mServiceId + '&month=' + m.getTime(),
-				function (data)
-				{
-					callback(data);
-				});
-		},
-		eventAfterRender: function (event, element, view)
-		{
-			event.rendering = "background";
-			event.allDay = true;
-			if (mEventAfterRenderHelper)
-			{
-				mCalendar.fullCalendar('renderEvent', event);
-				mEventAfterRenderHelper = false;
-			}
-		},
+		events: null,
 		dayClick: function (date, jsEvent, view)
 		{
+			if ($(jsEvent.target).hasClass("disabled"))
+			{
+				return false;
+			}
 			// Adding the selected date to the sent form data
-			var setAppintmntForm = $('#setAppintmntForm');
-			setAppintmntForm.find('#chosenDate').attr('value', date.toDate());
-			setAppintmntForm.find('#serviceId').attr('value', serviceId);
-			setAppintmntForm.find('#branchId').attr('value', branchId);
+			$('#setAppintmntForm').find('#chosenDate').attr('value', date.toDate());
+			$('#setAppintmntForm').find('#serviceId').attr('value', serviceId);
+			$('#setAppintmntForm').find('#branchId').attr('value', branchId);
 
 			// Opening the modal
 			$('#setAppintmnt').find('.modal-title').html('Set appointment - ' + date.format('L'));
 			mChosenDate = new Date(date);
-
 			var openSpotsArr = getOpenSpotsPerDate(date);
-			if (!openSpotsArr) return; /// no available spots on this day - return
 			openSpotsArr.forEach(function (iOpenSpot)
 			{
 				var date = new Date(iOpenSpot);
-				var hours = make2chars(date.getHours());
-				var min = make2chars(date.getMinutes());
+				var hours = date.getHours();
+				var min = date.getMinutes();
 				var time = hours + ":" + min;
 				var listItem = '<li><a onclick="setAppintmnt(';
 				listItem = listItem + "'" + time + "')" + '"' + " href='#'>" + time + '</a></li>';
@@ -142,24 +114,46 @@ function initCalendar(serviceId)
 
 			$('#setAppintmnt').modal('show');
 		},
+		dayRender: function (date, cell)
+		{
+			if (mUpdated)
+			{
+				paintDay(date, cell);
+			}
+			else
+			{
+				setAvlbleEventsSync();
+				paintDay(date, cell);
+			}
+		},
 	});
 }
 
-function make2chars(iNum)
+function paintDay(date,cell)
 {
-	var str = iNum.toString();
-	if (str.length < 2)
+	var isDayValid = false;
+	mAvailbleEvents.forEach(function myfunction(iEvent)
 	{
-		str = '0' + str;
-	}
-
-	return str;
+		if (new Date(iEvent.date).getDate() == new Date(date.toString()).getDate())
+		{
+			cell.css("background-color", "#266526");
+			cell.removeClass('disabled');
+			isDayValid = true;
+		}
+		else
+		{
+			if (!isDayValid)
+			{
+				cell.css("background-color", "#DADADA");
+				cell.addClass('disabled');
+			}
+		}
+	});
 }
 
 function getOpenSpotsPerDate(iDate)
 {
 	var res;
-	mAvailbleEvents = mCalendar.fullCalendar('clientEvents');
 
 	mAvailbleEvents.forEach(function myfunction(iEvent)
 	{
@@ -190,10 +184,34 @@ var getUrlParameter = function getUrlParameter(sParam)
 	}
 };
 
+$(document).ready(function ()
+{
+	$("#setAppintmntForm").submit(function (e)
+	{
+		var url = "/set-appintmnt";
+
+		$.ajax({
+			type: "POST",
+			url: url,
+			data: $("#setAppintmntForm").serialize(), // serializes the form's elements.
+			success: function (data)
+			{
+				console.log(data);
+			}
+		});
+
+		e.preventDefault(); // avoid to execute the actual submit of the form.
+		$('#setAppintmnt').modal('hide');
+		initCalendar(mServiceId);
+	});
+});
+
 function showApp()
 {
 	$('#appintmnt-app').show();
 }
+
+
 
 var geocoder;
 var map;
