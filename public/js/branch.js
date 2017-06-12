@@ -11,44 +11,17 @@ var mCalendar;
 
 $.fn.bindFirst = function (name, fn)
 {
-	// bind as you normally would
-	// don't want to miss out on any jQuery magic
 	this.on(name, fn);
-
-	// Thanks to a comment by @Martin, adding support for
-	// namespaced events too.
 	this.each(function ()
 	{
 		var handlers = $._data(this, 'events')[name.split('.')[0]];
-		//console.log(handlers);
-		// take out the handler we just inserted from the end
 		var handler = handlers.pop();
-		// move it at the beginning
 		handlers.splice(0, 0, handler);
 	});
 };
 
 $(document).ready(function ()
 {
-	//$("#setAppintmntForm").submit(function (e)
-	//{
-	//	var url = "/set-appintmnt";
-
-	//	$.ajax({
-	//		type: "POST",
-	//		url: url,
-	//		data: $("#setAppintmntForm").serialize(), // serializes the form's elements.
-	//		success: function (data)
-	//		{
-	//			console.log(data);
-	//		}
-	//	});
-
-	//	e.preventDefault(); // avoid to execute the actual submit of the form.
-	//	$('#setAppintmnt').modal('hide');
-	//	initCalendar(mServiceId);
-	//});
-
 	mBranchId = getUrlParameter('branch');
 	mCalendar = $('#calendar');
 });
@@ -62,7 +35,7 @@ function serviceHasChosen(duration, serviceId)
 	}
 	else
 	{
-		initCalendar(serviceId);
+		initCalendar();
 		mCalendar.show();
 		mCalendar.fullCalendar('render');
 	}
@@ -81,18 +54,23 @@ function setAppintmnt(iTime)
 
 function refreshCalendarView()
 {
-	//mCalendar.fullCalendar('refetchEvents');
 	mCalendar.fullCalendar('prev');
+	sleep(300);
 	mCalendar.fullCalendar('next');
 }
 
-function initCalendar(serviceId)
+function sleep(ms) 
+{
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function initCalendar()
 {
 	mCalendar.fullCalendar({
-		// put your options and callbacks here
 		defaultView: "month",
 		locale: 'he',
 		timezone: 'local',
+		lazyFetching: false,
 		events: function (start, end, timezone, callback)
 		{
 			mEventAfterRenderHelper = true;
@@ -117,13 +95,14 @@ function initCalendar(serviceId)
 		},
 		dayClick: function (date, jsEvent, view)
 		{
-			// Adding the selected date to the sent form data
+			/// Adding the selected date to the sent form data
 			var setAppintmntForm = $('#setAppintmntForm');
 			setAppintmntForm.find('#chosenDate').attr('value', date.toDate());
-			setAppintmntForm.find('#serviceId').attr('value', serviceId);
+			setAppintmntForm.find('#serviceId').attr('value', mServiceId);
 			setAppintmntForm.find('#branchId').attr('value', branchId);
-
-			// Opening the modal
+			var openSpotsJQ = $('#openSpots');
+			openSpotsJQ.empty();
+			/// Opening the modal
 			$('#setAppintmnt').find('.modal-title').html('Set appointment - ' + date.format('L'));
 			mChosenDate = new Date(date);
 
@@ -137,7 +116,7 @@ function initCalendar(serviceId)
 				var time = hours + ":" + min;
 				var listItem = '<li><a onclick="setAppintmnt(';
 				listItem = listItem + "'" + time + "')" + '"' + " href='#'>" + time + '</a></li>';
-				$('#openSpots').append(listItem);
+				openSpotsJQ.append(listItem);
 			});
 
 			$('#setAppintmnt').modal('show');
@@ -159,6 +138,7 @@ function make2chars(iNum)
 function getOpenSpotsPerDate(iDate)
 {
 	var res;
+	//mCalendar.fullCalendar('refetchEvents');
 	mAvailbleEvents = mCalendar.fullCalendar('clientEvents');
 
 	mAvailbleEvents.forEach(function myfunction(iEvent)
