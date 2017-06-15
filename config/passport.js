@@ -115,14 +115,15 @@ module.exports = function (passport)
                             newManager.password = newManager.generateHash(password);
                             newManager.joinDate = new Date();
                             // Create the network
-                            var network = new Network();
+							var network = new Network();
+							network.email = email;
                             network.name = req.body.name;
                             network.categories.push(req.body.category);
                             network.address.country = req.body.country;
                             network.address.city = req.body.city;
                             network.address.street = req.body.street;
 
-                            network.save();
+							network.save(function (err) { if (err) console.log(err); else console.log("network " + network.name + " was saved"); });
                             newManager.networks_own.push(network.id);
                             newManager.save(function (err)
                             {
