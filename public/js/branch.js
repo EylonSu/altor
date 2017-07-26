@@ -41,6 +41,20 @@ function serviceHasChosen(duration, serviceId)
 	}
 }
 
+function setLbl(iTime)
+{
+	$('set_appntmnt').click(setAppintmnt(iTime));
+	$('time_lbl').text(iTime);
+
+	//var dateTime = iTime.split(':');
+	//mChosenDate.setHours(dateTime[0]);
+	//mChosenDate.setMinutes(dateTime[1]);
+
+	//$.post('/set-appintmnt', { branchId: getUrlParameter('branch'), serviceId: mServiceId, dateTime: mChosenDate });
+	//$('#setAppintmnt').modal('hide');
+	//refreshCalendarView()
+}
+
 function setAppintmnt(iTime)
 {
 	var dateTime = iTime.split(':');
@@ -61,7 +75,7 @@ function refreshCalendarView()
 
 function sleep(ms) 
 {
-  return new Promise(resolve => setTimeout(resolve, ms));
+	return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 function initCalendar()
@@ -97,9 +111,9 @@ function initCalendar()
 		{
 			/// Adding the selected date to the sent form data
 			var setAppintmntForm = $('#setAppintmntForm');
-			setAppintmntForm.find('#chosenDate').attr('value', date.toDate());
+			setAppintmntForm.find('#dateTime').attr('value', date.toDate());
 			setAppintmntForm.find('#serviceId').attr('value', mServiceId);
-			setAppintmntForm.find('#branchId').attr('value', branchId);
+			setAppintmntForm.find('#branchId').attr('value', mBranchId);
 			var openSpotsJQ = $('#openSpots');
 			openSpotsJQ.empty();
 			/// Opening the modal
@@ -114,8 +128,10 @@ function initCalendar()
 				var hours = make2chars(date.getHours());
 				var min = make2chars(date.getMinutes());
 				var time = hours + ":" + min;
-				var listItem = '<li><a onclick="setAppintmnt(';
-				listItem = listItem + "'" + time + "')" + '"' + " href='#'>" + time + '</a></li>';
+				//var listItem = '<li><a onclick="setLbl(';
+				//listItem = listItem + "'" + time + "')" + '"' + " href='#'>" + time + '</a></li>';
+				
+				var listItem = '<option>' + time + '</option>';
 				openSpotsJQ.append(listItem);
 			});
 
