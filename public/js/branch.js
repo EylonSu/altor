@@ -131,7 +131,7 @@ function initCalendar()
 				//var listItem = '<li><a onclick="setLbl(';
 				//listItem = listItem + "'" + time + "')" + '"' + " href='#'>" + time + '</a></li>';
 				
-				var listItem = '<option>' + time + '</option>';
+				var listItem = '<option >' + time + '</option>';
 				openSpotsJQ.append(listItem);
 			});
 
@@ -140,6 +140,12 @@ function initCalendar()
 	});
 }
 
+function setTime()
+{
+	var selectedTime =$('#openSpots').find(":selected").text()
+    var setAppintmntForm = $('#setAppintmntForm');
+    setAppintmntForm.find('#Time').attr('value',selectedTime);
+}
 function make2chars(iNum)
 {
 	var str = iNum.toString();

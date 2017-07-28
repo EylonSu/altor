@@ -21,6 +21,10 @@ module.exports = function (router, passport)
 	{
 		var date = new Date(req.body.dateTime);
 
+		var selectedTime = req.body.Time;
+		var h_m_Arr = selectedTime.split(':');
+
+		date.setHours(h_m_Arr[0],h_m_Arr[1]);
 		//for debug TODO remove
 		var id;
 		if (req.user)
@@ -55,7 +59,7 @@ module.exports = function (router, passport)
 			}
 		});
 
-		res.send('yeahhhh');
+		//res.send('yeahhhh');
 	});
 
 	router.get('/get-branch-events', function (req, res)
