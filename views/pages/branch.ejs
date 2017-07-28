@@ -1,4 +1,4 @@
-﻿<% layout('calendar-template') %>
+﻿﻿<% layout('calendar-template') %>
 <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
 <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 <script type="text/javascript" src="https://maps.google.com/maps/api/js?key=AIzaSyCio4YGG9Ls4kmhuazsucZSL5IZWqZl1a0"></script>
@@ -9,7 +9,7 @@
 <div class="modal fade" id="setAppintmnt" tabindex="-1" role="dialog" aria-labelledby="setAppintmntModalLabel">
     <div class="modal-dialog" role="document">
         <form id="setAppintmntForm" action="/set-appintmnt" method="post">
-            <input id="chosenDate" type="hidden" name="chosenDate" value="@" />
+            <input id="dateTime" type="hidden" name="dateTime" value="@" />
             <input id="serviceId" type="hidden" name="serviceId" value="@" />
             <input id="branchId" type="hidden" name="branchId" value="@" />
             <div class="modal-content">
@@ -20,22 +20,24 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <div class="row">
-                            <div class="col-md-12">
+                            <div class="col-md-6">
                                 <div class="dropdown">
-                                    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
-                                        Pick a time
-                                        <span class="caret"></span>
-                                    </button>
-                                    <ul id="openSpots" class="dropdown-menu">
-                                    </ul>
+                                    <!--<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">-->
+                                        <!--Pick a time-->
+                                        <!--<span class="caret"></span>-->
+                                    <!--</button>-->
+                                    <select id="openSpots" class="form-control"></select>
                                 </div>
+                            </div>
+                            <div class="col-md-6">
+                                <span id="time_lbl" class="label label-info"></span>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-warning">Add appointment</button>
+                    <button id="set_appntmnt" type="submit" class="btn btn-warning">Add appointment</button>
                 </div>
             </div>
         </form>
@@ -62,7 +64,7 @@
         </div>
         <div class="col-lg-6">
             <% if (user && user.role == 'client') { %>
-            <button type="button" class="btn btn-secondary btn-lg" onclick= showApp()>
+            <button type="button" class="btn btn-secondary btn-lg" onclick=showApp()>
                 Click to set an appointment
             </button>
             <% } else if (!user) { %>
