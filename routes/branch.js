@@ -1,6 +1,19 @@
 var Branch = require('../models/branch.js');
 var moment = require('moment');
 
+var weekday = new Array(7);
+weekday[0] =  "Sunday";
+weekday[1] = "Monday";
+weekday[2] = "Tuesday";
+weekday[3] = "Wednesday";
+weekday[4] = "Thursday";
+weekday[5] = "Friday";
+weekday[6] = "Saturday";
+
+var monthNames = ["January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
+];
+
 module.exports = function (router, passport)
 {
 	router.get('/branch', function (req, res, next)
@@ -20,6 +33,8 @@ module.exports = function (router, passport)
 	router.post('/set-appintmnt', function (req, res)
 	{
 		var date = new Date(req.body.dateTime);
+
+		var dateToReturn = new Date(req.body.dateTime);
 
 		var selectedTime = req.body.Time;
 		var h_m_Arr = selectedTime.split(':');
@@ -54,6 +69,10 @@ module.exports = function (router, passport)
 					if (err)
 					{
 						console.log(err);
+					}else{
+						res.render('pages/successSetApp',{user: req.user, branch: branch.name , monthDay: dateToReturn.getDate(),
+							day:weekday[date.getDay()], hour: h_m_Arr[0], min: h_m_Arr[1], year: dateToReturn.getFullYear(),
+							month :monthNames[dateToReturn.getMonth()] });
 					}
 				});
 			}
