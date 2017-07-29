@@ -93,6 +93,7 @@
                 <th>Branch name</th>
                 <th>Date & Time</th>
                 <th>Service</th>
+                <th>Cancel appointment</th>
             </tr>
             </thead>
             <tbody>
@@ -101,6 +102,7 @@
             <td><%= app.branch_name %></td>
             <td><%= moment(app.date_and_time).format( 'dddd, MMMM Do YYYY, h:mm:ss a') %></td>
             <td><%= app.service.name %></td>
+                <td><a type="button" class="btn btn-danger" href="/deleteAppointment?appToDel=(<%= app%>)">Cancel Appointment</a></td>
             </tr>
             <% }); %>
             </tbody>
