@@ -12,7 +12,8 @@ var workDaySchema = mongoose.Schema(
 		}],
 		appointments: [{
 			client: { type: mongoose.Schema.Types.ObjectId, ref: "client" },
-			start_time: Date,
+            date_and_time: Date,
+			date_as_string: String,
 			service: require('./service'),
 			station_title: String
 		}]

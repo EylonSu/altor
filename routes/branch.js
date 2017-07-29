@@ -1,5 +1,6 @@
 var Branch = require('../models/branch.js');
 var moment = require('moment');
+var Client = require('../models/client.js');
 
 var weekday = new Array(7);
 weekday[0] =  "Sunday";
@@ -40,6 +41,7 @@ module.exports = function (router, passport)
 		var h_m_Arr = selectedTime.split(':');
 
 		date.setHours(h_m_Arr[0],h_m_Arr[1]);
+        dateToReturn.setHours(h_m_Arr[0],h_m_Arr[1]);
 		//for debug TODO remove
 		var id;
 		if (req.user)
@@ -57,6 +59,7 @@ module.exports = function (router, passport)
 			service: req.body.serviceId
 		};
 
+
 		Branch.findById(req.body.branchId, function (err, branch)
 		{
 			var newBranch = branch.AddAppintmnt(date, appintmnt);
@@ -70,15 +73,39 @@ module.exports = function (router, passport)
 					{
 						console.log(err);
 					}else{
-						res.render('pages/successSetApp',{user: req.user, branch: branch.name , monthDay: dateToReturn.getDate(),
-							day:weekday[date.getDay()], hour: h_m_Arr[0], min: h_m_Arr[1], year: dateToReturn.getFullYear(),
-							month :monthNames[dateToReturn.getMonth()] });
+						var service = branch.GetServiceById(req.body.serviceId);
+                        var user = req.user;
+                        user.appointments.push({
+                        	branch_name: branch.name,
+                        	branch: branch._id,
+                            date_and_time: dateToReturn,
+                            service: service
+                            });
+
+						Client.findById(user._id.toString(),function (err, client)
+                        {
+                            client = user;
+                            client.save(function (err)
+                            {
+                                if (err)
+                                {
+                                	//TODO: because the branch is allready updated we need to delete the appointment from the branch... fuck it
+
+                                    console.log(err);
+                                }else{
+                                    res.render('pages/successSetApp',{user: req.user, branch: branch.name , monthDay: dateToReturn.getDate(),
+                                        day:weekday[date.getDay()], hour: h_m_Arr[0], min: h_m_Arr[1], year: dateToReturn.getFullYear(),
+                                        month :monthNames[dateToReturn.getMonth()] });
+								}
+                            })
+                        })
+
 					}
 				});
 			}
 		});
 
-		//res.send('yeahhhh');
+
 	});
 
 	router.get('/get-branch-events', function (req, res)

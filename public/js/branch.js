@@ -9,6 +9,11 @@ var mBranchId;
 var mEventAfterRenderHelper = true;
 var mCalendar;
 
+$( document ).ready(function() {
+	var adr = $("#address").text();
+    initializeMap(adr);
+});
+
 $.fn.bindFirst = function (name, fn)
 {
 	this.on(name, fn);
@@ -199,7 +204,7 @@ function showApp()
 
 var geocoder;
 var map;
-function initialize(adr)
+function initializeMap(adr)
 {
 	var address = adr;
 	geocoder = new google.maps.Geocoder();
