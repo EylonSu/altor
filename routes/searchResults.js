@@ -1,6 +1,7 @@
 var similarity = require("similarity")
 var network = require('../models/network');
 var branch = require('../models/branch');
+var moment = require('moment');
 
 module.exports = function (router)
 {
@@ -9,7 +10,7 @@ module.exports = function (router)
 		network.find({}, { name: true }, function (err, networks)
         {
             if(err){
-                res.render('pages/index', { title: 'Altor - Home', user: req.user , messege : "אירעה תקלה. אנא חפש שנית" });
+                res.render('pages/index', { title: 'Altor - Home', user: req.user , messege : "אירעה תקלה. אנא חפש שנית" ,moment: moment});
             }
             var searchResults = [];
 

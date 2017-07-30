@@ -22,7 +22,7 @@ module.exports = function (router, passport)
         }
         else
         {
-            res.render('pages/index', {title: 'Altor - Home', user: req.user, messege: ""});
+            res.render('pages/index', {title: 'Altor - Home', user: req.user, messege: "", moment: moment});
         }
     });
 };

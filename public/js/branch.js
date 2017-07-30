@@ -1,8 +1,5 @@
 "use strict";
 
-function serviceHasChosen(serviceId)
-{
-    //TODO
 var mServiceId;
 var mAvailbleEvents;
 var mChosenDate;
