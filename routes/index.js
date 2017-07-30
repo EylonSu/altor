@@ -1,3 +1,5 @@
+var moment = require('moment');
+
 module.exports = function (router, passport)
 {
     var Messages = require('../models/schemes/message');
@@ -16,7 +18,7 @@ module.exports = function (router, passport)
     {
         if (req.user)
         {
-            res.render('pages/index', {title: 'Altor - Home', user: req.user, messege: ""});
+            res.render('pages/index', {title: 'Altor - Home', user: req.user, messege: "", moment: moment});
         }
         else
         {

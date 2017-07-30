@@ -15,6 +15,13 @@ var clientSchema = User.discriminator('client', new mongoose.Schema(
         [{
             branch: mongoose.Schema.Types.ObjectId,
             queue: mongoose.Schema.Types.ObjectId
+        }],
+
+        appointments: [{
+            branch_name: String,
+            branch: { type: mongoose.Schema.Types.ObjectId, ref: "branch" },
+            date_and_time: Date,
+            service: require('../models/schemes/service'),
         }]
     }));
 

@@ -74,9 +74,9 @@ shiftSchema.methods.SetAvailbleArrs = function (appintmnt)
 		}
 	}
 
-	if (!isArrUpdate)
+	if (!isArrUpdate)// here the error is thrown
 	{
-		throw "error"
+		res.send('booooozzzzzz');
 	}
 };
 
