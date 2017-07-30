@@ -8,8 +8,7 @@ var branchSchema = mongoose.Schema(
         email: { type: String, required: true, trim: true },
         phone: { type: String },
         picture_path: { type: String },
-        address:
-            {
+        address: {
                 country: String,
                 city: String,
                 street: String,
