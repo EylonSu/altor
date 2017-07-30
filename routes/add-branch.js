@@ -148,7 +148,6 @@ module.exports = function (router, passport)
 				else
 				{
 					console.log("No network was found");
-					return;
 				}
 			})
 		}
