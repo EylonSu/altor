@@ -81,12 +81,14 @@
                     <% } %>
                 </div>
             </div>
-
+            <% if (user) { %>
             <h2 class="title-one">Your upcoming appointments</h2>
+            <% } %>
         </div>
 
 
         <!--Appointments table-->
+        <% if (user) { %>
         <table class="table table-striped">
             <thead>
             <tr>
@@ -99,15 +101,20 @@
             <tbody>
             <% user.appointments.forEach(function(app){ %>
             <tr>
-            <td><%= app.branch_name %></td>
-            <td><%= moment(app.date_and_time).format( 'dddd, MMMM Do YYYY, h:mm:ss a') %></td>
-            <td><%= app.service.name %></td>
+                <td><%= app.branch_name %></td>
+                <td><%= moment(app.date_and_time).format( 'dddd, MMMM Do YYYY, h:mm:ss a') %></td>
+                <td><%= app.service.name %></td>
                 <td><a type="button" class="btn btn-danger" href="/deleteAppointment?appToDel=(<%= app%>)">Cancel Appointment</a></td>
             </tr>
             <% }); %>
             </tbody>
         </table>
+
+        <% } else { %>
+        <% } %>
+
         <!--Appointments table-->
+
         <div class="about-us">
             <div class="row">
                 <div class="col-sm-6">
