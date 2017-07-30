@@ -8,6 +8,11 @@ module.exports = function (router)
 		res.redirect('/');
 	});
 
+	router.get('/sms', function (req, res)
+	{
+		res.render('pages/sms', { user: null });
+	});
+
 	router.post('/sendSMS', function (req, res, next)
 	{
 		var example = new SmsModel();
