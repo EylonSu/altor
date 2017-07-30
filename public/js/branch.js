@@ -141,7 +141,7 @@ function initCalendar()
 			});
 
 			$('#setAppintmnt').modal('show');
-		},
+		}
 	});
 }
 

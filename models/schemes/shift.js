@@ -7,7 +7,6 @@ var shiftSchema = mongoose.Schema(
 	{
 		title: String,
 		stations: [{
-			title: String,
 			services: [{ type: [mongoose.Schema.ObjectId], ref: "service", required: true }],
 			numOfServiceProviders: Number,
 			availbleArrs: [[String]]

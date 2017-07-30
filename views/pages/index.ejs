@@ -75,7 +75,7 @@
 
 
         <!--Appointments table-->
-        <% if (user) { %>
+        <% if (user && user.role == 'client') { %>
         <table class="table table-striped">
             <thead>
             <tr>

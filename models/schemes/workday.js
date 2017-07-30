@@ -29,18 +29,7 @@ workDaySchema.methods.AddAppintmnt = function (appintmnt)
 	this.appointments.push(appintmnt);
 
 	return this;
-	//var xwd = this;
-	//this.save(function (err)
-	//{
-	//	if (err)
-	//	{
-	//		console.log("error in saving workday");
-	//	}
-	//	else
-	//	{
-	//		//console.log('workday saved with the title: ' + xwd.shifts[0].shift.stations[0].title);
-	//	}
-	//});
+
 };
 
 workDaySchema.methods.getShiftIndexByTime = function(iStart_time)
