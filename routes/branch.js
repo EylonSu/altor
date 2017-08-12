@@ -127,4 +127,9 @@ module.exports = function (router, passport)
         var openSpots = branch.GetOpenSpots(serviceId, month); ///month=Date
 		return openSpots;
     }
+
+
+    router.get('/deleteAppointment', function (req, res){
+
+    });
 };
