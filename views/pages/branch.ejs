@@ -68,40 +68,88 @@
     </div>
 </div>
 
+    <!--***************************************************************************************-->
+
+    <div class="modal fade" id="map" tabindex="-1" role="dialog" aria-labelledby="setAppintmntModalLabel">
+        <div class="modal-dialog" role="document">
+
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">Location</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div id="map_canvas"  style="width:500px; height:300px"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <!--***************************************************************************************-->
 <div class="container">
     <div class="row">
-        <div class="col-lg-6">
-            <h1>Wellcome to <%= branch.name %> branch page</h1>
-            <img src="<%= branch.picture_path%>" class="img-rounded img-responsive" alt="Cinque Terre" width="304" height="236">
-            <h3>contact information:</h3>
-            <h4>Phone: <%= branch.phone %></h4>
-            <h4>email: <%= branch.email %></h4>
-            <h4 id="address">Address: <%= address %></h4>
+        <div class="text-center">
+            <div class="col-sm-8 col-sm-offset-2">
+        <section style="margin-top: -150px; margin-bottom: -50px">
 
 
-        </div>
-        <div class="col-lg-6">
-        </br>
-            <div id="map_canvas" class="col-lg-12" style="width:500px; height:300px"></div>
-            <div id="choose-service" class="row">
-                <div class="col-lg-6" style="margin-top: 1cm" >
-                    <div class="dropdown">
-                        <button class="btn btn-secondary btn-lg dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Choose the service you want to receive
+        <h1 class="title-one">Wellcome to <%= branch.name %> branch page</h1>
+
+        </section>
+        <!--<div class="col-lg-6">-->
+            <img src="<%= branch.picture_path%>" class="img-rounded img-responsive" alt="Cinque Terre" width="304" height="236" style="margin: 0 auto;">
+                <br />
+
+            <h3 class="heading animated bounceInDown">Contact information:</h3>
+            <p class="heading animated bounceInDown">Phone: <%= branch.phone %></p>
+            <p class="heading animated bounceInDown" >Email: <%= branch.email %></p>
+            <p class="heading animated bounceInDown" id="address">Address: <%= address %> <button class=" btn btn-primarye glyphicon glyphicon-map-marker" type="button" onclick="showMap()">Show on map</button></p>
+
+
+        <!--</div>-->
+        <!--<div class="col-lg-6">-->
+
+            <!--<div id="map_canvas" class="col-lg-12 animated bounceInLeft" style="width:500px; height:300px"></div>-->
+            <div id="choose-service">
+                <!--<div class="col-lg-6" style="margin-top: 1cm" >-->
+                    <div class="dropdown btn-group">
+                        <button class="btn btn-default slider-btn animated bounceInUp" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Select Service
                             <!--<span class="caret"></span>-->
                         </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                             <% branch.services.forEach(function(service){ %>
-                            <li> <a class="dropdown-item" onclick="serviceHasChosen('<%=service.duration%>', '<%=service._id%>')" href="#"><%=service.name%></a></li>
+                            <li> <a class="dropdown-item btn btn-default slider-btn" onclick="serviceHasChosen('<%=service.duration%>', '<%=service._id%>','<%=service.name%>' )" href="#sch"><%=service.name%></a></li>
                             <%})%>
                         </div>
                     </div>
-                </div>
+                <!--</div>-->
             </div>
-        </div>
+        <!--</div>-->
+            </div>
     </div>
+    </div>
+
     <br />
     <hr class="intro-divider">
+    <section id="sch">
+    <div class="row">
+        <div class="text-center">
+            <div class="col-sm-8 col-sm-offset-2">
+    <h1 id="serviceChoosen" class="title-one" style="display: none">Possible appointments for: </h1>
+            </div>
+        </div></div>
     <!-- SERVICES CHOOSE -->
     <div id="appintmnt-app">
         <br /><br />
@@ -113,5 +161,6 @@
             </div>
         </div>
     </div>
+    </section>
 </div>
 </section>
