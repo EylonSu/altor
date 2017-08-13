@@ -1,4 +1,3 @@
-
 <header id="navigation">
     <div class="navbar navbar-inverse navbar-fixed-top" role="banner" style="background-color: whitesmoke">
         <div class="container">
@@ -6,28 +5,19 @@
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                     <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="/"><h1><img src="images/logo.png" alt="logo"></h1></a>
+                <a class="navbar-brand" href="/"><h1><img src="images/logo.png" height="50" alt="logo"></h1></a>
             </div>
             <div class="collapse navbar-collapse">
                 <ul class="nav navbar-nav navbar-right">
-                    <li class="scroll">
-                        <a href="#about">About</a>
-                    </li>
                     <% if (user && user.role == 'manager') { %>
                     <li class="scroll">
                         <a href="/manage-business">Manage</a>
                     </li>
                     <% } %>
-                    <li class="scroll">
-                        <a href="#services">Services</a>
-                    </li>
-                    <li class="scroll">
-                        <a href="#contact">Contact</a>
-                    </li>
                 </ul>
                 <% if (user) { %>
                 <ul class="nav navbar-nav navbar-right">
-                    <li class="navbar-text">Hello <%= user.email %></li>
+                    <li class="scroll"><a href='/index'>Hello <%= user.email %></a></li>
                     <li class="scroll"><a href='/logout'>Log out</a></li>
                 </ul>
                 <% } else { %>

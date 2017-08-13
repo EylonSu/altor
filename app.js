@@ -8,6 +8,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var session = require('express-session');
+var MongoStore = require('connect-mongo')(session);
 var expressValidator = require('express-validator');
 var moment = require('moment');
 
@@ -71,7 +72,9 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(session({
     secret: 'ilovescotchscotchyscotchscotch', // session secret
     resave: true,
-    saveUninitialized: true
+    saveUninitialized: true,
+    store: new MongoStore ({mongooseConnection: mongoose.connection}),
+    cookie: {maxAge: 180 * 60 *1000}
 }));
 
 app.use(passport.initialize());
@@ -79,7 +82,10 @@ app.use(passport.session()); // persistent login sessions
 app.use(flash()); // use connect-flash for flash messages stored in session
 app.use(router);
 app.use(express.static(path.join(__dirname, '/appointment/dist')));
-
+app.use(function(req,res,next){
+    res.locals.session=req.session;
+    next();
+});
 // catch 404 and forward to error handler
 app.use(function (req, res, next)
 {
