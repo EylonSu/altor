@@ -130,6 +130,50 @@ module.exports = function (router, passport)
 
 
     router.get('/deleteAppointment', function (req, res){
+		var appToDel =JSON.parse(req.query.appToDel);
 
+        Branch.findById(appToDel.branch, function (err, branch){
+
+            var newBranch = branch.delAppointment(appToDel);
+            if (newBranch)
+            {
+                branch = newBranch;
+                branch.markModified('workdays');
+                branch.save(function (err, updatedDoc)
+                {
+                    if (err)
+                    {
+                        console.log(err);
+                    }else{
+                        // var user =  req.user;
+                        // for (var j =0; j < user.appointments.length; j++){
+                        // 	 if ((new Date(user.appointments[j].date_and_time).getTime() == new Date(appToDel.date_and_time)).getTime() && (user.appointments[j].branch.toString() == appToDel.branch.toString()) &&
+							// 	 (user.appointments[j].service._id.toString() == appToDel.service._id.toString())){
+                        // 	 	delete user.appointments[j];
+                        // 	 	break;
+							//  }
+                        // }
+                        //
+                        // Client.findById(user._id.toString(),function (err, client)
+                        // {
+                        //     client = user;
+                        //     client.save(function (err)
+                        //     {
+                        //         if (err)
+                        //         {
+                        //             //TODO: because the branch is allready updated we need to delete the appointment from the branch... fuck it
+                        //
+                        //             console.log(err);
+                        //         }else{
+                        //             res.render('pages/index', {title: 'Altor - Home', user: req.user, messege: "", moment: moment});
+                        //         }
+                        //     })
+                        // })
+                        res.render('pages/index', {title: 'Altor - Home', user: req.user, messege: "", moment: moment});
+                    }
+                });
+            }
+		});
     });
 };
+

@@ -78,6 +78,105 @@ shiftSchema.methods.SetAvailbleArrs = function (appintmnt)
 		res.send('booooozzzzzz');
 	}
 };
+shiftSchema.methods.delFromAvailbleArrs = function (appToDel)
+{
+    var startIndex = getIndexFromDate(new Date(appToDel.date_and_time));
+    var durationIn5Packets = appToDel.service.duration / 5;
+    var relevantStationsIndex = this.getRelevantStationToDelAppFrom(startIndex, appToDel.service); //TODO
+    var foundedAvalbleArr;
+
+    var isArrUpdate = false;
+    for (var i = 0; i < relevantStationsIndex.length; i++)
+    {
+
+        if (isArrUpdate)
+            break;
+
+        var index = 0;
+        this.stations[relevantStationsIndex[i]].availbleArrs.forEach(function (availbleArr)
+        {
+            if (isArrUpdate)
+                return;
+
+            for (var j = startIndex; j < startIndex + durationIn5Packets; j++)
+            {
+                if (availbleArr[j] != "B")
+                {
+                    index++;
+                    return;
+                }
+                else
+                {
+                    availbleArr[j] = "A";
+                }
+            }
+            foundedAvalbleArr = availbleArr;
+            isArrUpdate = true;
+        })
+        if (isArrUpdate)
+        {
+            this.stations[relevantStationsIndex[i]].availbleArrs[index] = foundedAvalbleArr;
+            var res = {};
+            res.shift = this;
+            var xshift = this;
+
+            return res;
+        }
+    }
+
+    if (!isArrUpdate)// here the error is thrown
+    {
+        res.send('booooozzzzzz');
+    }
+}
+
+shiftSchema.methods.getRelevantStationToDelAppFrom = function (startIndex, iServiceId)
+{
+    var res = [];
+    var found;
+    var index = 0;
+    for (index = 0; index < this.stations.length; index++)
+    {
+        var isServiceInclude = false;
+        for (var j = 0; j < this.stations[index].services.length; j++)
+        {
+            if (this.stations[index].services[j].toString() == iServiceId._id.toString())
+            {
+                isServiceInclude = true;
+                break;
+            }
+        }
+
+        if (isServiceInclude)
+        {
+            var isStationAvailable = false;
+            var durationIn5Packets = iServiceId.duration / 5;
+
+            this.stations[index].availbleArrs.forEach(function (iAvalArr)
+            {
+                if (!isStationAvailable)
+                {
+                    found = true;
+                    for (var i = startIndex; i < startIndex + durationIn5Packets; i++)
+                    {
+                        if (iAvalArr[i] != "B")
+                        {
+                            found = false;
+                            return;
+                        }
+                    }
+                    if (found)
+                    {
+                        res.push(index);
+                        isStationAvailable = true;
+                    }
+                }
+            });
+        }
+    };
+
+    return res;
+}
 
 shiftSchema.methods.getRelevantStation = function (startIndex, iServiceId)
 {

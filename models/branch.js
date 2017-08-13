@@ -121,6 +121,19 @@ branchSchema.methods.AddAppintmnt = function (date, appintmnt)
         return "no such workday";
 };
 
+branchSchema.methods.delAppointment = function (appToDel)
+{
+    var workday = this.findWorkday(new Date(appToDel.date_and_time));
+    if (workday)
+    {
+        workday = workday.delAppintmnt(appToDel);
+        return this;
+    }
+    else
+        return "no such workday";
+}
+
+
 branchSchema.methods.GetOpenSpots = function(iServiceId, iMonth)
 {
     var res = [];
