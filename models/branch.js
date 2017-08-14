@@ -2,7 +2,6 @@
 
 var branchSchema = mongoose.Schema(
     {
-        //branch: ObjectId //TODO altor+
         name: { type: String, required: true, trim: true },
         managers: [{ type: [mongoose.Schema.Types.ObjectId], ref: "User", required: true }],
         email: { type: String, required: true, trim: true },
@@ -14,13 +13,11 @@ var branchSchema = mongoose.Schema(
                 street: String,
                 number: Number
             },
-        //queues: [require('../models/queue')], //TODO altor+
         employees: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
         workdays: [require('../models/schemes/workday')],
         messages: [require('../models/schemes/message')],
         services: [require('../models/schemes/service')],
         default_shifts: [require('../models/schemes/shift')]
-
     });
 
 branchSchema.methods.findWorkday = function (date)
@@ -104,18 +101,6 @@ branchSchema.methods.AddAppintmnt = function (date, appintmnt)
 	{
 		workday = workday.AddAppintmnt(fullappintment);
 		return this;
-		//var xbranch = this;
-		//this.update(function (err)
-		//{
-		//	if (err)
-		//	{
-		//		console.log("error in saving branch");
-		//	}
-		//	else
-		//	{
-		//		//console.log('branch saved with the title: ' + xbranch.workdays[0].shifts[0].shift.stations[0].title);
-		//	}
-		//});
     }
     else
         return "no such workday";

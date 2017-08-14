@@ -24,11 +24,13 @@
     </div>
 </div>
 
+<!--Appointments table-->
  <% if (user && user.role == 'client') { %>
 <div class="container">
     <div class="row">
+
+        <% if (user.appointments.count > 0){ %>
         <div class="text-center">
-            <!--Appointments table-->
             <h1 class="title-one">Your upcoming appointments</h1>
         </div>
         <table class="table table-striped">
@@ -51,7 +53,13 @@
                 <% }); %>
             </tbody>
         </table>
+
+        <!--Appointments table-->
+        <% } else {%>
+        <div class="text-center">
+            <h1 class="title-one">No upcoming appointments. Schedual one now!</h1>
+        </div>
+        <% } %>
     </div>
 </div>
-<!--Appointments table-->
 <% } %>
