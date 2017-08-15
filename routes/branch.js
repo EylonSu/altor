@@ -163,6 +163,7 @@ module.exports = function (router, passport)
 						//     client = user;
 						//     client.save(function (err)
 						//     {
+						//
 						//         if (err)
 						//         {
 						//             //TODO: because the branch is allready updated we need to delete the appointment from the branch... fuck it
