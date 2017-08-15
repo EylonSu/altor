@@ -149,31 +149,36 @@ module.exports = function (router, passport)
 						console.log(err);
 					} else
 					{
-						// var user =  req.user;
-						// for (var j =0; j < user.appointments.length; j++){
-						// 	 if ((new Date(user.appointments[j].date_and_time).getTime() == new Date(appToDel.date_and_time)).getTime() && (user.appointments[j].branch.toString() == appToDel.branch.toString()) &&
-						// 	 (user.appointments[j].service._id.toString() == appToDel.service._id.toString())){
-						// 	 	delete user.appointments[j];
-						// 	 	break;
-						//  }
-						// }
-						//
-						// Client.findById(user._id.toString(),function (err, client)
-						// {
-						//     client = user;
-						//     client.save(function (err)
-						//     {
-						//         if (err)
-						//         {
-						//             //TODO: because the branch is allready updated we need to delete the appointment from the branch... fuck it
-						//
-						//             console.log(err);
-						//         }else{
-						//             res.render('pages/index', {title: 'Altor - Home', user: req.user, messege: "", moment: moment});
-						//         }
-						//     })
-						// })
-						res.render('pages/index', { title: 'Altor - Home', user: req.user, messege: "", moment: moment });
+
+						Client.findById(req.user._id.toString(),function (err, client)
+						{
+
+                            //var user =  req.user;
+                            var j ;
+                            for ( j =0; j < client.appointments.length; j++){
+                                if ((new Date(client.appointments[j].date_and_time).getTime() == new Date(appToDel.date_and_time).getTime()) && (client.appointments[j].branch.toString() == appToDel.branch.toString()) &&
+                                    (client.appointments[j].service._id.toString() == appToDel.service._id.toString())){
+                                   client.appointments.splice(j,1);
+                                    break;
+                                }
+                            }
+
+                            //client.appointments[j].markModified('service');
+						    //client = user;
+						    client.save(function (err)
+						    {
+						        if (err)
+						        {
+						            //TODO: because the branch is allready updated we need to delete the appointment from the branch... fuck it
+
+						            console.log(err);
+						        }else{
+						         //   res.render('pages/index', {title: 'Altor - Home', user: req.user, messege: "", moment: moment});
+                                    res.send("yhaaa");
+						        }
+						    })
+						})
+				//		res.render('pages/index', { title: 'Altor - Home', user: req.user, messege: "", moment: moment });
 					}
 				});
 			}
