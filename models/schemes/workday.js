@@ -32,6 +32,16 @@ workDaySchema.methods.AddAppintmnt = function (appintmnt)
 
 };
 
+workDaySchema.methods.delAppintmnt = function (appToDel)
+{
+    var relevantShiftIndex = this.getShiftIndexByTime(new Date(appToDel.date_and_time));
+    var res = this.shifts[relevantShiftIndex].shift.delFromAvailbleArrs(appToDel);
+    this.shifts[relevantShiftIndex].shift = res.shift;
+    //this.delAppFromAppList(appToDel)
+
+	return this;
+};
+
 workDaySchema.methods.getShiftIndexByTime = function(iStart_time)
 {
 	var res = 0;

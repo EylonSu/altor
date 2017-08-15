@@ -9,10 +9,6 @@ var mBranchId;
 var mEventAfterRenderHelper = true;
 var mCalendar;
 
-$( document ).ready(function() {
-
-});
-
 $.fn.bindFirst = function (name, fn)
 {
 	this.on(name, fn);
@@ -89,6 +85,7 @@ function initCalendar()
 {
 	mCalendar.fullCalendar({
 		defaultView: "month",
+		aspectRatio: 4,
 		locale: 'he',
 		timezone: 'local',
 		lazyFetching: false,

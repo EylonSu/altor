@@ -28,139 +28,134 @@
 <script src="js/branch.js"></script>
 
 <section>
-<!--SET APPOINTMENT MODAL-->
-<div class="modal fade" id="setAppintmnt" tabindex="-1" role="dialog" aria-labelledby="setAppintmntModalLabel">
-    <div class="modal-dialog" role="document">
-        <form id="setAppintmntForm" action="/set-appintmnt" method="post">
-            <input id="dateTime" type="hidden" name="dateTime" value="@" />
-            <input id="serviceId" type="hidden" name="serviceId" value="@" />
-            <input id="branchId" type="hidden" name="branchId" value="@" />
-            <input id="Time" type="hidden" name="Time" value="@" />
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="myModalLabel">Set appointment</h4>
-                </div>
-                <div class="modal-body">
-                    <div class="form-group">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="dropdown">
-                                    <!--<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">-->
-                                        <!--Pick a time-->
-                                        <!--<span class="caret"></span>-->
-                                    </button>
-                                    <select id="openSpots" onchange="setTime()" class="form-control"></select>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <span id="time_lbl" class="label label-info"></span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button id="set_appntmnt" type="submit" class="btn btn-warning">Add appointment</button>
-                </div>
-            </div>
-        </form>
-    </div>
-</div>
-
-    <!--***************************************************************************************-->
-
-    <div class="modal fade" id="map" tabindex="-1" role="dialog" aria-labelledby="setAppintmntModalLabel">
+    <!--SET APPOINTMENT MODAL-->
+    <div class="modal fade" id="setAppintmnt" tabindex="-1" role="dialog" aria-labelledby="setAppintmntModalLabel">
         <div class="modal-dialog" role="document">
-
+            <form id="setAppintmntForm" action="/set-appintmnt" method="post">
+                <input id="dateTime" type="hidden" name="dateTime" value="@" />
+                <input id="serviceId" type="hidden" name="serviceId" value="@" />
+                <input id="branchId" type="hidden" name="branchId" value="@" />
+                <input id="Time" type="hidden" name="Time" value="@" />
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title" id="myModalLabel">Location</h4>
+                        <h4 class="modal-title" id="myModalLabel">Set appointment</h4>
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
                             <div class="row">
                                 <div class="col-md-6">
-                                    <div id="map_canvas"  style="width:500px; height:300px"></div>
+                                    <div class="dropdown">
+                                        <!--<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">-->
+                                        <!--Pick a time-->
+                                        <!--<span class="caret"></span>-->
+                                        </button>
+                                        <select id="openSpots" onchange="setTime()" class="form-control"></select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <span id="time_lbl" class="label label-info"></span>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button id="set_appntmnt" type="submit" class="btn btn-warning">Add appointment</button>
                     </div>
                 </div>
             </form>
         </div>
     </div>
 
-
     <!--***************************************************************************************-->
-<div class="container">
-    <div class="row">
-        <div class="text-center">
-            <div class="col-sm-8 col-sm-offset-2">
-        <section style="margin-top: -150px; margin-bottom: -50px">
 
+    <div class="modal fade" id="map" tabindex="-1" role="dialog" aria-labelledby="setAppintmntModalLabel">
+        <div class="modal-dialog" role="document">
 
-        <h1 class="title-one">Wellcome to <%= branch.name %> branch page</h1>
-
-        </section>
-        <!--<div class="col-lg-6">-->
-            <img src="<%= branch.picture_path%>" class="img-rounded img-responsive" alt="Cinque Terre" width="304" height="236" style="margin: 0 auto;">
-                <br />
-
-            <h3 class="heading animated bounceInDown">Contact information:</h3>
-            <p class="heading animated bounceInDown">Phone: <%= branch.phone %></p>
-            <p class="heading animated bounceInDown" >Email: <%= branch.email %></p>
-            <p class="heading animated bounceInDown" id="address">Address: <%= address %> <button class=" btn btn-primarye glyphicon glyphicon-map-marker" type="button" onclick="showMap()">Show on map</button></p>
-
-
-        <!--</div>-->
-        <!--<div class="col-lg-6">-->
-
-            <!--<div id="map_canvas" class="col-lg-12 animated bounceInLeft" style="width:500px; height:300px"></div>-->
-            <div id="choose-service">
-                <!--<div class="col-lg-6" style="margin-top: 1cm" >-->
-                    <div class="dropdown btn-group">
-                        <button class="btn btn-default slider-btn animated bounceInUp" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Select Service
-                            <!--<span class="caret"></span>-->
-                        </button>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <% branch.services.forEach(function(service){ %>
-                            <li> <a class="dropdown-item btn btn-default slider-btn" onclick="serviceHasChosen('<%=service.duration%>', '<%=service._id%>','<%=service.name%>' )" href="#sch"><%=service.name%></a></li>
-                            <%})%>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Location</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div id="map_canvas" style="width:500px; height:300px"></div>
+                            </div>
                         </div>
                     </div>
-                <!--</div>-->
-            </div>
-        <!--</div>-->
-            </div>
-    </div>
-    </div>
-
-    <br />
-    <hr class="intro-divider">
-    <section id="sch">
-    <div class="row">
-        <div class="text-center">
-            <div class="col-sm-8 col-sm-offset-2">
-    <h1 id="serviceChoosen" class="title-one" style="display: none">Possible appointments for: </h1>
-            </div>
-        </div></div>
-    <!-- SERVICES CHOOSE -->
-    <div id="appintmnt-app">
-        <br /><br />
-        <br>
-        <!-- Calendar -->
-        <div class="row">
-            <div class="col-lg-12">
-                <div id='calendar' style="display:none"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
             </div>
         </div>
     </div>
-    </section>
-</div>
+
+    <!--***************************************************************************************-->
+    <div class="container">
+        <div class="row">
+            <div class="text-center">
+                <div class="col-sm-8 col-sm-offset-2">
+                    <section style="margin-top: -150px; margin-bottom: -50px">
+                        <h1 class="title-one">Wellcome to <%= branch.name %> branch page</h1>
+                    </section>
+                    <!--<div class="col-lg-6">-->
+                    <img src="<%=branch.picture_path%>" class="img-rounded img-responsive" alt="Branch logo" width="304" height="236" style="margin: 0 auto;">
+                    <br />
+
+                    <h3 class="heading animated bounceInDown">Contact information:</h3>
+                    <p class="heading animated bounceInDown">Phone: <%= branch.phone %></p>
+                    <p class="heading animated bounceInDown">Email: <%= branch.email %></p>
+                    <p class="heading animated bounceInDown" id="address">Address: <%= address %> <button class=" btn btn-primarye glyphicon glyphicon-map-marker" type="button" onclick="showMap()">Show on map</button></p>
+
+
+                    <!--</div>-->
+                    <!--<div class="col-lg-6">-->
+                    <!--<div id="map_canvas" class="col-lg-12 animated bounceInLeft" style="width:500px; height:300px"></div>-->
+                    <div id="choose-service">
+                        <!--<div class="col-lg-6" style="margin-top: 1cm" >-->
+                        <div class="dropdown btn-group">
+                            <button class="btn btn-default slider-btn animated bounceInUp" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Select Service
+                                <!--<span class="caret"></span>-->
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <% branch.services.forEach(function(service){ %>
+                                <li> <a class="dropdown-item btn btn-default slider-btn" onclick="serviceHasChosen('<%=service.duration%>', '<%=service._id%>','<%=service.name%>' )" href="#sch"><%=service.name%></a></li>
+                                <%})%>
+                            </div>
+                        </div>
+                        <!--</div>-->
+                    </div>
+                    <!--</div>-->
+                </div>
+            </div>
+        </div>
+
+        <br />
+        <hr class="intro-divider">
+        <section id="sch">
+            <div class="row">
+                <div class="text-center">
+                    <div class="col-sm-8 col-sm-offset-2">
+                        <h1 id="serviceChoosen" class="title-one" style="display: none">Possible appointments for: </h1>
+                    </div>
+                </div>
+            </div>
+            <!-- SERVICES CHOOSE -->
+            <div id="appintmnt-app">
+                <br /><br />
+                <br>
+                <!-- Calendar -->
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div id='calendar' style="display:none"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
 </section>
