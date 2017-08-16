@@ -36,6 +36,7 @@ var searchResults = require('./routes/searchResults')(router);
 var branch = require('./routes/branch')(router);
 var addBranch = require('./routes/add-branch')(router);
 var api = require('./routes/api')(router);
+var messages = require('./routes/messages')(router);
 
 /// ====================other routing==========================
 var routes = require('./routes/routes')(router);
