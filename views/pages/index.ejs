@@ -78,12 +78,13 @@
             <tbody>
             <% var i = 0%>
                 <% user.appointments.forEach(function(app){ %>
-                <tr id="cancel_row_<%=i++%>">
+                <tr id="cancel_row_<%=i%>">
                     <td><%= app.branch_name %></td>
                     <td><%= moment(app.date_and_time).format( 'dddd, MMMM Do YYYY, h:mm:ss a') %></td>
                     <td><%= app.service.name %></td>
                     <td><button onclick="confirmCancel('/deleteAppointment?appToDel=<%= JSON.stringify(app)%>',<%=i%>)" type="button" class="btn btn-danger">Cancel Appointment</button></td>
                 </tr>
+            <%i++%>
                 <% }); %>
             </tbody>
         </table>
