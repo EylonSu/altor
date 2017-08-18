@@ -1,4 +1,34 @@
 <% layout('boilerplate') %>
+<head>
+    <style>
+        .loader {
+            border: 16px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 16px solid #3498db;
+            width: 40px;
+            height: 40px;
+            -webkit-animation: spin 2s linear infinite;
+            animation: spin 2s linear infinite;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            margin: auto;
+        }
+
+        @-webkit-keyframes spin {
+            0% { -webkit-transform: rotate(0deg); }
+            100% { -webkit-transform: rotate(360deg); }
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+    <script src="js/index.js"></script>
+</head>
 <div class="container">
     <div class="row">
         <div class="text-center">
@@ -24,11 +54,13 @@
     </div>
 </div>
 
+<!--Appointments table-->
  <% if (user && user.role == 'client') { %>
 <div class="container">
     <div class="row">
+
+        <% if (user.appointments.length > 0){ %>
         <div class="text-center">
-            <!--Appointments table-->
             <h1 class="title-one">Your upcoming appointments</h1>
         </div>
         <table class="table table-striped">
@@ -41,17 +73,64 @@
                 </tr>
             </thead>
             <tbody>
+            <% var i = 0%>
                 <% user.appointments.forEach(function(app){ %>
-                <tr>
+                <tr id="cancel_row_<%=i%>">
                     <td><%= app.branch_name %></td>
                     <td><%= moment(app.date_and_time).format( 'dddd, MMMM Do YYYY, h:mm:ss a') %></td>
                     <td><%= app.service.name %></td>
-                    <td><a type="button" class="btn btn-danger" href="/deleteAppointment?appToDel=(<%= app%>)">Cancel Appointment</a></td>
+                    <td><button onclick="confirmCancel('/deleteAppointment?appToDel=<%= JSON.stringify(app)%>',<%=i%>)" type="button" class="btn btn-danger">Cancel Appointment</button></td>
                 </tr>
+            <%i++%>
                 <% }); %>
             </tbody>
         </table>
+        <!--Appointments table-->
+        <% } else {%>
+        <div class="text-center">
+            <h1 class="title-one">No upcoming appointments. Schedual one now!</h1>
+        </div>
+        <% } %>
     </div>
 </div>
-<!--Appointments table-->
 <% } %>
+<div class="modal fade" id="confCancel" >
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirm cancellation</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <p>Are you sure that you want to cancel?</p>
+            </div>
+            <div class="modal-footer">
+                <div class="text-center"></div>
+                <div id="loader" class="loader" style="display: none"></div>
+                <button id="cancel" type="button" onclick="ajaxRequestForCancel()" class="btn btn-primary">Cancel Appointment</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="modal fade" id="successCancel" >
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Appointment canceled successfully!</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

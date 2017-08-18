@@ -9,11 +9,6 @@ var mBranchId;
 var mEventAfterRenderHelper = true;
 var mCalendar;
 
-$( document ).ready(function() {
-	var adr = $("#address").text();
-    initializeMap(adr);
-});
-
 $.fn.bindFirst = function (name, fn)
 {
 	this.on(name, fn);
@@ -31,8 +26,10 @@ $(document).ready(function ()
 	mCalendar = $('#calendar');
 });
 
-function serviceHasChosen(duration, serviceId)
+function serviceHasChosen(duration, serviceId ,sName)
 {
+    $('#serviceChoosen').html("possible appointments for: " + sName);
+	$('#serviceChoosen').show();
 	mServiceId = serviceId;
 	if (mCalendar.is(":visible"))
 	{
@@ -44,6 +41,7 @@ function serviceHasChosen(duration, serviceId)
 		mCalendar.show();
 		mCalendar.fullCalendar('render');
 	}
+
 }
 
 function setLbl(iTime)
@@ -87,6 +85,7 @@ function initCalendar()
 {
 	mCalendar.fullCalendar({
 		defaultView: "month",
+		aspectRatio: 4,
 		locale: 'he',
 		timezone: 'local',
 		lazyFetching: false,
@@ -196,6 +195,13 @@ var getUrlParameter = function getUrlParameter(sParam)
 		}
 	}
 };
+
+function  showMap()
+{
+    $('#map').modal('show');
+    var adr = $("#address").text();
+    initializeMap(adr);
+}
 
 function showApp()
 {

@@ -2,12 +2,16 @@
 <div class="container">
     <div class="jumbotron">
         <h1>Message board</h1>
-        <a href="/send-messge">Send new message</a>
         <p>Incoming messages</p>
         <% if (user && user.role == 'client') { %>
-        <div> You are logged in as a user! email: <%= user.email %></div>
-        <% } else if (user) { %>
-        <div> You are logged in as a business! email: <%= user.email %></div>
+        <div>
+            <% messages.forEach(function(message){%>
+                <%=message%>
+            <br/>
+            <% })%>
+        </div>
+        <% } else { %>
+        <div> Please go to your branch managment panel to see incoming messages</div>
         <% } %>
     </div>
 </div>

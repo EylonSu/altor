@@ -5,7 +5,21 @@ var User = require('../models/user');
 var Manager = require('../models/manager');
 var Client = require('../models/client');
 var Network = require('../models/network');
+var Branch = require('../models/branch');
 
+function createBranchFromNetwork(network, manager) {
+    var createdBranch = new Branch();
+    createdBranch.name = network.name;
+    createdBranch.email = manager.email;
+    createdBranch.managers = network.managers;
+    createdBranch.address.country = network.address.country;
+    createdBranch.address.city = network.address.city;
+    createdBranch.address.street = network.address.street;
+    createdBranch.address.number = network.address.number;
+    createdBranch.picture_path = network.picture_path;
+
+    return createdBranch;
+}
 module.exports = function (passport)
 {
     // =========================================================================
@@ -122,11 +136,12 @@ module.exports = function (passport)
                             network.address.country = req.body.country;
                             network.address.city = req.body.city;
                             network.address.street = req.body.street;
-
+                            var branch = createBranchFromNetwork(network, newManager);
+                            branch.save();
+                            network.branches.push(branch.id);
 							network.save(function (err) { if (err) console.log(err); else console.log("network " + network.name + " was saved"); });
                             newManager.networks_own.push(network.id);
-                            newManager.save(function (err)
-                            {
+                            newManager.save(function (err) {
                                 if (err)
                                     return done(err);
 
