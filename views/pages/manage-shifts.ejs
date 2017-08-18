@@ -2,14 +2,16 @@
 <div class="container">
     <div class="row">
         <div class="col-md-6">
-            <h1>Manage default shifts</h1>
+            <h1 class="title-one">Manage default shifts</h1>
+            <% if (shifts.length <= 0) {%>
+            <p class="text-muted">You have yet to add any shift prototypes!</p>
+            <%} else {%>
+            <ul class="list-group">
             <% shifts.forEach(function(shift){ %>
-            <div class="row">
-                <div class="col-md-12">
-                    <%= shift.title %>
-                </div>
-            </div>
+                <li class="list-group-item"> <%= shift.title %> </li>
             <% }); %>
+            </ul>
+            <%}%>
             <!-- Add shifts -->
             <form action="/add-shift" method="get">
                 <button type="submit" class="btn btn-warning btn-lg">Add shift</button>
