@@ -13,6 +13,7 @@ var userSchema = new mongoose.Schema(
     },
     { discriminatorKey: 'role' });
 
+
 // generating a hash
 userSchema.methods.generateHash = PassportUtils.generateHash;
 

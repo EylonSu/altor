@@ -77,12 +77,21 @@ module.exports = function (router, passport)
 					{
 						var service = branch.GetServiceById(req.body.serviceId);
 						var user = req.user;
-						user.appointments.push({
+						var appintmnt = {
 							branch_name: branch.name,
 							branch: branch._id,
 							date_and_time: dateToReturn,
 							service: service
-						});
+						}
+						if (user.appointments)
+						{
+							user.appointments.push(appintmnt);
+							
+						}
+						else
+						{
+							user.appointments = [appintmnt];
+						}
 
 						Client.findById(user._id.toString(), function (err, client)
 						{
@@ -150,35 +159,38 @@ module.exports = function (router, passport)
 					} else
 					{
 
-						Client.findById(req.user._id.toString(),function (err, client)
+						Client.findById(req.user._id.toString(), function (err, client)
 						{
 
-                            //var user =  req.user;
-                            var j ;
-                            for ( j =0; j < client.appointments.length; j++){
-                                if ((new Date(client.appointments[j].date_and_time).getTime() == new Date(appToDel.date_and_time).getTime()) && (client.appointments[j].branch.toString() == appToDel.branch.toString()) &&
-                                    (client.appointments[j].service._id.toString() == appToDel.service._id.toString())){
-                                   client.appointments.splice(j,1);
-                                    break;
-                                }
-                            }
+							//var user =  req.user;
+							var j;
+							for (j = 0; j < client.appointments.length; j++)
+							{
+								if ((new Date(client.appointments[j].date_and_time).getTime() == new Date(appToDel.date_and_time).getTime()) && (client.appointments[j].branch.toString() == appToDel.branch.toString()) &&
+									(client.appointments[j].service._id.toString() == appToDel.service._id.toString()))
+								{
+									client.appointments.splice(j, 1);
+									break;
+								}
+							}
 
-                            //client.appointments[j].markModified('service');
-						    //client = user;
-						    client.save(function (err)
-						    {
-						        if (err)
-						        {
-						            //TODO: because the branch is allready updated we need to delete the appointment from the branch... fuck it
+							//client.appointments[j].markModified('service');
+							//client = user;
+							client.save(function (err)
+							{
+								if (err)
+								{
+									//TODO: because the branch is allready updated we need to delete the appointment from the branch... fuck it
 
-						            console.log(err);
-						        }else{
-						         //   res.render('pages/index', {title: 'Altor - Home', user: req.user, messege: "", moment: moment});
-                                    res.send("yhaaa");
-						        }
-						    })
+									console.log(err);
+								} else
+								{
+									//   res.render('pages/index', {title: 'Altor - Home', user: req.user, messege: "", moment: moment});
+									res.send("yhaaa");
+								}
+							})
 						})
-				//		res.render('pages/index', { title: 'Altor - Home', user: req.user, messege: "", moment: moment });
+						//		res.render('pages/index', { title: 'Altor - Home', user: req.user, messege: "", moment: moment });
 					}
 				});
 			}
