@@ -64,7 +64,19 @@ function setAppintmnt(iTime)
 	mChosenDate.setHours(dateTime[0]);
 	mChosenDate.setMinutes(dateTime[1]);
 
-	$.post('/set-appintmnt', { branchId: getUrlParameter('branch'), serviceId: mServiceId, dateTime: mChosenDate });
+    // $.ajax({
+    //     type: "POST",
+    //     dataType: "json",
+    //     data: { branchId: getUrlParameter('branch'), serviceId: mServiceId, dateTime: mChosenDate },
+    //     url: '/set-appintmnt',
+    //     success: function(data){
+    //         var x =data;
+    //         alert("OH NO!");
+    //     }
+    // });
+
+
+    $.post('/set-appintmnt', { branchId: getUrlParameter('branch'), serviceId: mServiceId, dateTime: mChosenDate });
 	$('#setAppintmnt').modal('hide');
 	refreshCalendarView()
 }
