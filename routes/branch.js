@@ -96,10 +96,10 @@ module.exports = function (router, passport)
 									console.log(err);
 								} else
 								{
-									res.render('pages/successSetApp', {
+									res.render('pages/index', { isNewApp:"true",
 										user: req.user, branch: branch.name, monthDay: dateToReturn.getDate(),
 										day: weekday[date.getDay()], hour: h_m_Arr[0], min: h_m_Arr[1], year: dateToReturn.getFullYear(),
-										month: monthNames[dateToReturn.getMonth()]
+										month: monthNames[dateToReturn.getMonth()],title: 'Altor - Home', user: req.user, messege: "", moment: moment
 									});
 								}
 							})

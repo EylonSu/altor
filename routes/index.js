@@ -18,11 +18,11 @@ module.exports = function (router, passport)
     {
         if (req.user)
         {
-            res.render('pages/index', {title: 'Altor - Home', user: req.user, messege: "", moment: moment});
+            res.render('pages/index', {title: 'Altor - Home', user: req.user, messege: "", moment: moment , isNewApp : "false"});
         }
         else
         {
-            res.render('pages/index', {title: 'Altor - Home', user: req.user, messege: "", moment: moment});
+            res.render('pages/index', {title: 'Altor - Home', user: req.user, messege: "", moment: moment, isNewApp : "false"});
         }
     });
 };
