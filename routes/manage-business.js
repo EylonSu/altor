@@ -1,9 +1,6 @@
 var Network = require('../models/network');
 var User = require('../models/user');
 var Request = require('request');
-var Url = require('url');
-
-
 
 module.exports = function (router)
 {
@@ -22,59 +19,86 @@ module.exports = function (router)
 			.exec(function (err, network)
 			{
 				var clients = network.branches[0].FindClientsByShift(workdayId, shiftId);
+				if (!bSms && !bAltor)
+				{
+					res.redirect('back');
+				}
+
 				clients.forEach(function (client)
 				{
-					if (bSms)
-					{
-						User.findOne({ _id: client.toString() }, function (err, iUser)
+					User.findOne({ _id: client.toString() })
+						.populate('messages')
+						.exec(function (err, iUser)
 						{
 							if (err)
 							{
 								console.log(err);
-								return;
 							}
-							else
+							else if (iUser && text2send)
 							{
-								if (iUser && iUser.phone && text2send)
+								if (bSms)
 								{
-									sendSms(iUser.phone, text2send, req.headers.host);
+									if (iUser.phone)
+									{
+										sendSms(iUser.phone, text2send, req.headers.host);
+									}
+								}
+								if (bAltor)
+								{
+									sendAltorMessage(iUser, text2send, network.branches[0]);
 								}
 							}
-						})
-					}
-					if (bAltor)
-					{
-						sendAltorMessage(client, text2send, network.branches[0]);
-					}
+							res.redirect('back');
+						});
 				});
+
 			});
 
-		res.redirect('back');
-	});
+		function sendAltorMessage(iUser, iText2send, iBranch)
+		{
+			var message =
+				{
+					subject: 'Message from ' + iBranch.name,
+					from: iBranch._id.toString(),
+					to: iUser._id.toString(),
+					content: iText2send,
+				}
 
-	function sendSms(iPhone, iText2send, iHost)
-	{
-		Request(
+			iUser.messages.push(message);
+			iUser.markModified('messages');
+			iUser.save(function (err)
 			{
-				method: 'POST',
-				url: '/sendSMS',
-				baseUrl: 'http://' + iHost,
-				form: {
-					target: iPhone,
-					message: iText2send
-				}
-			},
-			function (error, response, body)
-			{
-				if (error)
+				if (err)
 				{
-					console.log(error);
+					console.log(err);
 				}
-				if (!error && response.statusCode == 200)
+			})
+		}
+
+		function sendSms(iPhone, iText2send, iHost)
+		{
+			Request(
 				{
-					console.log(body)
+					method: 'POST',
+					url: '/sendSMS',
+					baseUrl: 'http://' + iHost,
+					form: {
+						target: iPhone,
+						message: iText2send
+					}
+				},
+				function (error, response, body)
+				{
+					if (error)
+					{
+						console.log(error);
+					}
+					if (!error && response.statusCode == 200)
+					{
+						console.log(body)
+					}
 				}
-			}
-		);
-	}
-};
+			);
+		}
+	});
+}
