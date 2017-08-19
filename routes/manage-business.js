@@ -1,4 +1,9 @@
 var Network = require('../models/network');
+var User = require('../models/user');
+var Request = require('request');
+var Url = require('url');
+
+
 
 module.exports = function (router)
 {
@@ -17,12 +22,25 @@ module.exports = function (router)
 			.exec(function (err, network)
 			{
 				var clients = network.branches[0].FindClientsByShift(workdayId, shiftId);
-				//send text2send foreach client
 				clients.forEach(function (client)
 				{
 					if (bSms)
-					{//TODO eylon
-						sendSms(client.Phone, text2send);
+					{
+						User.findOne({ _id: client.toString() }, function (err, iUser)
+						{
+							if (err)
+							{
+								console.log(err);
+								return;
+							}
+							else
+							{
+								if (iUser && iUser.phone && text2send)
+								{
+									sendSms(iUser.phone, text2send, req.headers.host);
+								}
+							}
+						})
 					}
 					if (bAltor)
 					{
@@ -31,6 +49,32 @@ module.exports = function (router)
 				});
 			});
 
-
+		res.redirect('back');
 	});
+
+	function sendSms(iPhone, iText2send, iHost)
+	{
+		Request(
+			{
+				method: 'POST',
+				url: '/sendSMS',
+				baseUrl: 'http://' + iHost,
+				form: {
+					target: iPhone,
+					message: iText2send
+				}
+			},
+			function (error, response, body)
+			{
+				if (error)
+				{
+					console.log(error);
+				}
+				if (!error && response.statusCode == 200)
+				{
+					console.log(body)
+				}
+			}
+		);
+	}
 };

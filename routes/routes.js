@@ -15,10 +15,10 @@ module.exports = function (router)
 
 	router.post('/sendSMS', function (req, res, next)
 	{
-		var example = new SmsModel();
-		example.target = req.body.target;
-		example.message = req.body.message;
-		example.save(function (err)
+		var Sms = new SmsModel();
+		Sms.target = req.body.target;
+		Sms.message = req.body.message;
+		Sms.save(function (err)
 		{
 			if (err)
 			{
