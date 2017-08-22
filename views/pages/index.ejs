@@ -63,6 +63,7 @@
         <div class="text-center">
             <h1 class="title-one">Your upcoming appointments</h1>
         </div>
+
         <table class="table table-striped">
             <thead>
                 <tr>
@@ -79,12 +80,13 @@
                     <td><%= app.branch_name %></td>
                     <td><%= moment(app.date_and_time).format( 'dddd, MMMM Do YYYY, h:mm:ss a') %></td>
                     <td><%= app.service.name %></td>
-                    <td><button onclick="confirmCancel('/deleteAppointment?appToDel=<%= JSON.stringify(app)%>',<%=i%>)" type="button" class="btn btn-danger">Cancel Appointment</button></td>
+                    <td><button  onclick="confirmCancel('/deleteAppointment?appToDel=<%= JSON.stringify(app)%>',<%=i%>)" type="button" class="btn btn-danger">Cancel Appointment</button></td>
                 </tr>
             <%i++%>
                 <% }); %>
             </tbody>
         </table>
+        </span>
         <!--Appointments table-->
         <% } else {%>
         <div class="text-center">

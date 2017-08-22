@@ -12,9 +12,10 @@ module.exports = function (router)
 		{
 			if (err)
 			{
-				res.render('pages/index', { title: 'Altor - Home', user: req.user, messege: "אירעה תקלה. אנא חפש שנית", moment: moment });
+				res.render('pages/index', { title: 'Altor - Home', user: req.user, messege: "Error occurred, please try again later....", moment: moment, isNewApp : "false" });
 			}
-			var searchResults = [];
+
+            var searchResults = [];
 
 
 			for (var i = 0; i < networks.length; i++)
@@ -30,15 +31,20 @@ module.exports = function (router)
 
 			if (searchResults.length == 0)
 			{
-				res.render('pages/index', { title: 'Altor - Home', user: req.user, messege: "There is no relevant results to: " + query });
-			}
-			searchResults.sort(function (a, b)
-			{
-				return a.howMuchSimilar < b.howMuchSimilar;
-			})
+				res.render('pages/index', { title: 'Altor - Home', user: req.user,moment: moment, messege: "There is no relevant results for: " + query , isNewApp : "false"});
+			}else
+            {
+                searchResults.sort(function (a, b)
+                {
+                    return a.howMuchSimilar < b.howMuchSimilar;
+                })
 
-			res.render('pages/searchResults', { title: 'Search results for "' + query + '"', user: req.user, serachResults: searchResults });
-		})
+                res.render('pages/searchResults', {
+                    title: 'Search results for "' + query + '"',
+                    user: req.user,
+                    serachResults: searchResults
+                });
+            }})
 
 	});
 };
