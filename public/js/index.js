@@ -4,12 +4,19 @@
 'use strict'
 
 var cancelurl = "";
+var replacelurl = "";
 var trID ;
 function  confirmCancel(url, id)
 {
     $('#confCancel').modal('show');
     cancelurl = url;
     trID = 'cancel_row_'+id;
+}
+
+function  confirmReplacment(url, id)
+{
+    $('#confReplacment').modal('show');
+    replacelurl = url;
 }
 
 function ajaxRequestForCancel()
@@ -27,6 +34,28 @@ function ajaxRequestForCancel()
             $('#loader').hide();
             $('#successCancel').modal('show');
             $('#'+trID).remove();
+        },
+        error:function (err)
+        {
+            console.log(err);
+        }
+    });
+}
+
+
+
+function ajaxRequestForReplacmentOffer()
+{
+    $('#loader2').show();
+    $('#confirm').attr("disabled", true);
+    $.ajax({
+        type: "GET",
+        url: replacelurl,
+        success: function (data, status)
+        {
+            console.log(data);
+            $('#confReplacment').modal('hide');
+            $('#loader2').hide();
         },
         error:function (err)
         {

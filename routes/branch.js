@@ -173,16 +173,45 @@ module.exports = function (router, passport)
 
 						            console.log(err);
 						        }else{
-						         //   res.render('pages/index', {title: 'Altor - Home', user: req.user, messege: "", moment: moment});
                                     res.send("yhaaa");
 						        }
 						    })
 						})
-				//		res.render('pages/index', { title: 'Altor - Home', user: req.user, messege: "", moment: moment });
 					}
 				});
 			}
 		});
 	});
+
+
+
+    router.get('/appOfferedFoReplacement', function (req, res)
+    {
+        var offeredApp = JSON.parse(req.query.offeredApp);
+
+        Branch.findById(offeredApp.branch, function (err, branch)
+        {
+            var newBranch = branch.offerAppForReplacment(offeredApp,req.query.clientId);
+
+            if (newBranch)
+            {
+                branch = newBranch;
+                branch.markModified('workdays');
+                branch.save(function (err, updatedDoc)
+                {
+                    if (err)
+                    {
+                        console.log(err);
+                    }
+                    else
+                    {
+                    }
+
+
+                });
+
+            }
+        });
+    });
 };
 

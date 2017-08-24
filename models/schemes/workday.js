@@ -15,18 +15,25 @@ var workDaySchema = mongoose.Schema(
             date_and_time: Date,
 			date_as_string: String,
 			service: require('./service'),
-			station_title: String
+			station_title: String,
+			offeredForReplacment: Boolean
 		}]
 	});
 
 workDaySchema.methods.AddAppintmnt = function (appintmnt)
 {
 	//TODO validation
+    var startTime = new Date(appintmnt.start_time);
 	var relevantShiftIndex = this.getShiftIndexByTime(appintmnt.start_time);
 	var res = this.shifts[relevantShiftIndex].shift.SetAvailbleArrs(appintmnt);
 	this.shifts[relevantShiftIndex].shift = res.shift;
 	appintmnt.station_title = res.stationTitle;//.stationTitle;
-	this.appointments.push(appintmnt);
+	var appToAdd = {client: appintmnt.client,
+        date_and_time:startTime,
+        service: appintmnt.service,
+        station_title: "noNeeded",
+        offeredForReplacment : false}
+	this.appointments.push(appToAdd);
 
 	return this;
 
@@ -41,6 +48,20 @@ workDaySchema.methods.delAppintmnt = function (appToDel)
 
 	return this;
 };
+
+workDaySchema.methods.offerAppForReplacment = function (offeredApp, clientId)
+{
+	for(var i=0; this.appointments.length; i++ ){
+        if ((new Date(this.appointments[i].date_and_time).getTime() == new Date(offeredApp.date_and_time).getTime())
+         &&   (this.appointments[i].service._id.toString() == offeredApp.service._id.toString())
+		&& (this.appointments[i].client.toString() ==  clientId)){
+
+        	this.appointments[i].offeredForReplacment = true;
+        	break;
+        }
+	}
+}
+
 
 workDaySchema.methods.getShiftIndexByTime = function(iStart_time)
 {

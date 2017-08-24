@@ -118,6 +118,17 @@ branchSchema.methods.delAppointment = function (appToDel)
         return "no such workday";
 }
 
+branchSchema.methods.offerAppForReplacment = function (offeredApp, clientId)
+{
+    var workday = this.findWorkday(new Date(offeredApp.date_and_time));
+    if (workday)
+    {
+        workday = workday.offerAppForReplacment(offeredApp, clientId);
+        return this;
+    }
+    else
+        return "no such workday";
+}
 
 branchSchema.methods.GetOpenSpots = function(iServiceId, iMonth)
 {
