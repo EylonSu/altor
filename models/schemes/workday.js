@@ -51,7 +51,7 @@ workDaySchema.methods.delAppintmnt = function (appToDel)
 
 workDaySchema.methods.offerAppForReplacment = function (offeredApp, clientId)
 {
-	for(var i=0; this.appointments.length; i++ ){
+	for(var i=0; i < this.appointments.length; i++ ){
         if ((new Date(this.appointments[i].date_and_time).getTime() == new Date(offeredApp.date_and_time).getTime())
          &&   (this.appointments[i].service._id.toString() == offeredApp.service._id.toString())
 		&& (this.appointments[i].client.toString() ==  clientId)){
@@ -62,6 +62,16 @@ workDaySchema.methods.offerAppForReplacment = function (offeredApp, clientId)
 	}
 }
 
+workDaySchema.methods.getOfferedAppForReplace = function(serviceId){
+    var offeredApps = [];
+	for(var i=0; i < this.appointments.length; i++ ){
+       if (this.appointments[i].offeredForReplacment == true){
+           offeredApps.push(this.appointments[i]);
+	   }
+    }
+
+    return offeredApps;
+}
 
 workDaySchema.methods.getShiftIndexByTime = function(iStart_time)
 {

@@ -52,10 +52,14 @@
                                         </button>
                                         <select id="openSpots" onchange="setTime()" class="form-control"></select>
                                     </div>
+                                    </br>
+                                    <p>Don't you find a suitable time for the meeting? Click on the button below and you'll see if someone wants to change its appointment time. </p>
+                                    <button type=button id="app_for_replace" onclick="showOfferedApps()" class="btn btn-default">Show appointments that are offered for replacement</button>
                                 </div>
                                 <div class="col-md-6">
                                     <span id="time_lbl" class="label label-info"></span>
                                 </div>
+
                             </div>
                         </div>
                     </div>
@@ -93,6 +97,89 @@
             </div>
         </div>
     </div>
+
+    <!--Switch Appointment MODAL-->
+    <div class="modal fade" id="switchApp" tabindex="-1" role="dialog" aria-labelledby="setAppintmntModalLabel">
+        <div class="modal-dialog" role="document">
+            <form id="setAppintmntForm" action="/" method="post">
+                <input id="dateTime" type="hidden" name="dateTime" value="@" />
+                <input id="serviceId" type="hidden" name="serviceId" value="@" />
+                <input id="branchId" type="hidden" name="branchId" value="@" />
+                <input id="Time" type="hidden" name="Time" value="@" />
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">Choose the time that works for you</h4>
+                    </div>
+                    <div class="modal-body">
+                        <table class="table table-bordered">
+                            <thead>
+                            <tr>
+                                <th>Time</th>
+                                <th>Service</th>
+                                <th>Switch Request</th>
+                            </tr>
+                            </thead>
+                            <tbody id="swith_table_body">
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!--Appointments MODAL-->
+    <div class="modal fade" id="clientApp" tabindex="-1" role="dialog" aria-labelledby="setAppintmntModalLabel">
+        <div class="modal-dialog" role="document">
+            <form id="setAppintmntForm" action="/" method="post">
+                <input id="dateTime" type="hidden" name="dateTime" value="@" />
+                <input id="serviceId" type="hidden" name="serviceId" value="@" />
+                <input id="branchId" type="hidden" name="branchId" value="@" />
+                <input id="Time" type="hidden" name="Time" value="@" />
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">Choose an appointment that you want to switch</h4>
+                    </div>
+                    <div class="modal-body">
+                        <table class="table table-bordered">
+                            <thead>
+                            <tr>
+                                <th>Time</th>
+                                <th>Service</th>
+                                <th>Send Request</th>
+                            </tr>
+                            </thead>
+                            <tbody id="talble">
+                            <% var i = 0%>
+                            <% var i = 0%>
+                            <% user.appointments.forEach(function(app){ %>
+                            <%if (app.branch == branch._id.toString()){%>
+                            <tr id="row_<%=i%>">
+                                <td><%=moment(app.date_and_time).format( 'dddd, MMMM Do YYYY, h:mm:ss a')%></td>
+                                <td><%=app.service.name %></td>
+                                <td><button  onclick="appChoosen('<%= JSON.stringify(app)%>')" type="button" class="btn btn-warning">Send request</button></td>
+                            </tr>
+                            <%i++%>
+                            <% } %>
+                            <% }); %>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!--***************************************************************************************-->
+    <!--***************************************************************************************-->
 
     <!--***************************************************************************************-->
     <div class="container">

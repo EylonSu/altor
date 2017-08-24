@@ -56,6 +56,7 @@ function ajaxRequestForReplacmentOffer()
             console.log(data);
             $('#confReplacment').modal('hide');
             $('#loader2').hide();
+            $('#successOffer').modal('show');
         },
         error:function (err)
         {

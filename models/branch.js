@@ -70,6 +70,15 @@ branchSchema.methods.setWorkDay = function (date,workD)
     return res;
 };
 
+
+branchSchema.methods.getOfferedAppForReplace = function (serviceId, date)
+{
+    var workday = this.findWorkday(new Date (date));
+    return workday.getOfferedAppForReplace(serviceId);
+}
+
+
+
 branchSchema.methods.GetServiceById = function (serviceId)
 {
     var res;

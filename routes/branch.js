@@ -27,7 +27,7 @@ module.exports = function (router, passport)
 			{
 				//TODO check if branch exists
 				var adr = branch.address.street + " " + branch.address.number + " " + branch.address.city + " " + branch.address.country;
-				res.render('pages/branch', { user: req.user, branch: branch, address: adr });
+				res.render('pages/branch', { user: req.user, branch: branch, address: adr, moment:moment });
 			});
 	});
 
@@ -205,6 +205,7 @@ module.exports = function (router, passport)
                     }
                     else
                     {
+                    	res.send("yheeee")
                     }
 
 
@@ -213,5 +214,19 @@ module.exports = function (router, passport)
             }
         });
     });
+
+
+    router.get('/getWorkdayOfferedApps', function (req, res)
+    {
+        Branch.findById(req.query.branchid, function (err, branch)
+        {
+           var offeredApps =  branch.getOfferedAppForReplace(req.query.serviceId, req.query.date);
+
+           res.send(offeredApps);
+		});
+
+	});
+
+
 };
 

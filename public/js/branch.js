@@ -6,9 +6,11 @@ var mChosenDate;
 var mCurrentMonth;
 var mUpdated = false;
 var mBranchId;
+var mChoosenDate;
 var mEventAfterRenderHelper = true;
 var mCalendar;
-
+var mOfferedApps;
+var appToSwitch;
 $.fn.bindFirst = function (name, fn)
 {
 	this.on(name, fn);
@@ -26,6 +28,52 @@ $(document).ready(function ()
 	mCalendar = $('#calendar');
 });
 
+function switchRequest(index)
+{
+    appToSwitch = mOfferedApps[index];
+    $('#switchApp').modal('hide');
+    $('#clientApp').modal('show');
+
+}
+function appChoosen(clientApp){
+	var x= 0;
+}
+function showOfferedApps(){
+    $.ajax({
+        type: "GET",
+        url: '/getWorkdayOfferedApps',
+        data:{date : mChoosenDate,
+		branchid : mBranchId,
+        serviceId : mServiceId
+        },
+        success: function (data, status)
+        {
+            mOfferedApps = data;
+            var tableJQ = $('#swith_table_body')
+            tableJQ.empty();
+
+            for(var i=0 ; i< data.length; i++)
+            {
+                // var trItem = '<tr><td>' + moment(data[i].date_and_time).format('hh:mm') + '</td><td>'+data[i].service.name + '</td>' + '<td>' +
+					// '<button type=button id="switchReq_'+i + '" onclick="switchRequest('+ "'" +JSON.stringify(data[i]) +"'" + ')" class="btn btn-default">Switch request</button>'
+                //  +'</td></tr>' ;
+                var trItem = '<tr><td>' + moment(data[i].date_and_time).format('hh:mm') + '</td><td>'+data[i].service.name + '</td>' + '<td>' +
+                    '<button type=button id="switchReq_'+i + '" onclick="switchRequest('+i+')" class="btn btn-warning">Switch request</button>'
+                    +'</td></tr>' ;
+                tableJQ.append(trItem)
+            }
+
+            $('#setAppintmnt').modal('hide');
+            $('#switchApp').modal('show');
+            console.log(data);
+
+        },
+        error:function (err)
+        {
+            console.log(err);
+        }
+    });
+}
 function serviceHasChosen(duration, serviceId ,sName)
 {
     $('#serviceChoosen').html("possible appointments for: " + sName);
@@ -49,13 +97,6 @@ function setLbl(iTime)
 	$('set_appntmnt').click(setAppintmnt(iTime));
 	$('time_lbl').text(iTime);
 
-	//var dateTime = iTime.split(':');
-	//mChosenDate.setHours(dateTime[0]);
-	//mChosenDate.setMinutes(dateTime[1]);
-
-	//$.post('/set-appintmnt', { branchId: getUrlParameter('branch'), serviceId: mServiceId, dateTime: mChosenDate });
-	//$('#setAppintmnt').modal('hide');
-	//refreshCalendarView()
 }
 
 function setAppintmnt(iTime)
@@ -63,18 +104,6 @@ function setAppintmnt(iTime)
 	var dateTime = iTime.split(':');
 	mChosenDate.setHours(dateTime[0]);
 	mChosenDate.setMinutes(dateTime[1]);
-
-    // $.ajax({
-    //     type: "POST",
-    //     dataType: "json",
-    //     data: { branchId: getUrlParameter('branch'), serviceId: mServiceId, dateTime: mChosenDate },
-    //     url: '/set-appintmnt',
-    //     success: function(data){
-    //         var x =data;
-    //         alert("OH NO!");
-    //     }
-    // });
-
 
     $.post('/set-appintmnt', { branchId: getUrlParameter('branch'), serviceId: mServiceId, dateTime: mChosenDate });
 	$('#setAppintmnt').modal('hide');
@@ -125,6 +154,7 @@ function initCalendar()
 		},
 		dayClick: function (date, jsEvent, view)
 		{
+            mChoosenDate = date.toDate();
 			/// Adding the selected date to the sent form data
 			var setAppintmntForm = $('#setAppintmntForm');
 			setAppintmntForm.find('#dateTime').attr('value', date.toDate());
