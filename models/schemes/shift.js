@@ -77,7 +77,8 @@ shiftSchema.methods.SetAvailbleArrs = function (appintmnt)
 	{
 		res.send('booooozzzzzz');
 	}
-};
+}
+
 shiftSchema.methods.delFromAvailbleArrs = function (appToDel)
 {
     var startIndex = getIndexFromDate(new Date(appToDel.date_and_time));
@@ -283,7 +284,7 @@ shiftSchema.methods.GetOpenSpots = function (service)
 
 	res = uniq(res);
 	return res;
-};
+}
 
 function uniq(a)
 {
