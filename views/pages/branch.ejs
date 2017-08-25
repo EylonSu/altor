@@ -155,8 +155,8 @@
                             </tr>
                             </thead>
                             <tbody id="talble">
-                            <% var i = 0%>
-                            <% var i = 0%>
+                                <%if (user && user.role=='client'){%>
+                            <% var i = 0; %>
                             <% user.appointments.forEach(function(app){ %>
                             <%if (app.branch == branch._id.toString()){%>
                             <tr id="row_<%=i%>">
@@ -166,7 +166,7 @@
                             </tr>
                             <%i++%>
                             <% } %>
-                            <% }); %>
+                            <% }); }%>
                             </tbody>
                         </table>
                     </div>

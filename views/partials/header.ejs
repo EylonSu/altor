@@ -47,9 +47,8 @@
                 </ul>
                 <% if (user) { %>
                 <ul class="nav navbar-nav navbar-right">
-
-                    <% if (user.role=='client') { %>
-                    <li class="scroll"><a href='/messages'>Incoming messages</a></li>
+                    <% if (user) { %>
+                    <li class="scroll" id="messageCount"><a onclick="openMessagesModal()"><%if(count>0){%><%=count%><%}else{%>No<%}%> incoming messages</a></li>
                     <li class="scroll"><a href='/index#replace'>Replacement offers </a></li>
                     <li class="scroll"><a href='/index#appTable'>Upcoming Appointments</a></li>
                     <%}%>
