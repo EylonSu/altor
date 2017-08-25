@@ -255,5 +255,95 @@ module.exports = function (router, passport)
 
     });
 
+    router.post('/thirdHandShake', function (req, res)
+    {
+        var apps = JSON.parse(req.body.apps)
+        var newApp = apps.newApp;
+        var oldApp = apps.oldApp;
+        Client.findById(oldApp.client, function (err, client)
+        {
+            if(err){
+                throw "error";
+            }
+
+            for(var j=0; j <  client.waiting_for_confirim.length; j++){
+            	if(JSON.stringify(client.waiting_for_confirim[j]) == req.body.apps){
+                    client.waiting_for_confirim.splice(j,1);
+				}
+			}
+
+			for (var i = 0; i < client.appointments.length; i++){
+                if ((new Date(client.appointments[i].date_and_time).getTime() == new Date(oldApp.date_and_time).getTime()) && (client.appointments[i].branch.toString() == oldApp.branch.toString()) &&
+                    (client.appointments[i].service._id.toString() == oldApp.service._id.toString())){
+                    client.appointments[i].service = newApp.service;
+                    client.appointments[i].date_and_time = newApp.date_and_time;
+                    break;
+                }
+
+        }
+            client.save(function (err, updatedDoc)
+            {
+                if (err)
+                {
+                    console.log(err);
+                }
+                else
+                {
+                    res.send("yheeeee");
+                    Client.findById(newApp.client, function (err, client2)
+                    {
+                        for (var i = 0; i < client2.appointments.length; i++)
+                        {
+                            if ((new Date(client2.appointments[i].date_and_time).getTime() == new Date(newApp.date_and_time).getTime()) && (client2.appointments[i].branch.toString() == newApp.branch.toString()) &&
+                                (client2.appointments[i].service._id.toString() == newApp.service._id.toString()))
+                            {
+                                client2.appointments[i].service = oldApp.service;
+                                client2.appointments[i].date_and_time = oldApp.date_and_time;
+                                break;
+                            }
+                        }
+
+                        client2.save(function (err, updatedDoc)
+                        {
+                            if (err)
+                            {
+                                console.log(err);
+                            }
+                            else
+                            {
+                                console.log("success")
+                                Branch.findById(newApp.branch, function (err, branch)
+                                {
+                                    var newBranch = branch.updateApps(newApp,oldApp);
+                                    if (newBranch)
+                                    {
+                                        branch = newBranch;
+                                        branch.markModified('workdays');
+                                        branch.save(function (err, updatedDoc)
+                                        {
+                                            if (err)
+                                            {
+                                                console.log(err);
+                                            }
+                                            else
+                                            {
+                                                console.log("branch save success")
+                                            }
+                                        });
+                                    }
+                                });
+                            }
+                        })
+                    });
+                }
+
+
+            });
+        });
+
+    });
+
+
+
 };
 

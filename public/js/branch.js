@@ -35,6 +35,9 @@ function switchRequest(index)
     $('#clientApp').modal('show');
 
 }
+
+
+
 function appChoosen(clientApp, id){
 	var newApp = JSON.parse(clientApp);
 

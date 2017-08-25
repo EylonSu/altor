@@ -139,6 +139,37 @@ branchSchema.methods.offerAppForReplacment = function (offeredApp, clientId)
         return "no such workday";
 }
 
+branchSchema.methods.updateApps =function (newApp, oldApp)
+{
+    var workday1 = this.findWorkday(new Date(newApp.date_and_time));
+    var workday2 = this.findWorkday(new Date(newApp.date_and_time));
+
+    //update first app
+    for(var i =0 ; i< workday1.appointments.length; i++){
+        if ((new Date(workday1.appointments[i].date_and_time).getTime() == new Date(newApp.date_and_time).getTime())
+            &&(workday1.appointments[i].service._id.toString() == newApp.service._id.toString())
+            &&(workday1.appointments[i].client.toString() == newApp.client.toString()))
+        {
+            workday1.appointments[i].client = oldApp.client;
+            workday1.appointments[i].offeredForReplacment = false;
+            break;
+        }
+    }
+
+    //update second app
+    for(var i =0 ; i< workday2.appointments.length; i++){
+        if ((new Date(workday2.appointments[i].date_and_time).getTime() == new Date(oldApp.date_and_time).getTime())
+            && (workday2.appointments[i].service._id.toString() == oldApp.service._id.toString())
+            &&(workday2.appointments[i].client.toString() == oldApp.client.toString()))
+        {
+            workday2.appointments[i].client = newApp.client;
+            workday2.appointments[i].offeredForReplacment = false;
+        }
+    }
+
+    return this;
+}
+
 branchSchema.methods.GetOpenSpots = function(iServiceId, iMonth)
 {
     var res = [];

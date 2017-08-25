@@ -64,3 +64,20 @@ function ajaxRequestForReplacmentOffer()
         }
     });
 }
+
+function switchApps(apps)
+{
+    $.ajax({
+        type: "POST",
+        url: '/thirdHandShake',
+        data:{apps : apps},
+        success: function (data, status)
+        {
+            $('#switchAppApproved').modal('show');
+        },
+        error:function (err)
+        {
+
+        }
+    });
+}
