@@ -117,9 +117,8 @@
             <thead>
             <tr>
                 <th>Branch name</th>
+                <th> Date & Time</th>
                 <th>Service</th>
-                <th>Current Date & time</th>
-                <th>Suggested Date & Time</th>
                 <th>Approve</th>
             </tr>
             </thead>
@@ -128,9 +127,9 @@
             <% user.waiting_for_confirim.forEach(function(apps){ %>
             <tr id="approve_row_<%=i%>">
                 <td><%= apps.newApp.branch_name%></td>
+                <td>Current: <%= moment(apps.oldApp.date_and_time).format( 'dddd, MMMM Do YYYY, h:mm:ss a') %> </br>Suggested: <%= moment(apps.newApp.date_and_time).format( 'dddd, MMMM Do YYYY, h:mm:ss a') %></td>
                 <td><%= apps.oldApp.service.name %></td>
-                <td><%= moment(apps.oldApp.date_and_time).format( 'dddd, MMMM Do YYYY, h:mm:ss a') %></td>
-                <td><%= moment(apps.newApp.date_and_time).format( 'dddd, MMMM Do YYYY, h:mm:ss a') %></td>
+                <!--<td>Suggested: <%= moment(apps.newApp.date_and_time).format( 'dddd, MMMM Do YYYY, h:mm:ss a') %></td>-->
                 <td><button  onclick="switchApps('<%= JSON.stringify(apps)%>')" type="button" class="btn btn-success">Approve replacement</button></td>
             </tr>
             <%i++%>
@@ -142,7 +141,7 @@
         <!--Appointments table-->
         <% } else {%>
         <div class="text-center">
-            <h1 class="title-one">No upcoming appointments. Schedual one now!</h1>
+            <h1 class="title-one">You have no replacement offers</h1>
         </div>
         <% } %>
     </div>
