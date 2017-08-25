@@ -452,7 +452,11 @@ module.exports = function (router, passport) {
                     if (req.body.action == 'delete') {
                         network.branches[0].workdays = deleteShift(network.branches[0], workdayId, shiftId);
                         network.branches[0].save();
-                    }
+					}
+					else if (req.body.action =='send-message')
+					{
+						
+					}
                     else {
                         console.log('Shift edit');
                     }

@@ -29,6 +29,7 @@
     </style>
     <script src="js/index.js"></script>
 </head>
+
 <div class="container">
     <div class="row">
         <div class="text-center">
@@ -56,6 +57,7 @@
 
 <!--Appointments table-->
  <% if (user && user.role == 'client') { %>
+<section id ="appTable">
 <div class="container">
     <div class="row">
 
@@ -63,13 +65,14 @@
         <div class="text-center">
             <h1 class="title-one">Your upcoming appointments</h1>
         </div>
+        <div class="table-responsive">
         <table class="table table-striped">
             <thead>
                 <tr>
                     <th>Branch name</th>
                     <th>Date & Time</th>
                     <th>Service</th>
-                    <th>Cancel appointment</th>
+                    <th>More actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -79,12 +82,14 @@
                     <td><%= app.branch_name %></td>
                     <td><%= moment(app.date_and_time).format( 'dddd, MMMM Do YYYY, h:mm:ss a') %></td>
                     <td><%= app.service.name %></td>
-                    <td><button onclick="confirmCancel('/deleteAppointment?appToDel=<%= JSON.stringify(app)%>',<%=i%>)" type="button" class="btn btn-danger">Cancel Appointment</button></td>
+                    <td><button  onclick="confirmCancel('/deleteAppointment?appToDel=<%= JSON.stringify(app)%>',<%=i%>)" type="button" class="btn btn-danger">Cancel Appointment</button></br><button style="margin-top: 10px"  onclick="confirmReplacment('/appOfferedFoReplacement?offeredApp=<%= JSON.stringify(app)%>&clientId=<%= user._id.toString()%>',<%=i%>)" type="button" class="btn btn-warning">Switch Appointment</button></td>
                 </tr>
             <%i++%>
                 <% }); %>
             </tbody>
         </table>
+        </div>
+        </span>
         <!--Appointments table-->
         <% } else {%>
         <div class="text-center">
@@ -93,12 +98,67 @@
         <% } %>
     </div>
 </div>
+</section>
 <% } %>
+
+
+<!--replace table -->
+
+<% if (user && user.role == 'client') { %>
+<section id="replace"></section>
+<div class="container">
+    <div class="row">
+
+        <% if (user.waiting_for_confirim.length > 0){ %>
+        <div class="text-center">
+            <h1 class="title-one">Interchangeable appointments that waiting for approval</h1>
+        </div>
+        <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Branch name</th>
+                <th> Date & Time</th>
+                <th>Service</th>
+                <th>Approve</th>
+            </tr>
+            </thead>
+            <tbody>
+            <% var i = 0%>
+            <% user.waiting_for_confirim.forEach(function(apps){ %>
+            <tr id="approve_row_<%=i%>">
+                <td><%= apps.newApp.branch_name%></td>
+                <td>Current: <%= moment(apps.oldApp.date_and_time).format( 'dddd, MMMM Do YYYY, h:mm:ss a') %> </br>Suggested: <%= moment(apps.newApp.date_and_time).format( 'dddd, MMMM Do YYYY, h:mm:ss a') %></td>
+                <td><%= apps.oldApp.service.name %></td>
+                <!--<td>Suggested: <%= moment(apps.newApp.date_and_time).format( 'dddd, MMMM Do YYYY, h:mm:ss a') %></td>-->
+                <td><button  onclick="switchApps('<%= JSON.stringify(apps)%>')" type="button" class="btn btn-success">Approve replacement</button></td>
+            </tr>
+            <%i++%>
+            <% }); %>
+            </tbody>
+        </table>
+        </div>
+        </span>
+        <!--Appointments table-->
+        <% } else {%>
+        <div class="text-center">
+            <h1 class="title-one">You have no replacement offers</h1>
+        </div>
+        <% } %>
+    </div>
+</div>
+</section>
+<% } %>
+
+
+
+
+<!--!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!-->
 <div class="modal fade" id="confCancel" >
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Confirm cancellation</h5>
+                <h5 class="modal-title">Confirm cancelation</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -117,6 +177,28 @@
     </div>
 </div>
 
+<div class="modal fade" id="confReplacment" >
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirm Replacment</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <p>Are you sure that you want to offer this appointment to replacement?</p>
+            </div>
+            <div class="modal-footer">
+                <div class="text-center"></div>
+                <div id="loader2" class="loader" style="display: none"></div>
+                <button id="Confirm" type="button" onclick="ajaxRequestForReplacmentOffer()" class="btn btn-primary">Confirm offer to replacement</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 <div class="modal fade" id="successCancel" >
@@ -134,3 +216,71 @@
         </div>
     </div>
 </div>
+
+
+
+<div class="modal fade" id="switchAppApproved" >
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">The appointment was successfully replaced!</h5>
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <a type="button" class="btn btn-secondary" href="/index">Close</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="successOffer" >
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Appointment offered successfully!</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<% if (user && isNewApp == 'true') { %>
+<div class="modal fade" id="successSetApp" >
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Queued successfully</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <p><%= branch %></p>
+                <p><%= day %>, <%= month %>  <%= monthDay %>  <%= year %> </p>
+                <p>at</p>
+                <p><%= hour %>:<%= min %></p>
+
+            </div>
+            <div class="modal-footer">
+                <div class="text-center"></div>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<% } %>
+
+
+<% if (user && isNewApp == 'true') { %>
+<script>
+    $('#successSetApp').modal('show');
+</script>
+<% } %>
