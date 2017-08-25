@@ -1,4 +1,5 @@
 var SmsModel = require('../models/sms');
+var User = require('../models/user');
 
 module.exports = function (router)
 {
@@ -52,5 +53,31 @@ module.exports = function (router)
 				res.json(smss);
 			}
 		});
+	});
+
+	router.post('/deleteAltorMessage', function (req, res)
+	{
+		User.findById(req.user._id, function (err, iUser)
+		{
+			if (err)
+			{
+				console.log(err);
+			}
+			else
+			{
+				iUser.messages.forEach(function (iMessage)
+				{
+					if (iMessage._id == req.body.message_id)
+					{
+						iMessage.has_read = true;
+						return;
+					}
+				});
+
+				iUser.save();
+			}
+		});
+
+		res.end();
 	});
 }

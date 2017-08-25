@@ -23,7 +23,10 @@ module.exports = function (router)
 				{
 					res.redirect('back');
 				}
-
+				if (clients.length==0)
+				{
+					res.redirect('back');
+				}
 				clients.forEach(function (client)
 				{
 					User.findOne({ _id: client.toString() })
@@ -59,7 +62,7 @@ module.exports = function (router)
 			var message =
 				{
 					subject: 'Message from ' + iBranch.name,
-					from: iBranch._id.toString(),
+					from: iBranch.name,
 					to: iUser._id.toString(),
 					content: iText2send,
 				}

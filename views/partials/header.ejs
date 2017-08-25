@@ -5,9 +5,28 @@
 <!-- Incoming Messages Modal -->
 <div class="modal fade" id="MessagesModal" tabindex="-1" role="dialog" aria-labelledby="sendMessageModal">
     <div class="modal-dialog" role="document">
-        <% if (user && user.messages) { user.messages.forEach(function(message){ %>
-        <%=message.content%><br/>
-        <% });}>
+        <div class="modal-content">
+            <div class="modal-body">
+                <div id="messages" class="row">
+                    <%var count=0; if (user && user.messages) user.messages.forEach(function(message){if (message.has_read==false) count++}); %>
+                    <div id="count" count="<%=count%>"></div>
+                    <%if (user && user.messages){ user.messages.forEach(function(message){ if (message.has_read==false){%>
+                    <div id="<%=message._id%>" class="col-lg-<%=12/user.messages.length%>">
+                        <label>From:</label><br />
+                        <%=message.from%><br />
+                        <label>Subject:</label><br />
+                        <%=message.subject%><br />
+                        <label>Message:</label><br />
+                        <%=message.content%><br />
+                        <div onclick="deleteMessage('<%=message._id%>')"><a href="/#"><label style="color:red">Delete message  </label><span class="glyphicon glyphicon-trash" style="color:red"></span></a></div>
+                    </div>
+                    <%} });} if(count==0){%>
+                    <label>No incoming Messages</label>
+                    <%}%>
+                    <label id="noMessages" style="display:none">No incoming Messages</label>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -29,6 +48,7 @@
                 <% if (user) { %>
                 <ul class="nav navbar-nav navbar-right">
                     <li class="scroll"><a href='/index'>Hello <%= user.email %></a></li>
+                    <li class="scroll" id="messageCount"><a onclick="openMessagesModal()"><%if(count>0){%><%=count%><%}else{%>No<%}%> incoming messages</a></li>
                     <li class="scroll"><a href='/logout'>Log out</a></li>
                 </ul>
                 <% } else { %>
