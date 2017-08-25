@@ -227,6 +227,33 @@ module.exports = function (router, passport)
 
 	});
 
+    router.post('/secondHandShake', function (req, res)
+    {
+    	var newApp = JSON.parse(req.body.newApp);
+    	var oldApp = JSON.parse(req.body.oldApp);
+        Client.findById(oldApp.client, function (err, client)
+        {
+        	if(err){
+        		throw "error";
+			}
+
+			client.waiting_for_confirim.push({oldApp : oldApp , newApp : newApp});
+            client.save(function (err, updatedDoc)
+            {
+                if (err)
+                {
+                    console.log(err);
+                }
+                else
+                {
+                    res.send("yheeee");
+                }
+
+
+            });
+        });
+
+    });
 
 };
 

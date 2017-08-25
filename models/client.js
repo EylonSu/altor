@@ -9,6 +9,19 @@ var clientSchema = User.discriminator('client', new mongoose.Schema(
             branch: { type: mongoose.Schema.Types.ObjectId, ref: "branch" },
             date_and_time: Date,
             service: require('../models/schemes/service'),
+        }],
+
+        waiting_for_confirim:[{
+            oldApp : { branch_name: String,
+                branch: { type: mongoose.Schema.Types.ObjectId, ref: "branch" },
+                date_and_time: Date,
+                service: require('../models/schemes/service'),
+            },
+            newApp : { branch_name: String,
+                branch: { type: mongoose.Schema.Types.ObjectId, ref: "branch" },
+                date_and_time: Date,
+                service: require('../models/schemes/service'),
+            }
         }]
     }));
 

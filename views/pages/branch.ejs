@@ -162,7 +162,7 @@
                             <tr id="row_<%=i%>">
                                 <td><%=moment(app.date_and_time).format( 'dddd, MMMM Do YYYY, h:mm:ss a')%></td>
                                 <td><%=app.service.name %></td>
-                                <td><button  onclick="appChoosen('<%= JSON.stringify(app)%>')" type="button" class="btn btn-warning">Send request</button></td>
+                                <td><button  onclick="appChoosen('<%= JSON.stringify(app)%>','<%=user._id.toString()%>')" type="button" class="btn btn-warning">Send request</button></td>
                             </tr>
                             <%i++%>
                             <% } %>
@@ -178,9 +178,23 @@
         </div>
     </div>
 
+    <!--******************Se*********************************************************************-->
     <!--***************************************************************************************-->
     <!--***************************************************************************************-->
 
+    <div class="modal fade" id="reqSendSuccessfully" tabindex="-1" role="dialog" aria-labelledby="setAppintmntModalLabel">
+        <div class="modal-dialog" role="document">
+
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel">Request successfully submitted</h4>
+                </div>
+                <div class="modal-footer">
+                    <a type="button" href="/index" class="btn btn-default" >Go to Altor Home</a>
+                </div>
+            </div>
+        </div>
+    </div>
     <!--***************************************************************************************-->
     <div class="container">
         <div class="row">

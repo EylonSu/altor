@@ -35,8 +35,33 @@ function switchRequest(index)
     $('#clientApp').modal('show');
 
 }
-function appChoosen(clientApp){
-	var x= 0;
+function appChoosen(clientApp, id){
+	var newApp = JSON.parse(clientApp);
+
+	newApp.client = id;
+
+    var oldApp = {
+		branch :  newApp.branch,
+		date_and_time : appToSwitch.date_and_time,
+		service : appToSwitch.service,
+        client : appToSwitch.client,
+	};
+    $.ajax({
+        type: "POST",
+        url: '/secondHandShake',
+        data:{newApp : JSON.stringify(newApp),
+              oldApp : JSON.stringify(oldApp),
+        },
+        success: function (data, status)
+        {
+            $('#clientApp').modal('hide');
+            $('#reqSendSuccessfully').modal('show');
+        },
+        error:function (err)
+        {
+
+        }
+    });
 }
 function showOfferedApps(){
     $.ajax({
