@@ -1,38 +1,4 @@
 <% layout('boilerplate') %>
-<%
-var today = moment(new Date());
-getCurrentAppointments();
-function hasAppointmentsToday() {
-    return getTodaysAppointments().length > 0;
-}
-
-function getTodaysAppointments() {
-    var todaysAppointments = [];
-    for (var i = 0; i < workdays.length; i++) {
-        var workdayDateAsMoment = moment(workdays[i].date);
-        if (workdayDateAsMoment.isSame(today, 'd') && workdays[i].appointments.length > 0) {
-            todaysAppointments = workdays[i].appointments;
-        }
-    }
-    return todaysAppointments;
-}
-
-function getCurrentAppointments() {
-    var todaysAppointments = getTodaysAppointments();
-    var currentAppointments = [];
-
-    for (var i = 0; i < todaysAppointments.length; i++) {
-        var currAppointmentStartTime = moment(todaysAppointments[i].date_and_time);
-        var currAppointmentEndTime = moment(currAppointmentStartTime).add(todaysAppointments[i].service.duration, 'minutes');
-        console.log("Appointment Start time: " + currAppointmentStartTime.format('HH:mm') + " Appointment End Time: " + currAppointmentEndTime.format('HH:mm'));
-    }
-    return currentAppointments;
-}
-if (hasAppointmentsToday()) { %>
-<p>You have appointments today!</p>
-<% } else { %>
-<p>You DON'T appointments today!</p>
-<% } %>
 <div class="container">
     <div class="row">
         <div class="col-md-12 text-center">
@@ -42,21 +8,28 @@ if (hasAppointmentsToday()) { %>
     <div class="row">
         <div class="col-md-12 text-center">
             <h2>Currently Serving:</h2>
-            <p>Jon S.<br>14:10-14:20</p>
+            <% if (currentAppointments.length > 0) { %>
+            <% for (var i = 0; i < currentAppointments.length; i++) { %>
+            <p><%= currentAppointments[i].customerName %> <br> <%= currentAppointments[i].startTime %>-<%= currentAppointments[i].endTime %></p>
+            <% }
+            }
+            else { %>
+            <p>You don't have any appointments right now! </p>
+            <% } %>
         </div>
     </div>
     <div class="row">
         <div class="col-md-12 text-center">
-            <h3>Next appointments:</h3>
-
-        </div>
-        <div class="col-md-4 col-md-offset-2">
-            Next appointment #1
-            <p>Jon S.<br>14:10-14:20</p>
-        </div>
-        <div class="col-md-4 col-md-offset-2">
-            Next appointment #2
-            <p>Jon S.<br>14:10-14:20</p>
-        </div>
+            <h2>Upcoming appointments today:</h2>
+            <% if (upcomingAppointments.length > 0) { %>
+            <% for (var j = 0; j < upcomingAppointments.length; j++) { %>
+            <div class="col-md-4">
+            <p><%= upcomingAppointments[j].customerName %> <br> <%= upcomingAppointments[j].startTime %>-<%= upcomingAppointments[j].endTime %></p>
+            </div>
+            <% }
+            }
+            else { %>
+            <p>You don't have any upcoming appointments today! </p>
+            <% } %>
     </div>
 </div>
