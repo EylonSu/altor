@@ -244,6 +244,10 @@ function getOpenSpotsPerDate(iDate)
 			res = iEvent.openSpots[0];
 		}
 	});
+    res.sort(function(a,b){
+
+        return new Date(a) - new Date(b);
+    });
 
 	return res;
 }
