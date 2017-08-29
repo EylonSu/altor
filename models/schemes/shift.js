@@ -75,9 +75,9 @@ shiftSchema.methods.SetAvailbleArrs = function (appintmnt)
 
 	if (!isArrUpdate)// here the error is thrown
 	{
-		res.send('booooozzzzzz');
+		res.send('Error!');
 	}
-}
+};
 
 shiftSchema.methods.delFromAvailbleArrs = function (appToDel)
 {

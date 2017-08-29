@@ -17,7 +17,8 @@ var workDaySchema = mongoose.Schema(
 			date_as_string: String,
 			service: require('./service'),
 			station_title: String,
-			offeredForReplacment: Boolean
+			offeredForReplacment: Boolean,
+			isOver: Boolean
 		}]
 	});
 
