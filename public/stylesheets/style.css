@@ -8,5 +8,5 @@ a {
 }
 
 .ui-timepicker-container {
-    z-index: 3000;
+    z-index: 3000 !important;
 }
