@@ -31,7 +31,7 @@ module.exports = function (router)
 
 			if (searchResults.length == 0)
 			{
-				res.render('pages/index', { title: 'Altor - Home', user: req.user,moment: moment, messege: "There is no relevant results for: " + query , isNewApp : "false"});
+				res.render('pages/index', { title: 'Altor - Home', user: req.user,moment: moment, messege: "There are no relevant results for: " + query , isNewApp : "false"});
 			}else
             {
                 searchResults.sort(function (a, b)
