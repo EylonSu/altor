@@ -128,6 +128,7 @@ module.exports = function (passport)
                             newManager.email = email;
                             newManager.password = newManager.generateHash(password);
                             newManager.joinDate = new Date();
+                            newManager.phone = req.body.phone;
                             // Create the network
 							var network = new Network();
 							network.email = email;
@@ -136,6 +137,7 @@ module.exports = function (passport)
                             network.address.country = req.body.country;
                             network.address.city = req.body.city;
                             network.address.street = req.body.street;
+                            network.address.number = req.body.streetNumber;
                             var branch = createBranchFromNetwork(network, newManager);
                             branch.save();
                             network.branches.push(branch.id);

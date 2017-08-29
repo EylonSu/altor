@@ -26,7 +26,7 @@ module.exports = function (router, passport)
 			.exec(function (err, branch)
 			{
 				//TODO check if branch exists
-				var adr = branch.address.street + " " + branch.address.number + " " + branch.address.city + " " + branch.address.country;
+				var adr = branch.address.street + " " + branch.address.number + ", " + branch.address.city + ", " + branch.address.country;
 				res.render('pages/branch', { user: req.user, branch: branch, address: adr, moment:moment });
 			});
 	});

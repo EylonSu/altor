@@ -37,8 +37,8 @@ var branch = require('./routes/branch')(router);
 var addBranch = require('./routes/add-branch')(router);
 var api = require('./routes/api')(router);
 var messages = require('./routes/messages')(router);
-var messages = require('./routes/manage-business')(router);
-
+var manageBusiness = require('./routes/manage-business')(router);
+var businessQueueStatus = require('./routes/business-queue-status')(router);
 /// ====================other routing==========================
 var routes = require('./routes/routes')(router);
 
