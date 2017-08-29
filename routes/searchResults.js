@@ -8,7 +8,7 @@ module.exports = function (router)
 	router.get('/searchResults', function (req, res, next)
 	{
 		var query = req.query.srchItem;
-		network.find({}, { name: true }, function (err, networks)
+		branch.find({}, { name: true }, function (err, networks)
 		{
 			if (err)
 			{
@@ -45,7 +45,6 @@ module.exports = function (router)
                     serachResults: searchResults
                 });
             }})
-
 	});
 };
 
