@@ -10,6 +10,7 @@ var mCalendar;
 var mOfferedApps;
 var appToSwitch;
 var isMapInitialized = false;
+
 $.fn.bindFirst = function (name, fn)
 {
 	this.on(name, fn);
@@ -91,9 +92,6 @@ function showOfferedApps(){
 
             for(var i=0 ; i< data.length; i++)
             {
-                // var trItem = '<tr><td>' + moment(data[i].date_and_time).format('hh:mm') + '</td><td>'+data[i].service.name + '</td>' + '<td>' +
-					// '<button type=button id="switchReq_'+i + '" onclick="switchRequest('+ "'" +JSON.stringify(data[i]) +"'" + ')" class="btn btn-default">Switch request</button>'
-                //  +'</td></tr>' ;
                 var trItem = '<tr><td>' + moment(data[i].date_and_time).format('hh:mm') + '</td><td>'+data[i].service.name + '</td>' + '<td>' +
                     '<button type=button id="switchReq_'+i + '" onclick="switchRequest('+i+')" class="btn btn-warning">Switch request</button>'
                     +'</td></tr>' ;
@@ -103,7 +101,6 @@ function showOfferedApps(){
             $('#setAppintmnt').modal('hide');
             $('#switchApp').modal('show');
             console.log(data);
-
         },
         error:function (err)
         {
@@ -211,9 +208,6 @@ function initCalendar()
 				var hours = make2chars(date.getHours());
 				var min = make2chars(date.getMinutes());
 				var time = hours + ":" + min;
-				//var listItem = '<li><a onclick="setLbl(';
-				//listItem = listItem + "'" + time + "')" + '"' + " href='#'>" + time + '</a></li>';
-				
 				var listItem = '<option >' + time + '</option>';
 				openSpotsJQ.append(listItem);
 			});
