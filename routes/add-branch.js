@@ -33,7 +33,7 @@ module.exports = function (router, passport) {
                     title: 'Altor | Manage services',
                     user: req.user,
                     services: network.branches[0].services,
-                    wizardMode: req.query.wizardMode
+                    wizardMode: req.session.wizardMode
                 });
             });
     });
@@ -150,7 +150,7 @@ module.exports = function (router, passport) {
                         messege: "אירעה תקלה במערכת. אנא נסה שנית"
                     });
                 }
-                res.render('pages/manage-shifts', {user: req.user, shifts: network.branches[0].default_shifts, wizardMode: req.query.wizardMode});
+                res.render('pages/manage-shifts', {user: req.user, shifts: network.branches[0].default_shifts, wizardMode: req.session.wizardMode});
             });
     });
 
@@ -232,7 +232,7 @@ module.exports = function (router, passport) {
                         messege: "אירעה תקלה במערכת. אנא נסה שנית"
                     });
                 }
-                res.render('pages/assign-shifts', {user: req.user, shifts: network.branches[0].default_shifts, wizardMode: req.query.wizardMode});
+                res.render('pages/assign-shifts', {user: req.user, shifts: network.branches[0].default_shifts, wizardMode: req.session.wizardMode});
             });
     });
 
@@ -300,7 +300,7 @@ module.exports = function (router, passport) {
                             res.render('pages/assign-shifts', {
                                 user: req.user,
                                 shifts: network.branches[0].default_shifts,
-                                wizardMode: req.query.wizardMode
+                                wizardMode: req.session.wizardMode
                             });
                         }
                     });
@@ -318,7 +318,7 @@ module.exports = function (router, passport) {
                             messege: "אירעה תקלה במערכת. אנא נסה שנית"
                         });
                     }
-                    res.render('pages/assign-shifts', {user: req.user, shifts: network.branches[0].default_shifts, wizardMode: req.query.wizardMode});
+                    res.render('pages/assign-shifts', {user: req.user, shifts: network.branches[0].default_shifts, wizardMode: req.session.wizardMode});
                 });
         }]);
 
