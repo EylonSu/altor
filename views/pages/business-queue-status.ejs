@@ -10,8 +10,10 @@
             <h2 class="title-two">Currently Serving:</h2>
             <% if (currentAppointments.length > 0) { %>
             <% for (var i = 0; i < currentAppointments.length; i++) { %>
-            <p><%= currentAppointments[i].customerName %> <br> <%= currentAppointments[i].startTime %>
-                -<%= currentAppointments[i].endTime %></p>
+            <div class="well well-lg">
+                <p><%= currentAppointments[i].customerName %> <br> <%= currentAppointments[i].startTime %>
+                    -<%= currentAppointments[i].endTime %></p>
+            </div>
             <% }
             }
             else { %>
@@ -22,18 +24,22 @@
     <div class="row">
         <div class="col-md-12 text-center">
             <h2 class="title-two">Upcoming appointments today:</h2>
+        </div>
+    </div>
+    <div class="row">
             <% if (upcomingAppointments.length > 0) { %>
             <% for (var j = 0; j < upcomingAppointments.length; j++) { %>
             <div class="col-md-4">
-                <p><%= upcomingAppointments[j].customerName %> <br> <%= upcomingAppointments[j].startTime %>
+                <div class="well well-lg">
+                <p><strong><%= upcomingAppointments[j].customerName %></strong><br> <%= upcomingAppointments[j].startTime %>
                     -<%= upcomingAppointments[j].endTime %></p>
+                </div>
             </div>
             <% }
             }
             else { %>
             <p>You don't have any upcoming appointments today! </p>
             <% } %>
-        </div>
     </div>
     <div class="row">
         <div class="col-md-12">

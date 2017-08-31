@@ -23,7 +23,7 @@ module.exports = function (router)
 				var network_name = networks[i].name;
 				var network_id = networks[i]._id.toString();
 				var howMuchSimilar = similarity(query, network_name);
-				if (howMuchSimilar > 0.25)
+				if (howMuchSimilar > 0.15)
 				{
 					searchResults.push({ network_name, network_id });
 				}
