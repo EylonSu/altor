@@ -12,6 +12,7 @@ function createBranchFromNetwork(network, manager) {
     createdBranch.name = network.name;
     createdBranch.email = manager.email;
     createdBranch.managers = network.managers;
+    createdBranch.phone = manager.phone;
     createdBranch.address.country = network.address.country;
     createdBranch.address.city = network.address.city;
     createdBranch.address.street = network.address.street;
