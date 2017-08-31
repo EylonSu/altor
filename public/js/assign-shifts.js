@@ -1,5 +1,6 @@
 ﻿'use strict'
-
+var todayAppointments;
+var indexOfApp;
 function openMessageModal()
 {
 	var workdayId = document.forms["shiftEditionForm"]["workdayId"].value;
@@ -10,15 +11,90 @@ function openMessageModal()
 	$('#sendMessageModal').modal('show');
 }
 
+function cancelApp(index)
+{
+    var appToDel = todayAppointments[index];
+	var userId = appToDel.client;
+    $.ajax({
+        type: "GET",
+        url: '/BranchDeleteAppointment?appToDel='+JSON.stringify(appToDel)+ '&userId=' + userId,
+
+        success: function (data, status)
+        {
+            console.log(data);
+            openAppsModal();
+        },
+        error:function (err)
+        {
+            console.log(err);
+        }
+    });
+}
+function sendMsg(index)
+{
+    indexOfApp = index;
+    $('#showAppsModal').modal('hide');
+    $('#sendMessagetoSpecificClientModal').modal('show');
+}
+
+function sendSms()
+{
+    var appToDel = todayAppointments[indexOfApp];
+    var userId = appToDel.client;
+
+    $.ajax({
+        type: "POST",
+        url: '/sendSmsToSpesificClient',
+        data:{ clientId : appToDel.client, msg:$("#text2sendToSpecifClient").val()
+        },
+        success: function (data, status)
+        {
+            $('#sendMessagetoSpecificClientModal').modal('hide');
+            $('#successfullySend').modal('show');
+        },
+        error:function (err)
+        {
+
+        }
+    });
+}
 function openAppsModal()
 {
     var workdayId = document.forms["shiftEditionForm"]["workdayId"].value;
+    $('#appointmentsTblBody').empty();
     $.ajax({
         type: "GET",
         url: '/getWorkDayAppointments',
         data:{ workdayId : document.forms["shiftEditionForm"]["workdayId"].value },
         success: function (data, status)
         {
+            todayAppointments = data;
+        	var index = 0;
+        	//time service actions
+        	$.each(data || [], function(index, appointment) {
+        		var last_name= appointment.client.last_name;
+        		var first_name =appointment.client.first_name;
+                appointment.client = appointment.client._id;
+                var child = '<tr><td>' +
+					last_name +
+					first_name +
+					'</td> <td>'+
+					moment(appointment.date_and_time).format('hh:mm') +
+					'</td><td>' +
+					appointment.service.name +
+                    '</td><td>' +
+					'<button onClick="sendMsg(' +
+                    index + '\)" ' +
+					'" type="button" class="btn btn-default">Send Message'+
+					'</button><br/><br/>' +
+                    '<button onClick="cancelApp(' +
+                    index +
+					'\)" ' +
+					'type="button" class="btn btn-danger">Cancel Appointment</button></td></tr>';
+
+				$('#appointmentsTblBody').append(child);
+                index++;
+			});
             $('#showAppsModal').modal('show');
         },
         error:function (err)

@@ -2,6 +2,7 @@ var Branch = require('../models/branch.js');
 var moment = require('moment');
 var Client = require('../models/client.js');
 
+
 var weekday = new Array(7);
 weekday[0] = "Sunday";
 weekday[1] = "Monday";
@@ -143,6 +144,9 @@ module.exports = function (router, passport)
 	{
 		var appToDel = JSON.parse(req.query.appToDel);
 		var userId = req.query.userId;
+
+		var x = 0;
+
 		Branch.findById(appToDel.branch, function (err, branch)
 		{
 			var newBranch = branch.delAppointment(appToDel,userId);
@@ -185,6 +189,7 @@ module.exports = function (router, passport)
 			}
 		});
 	});
+
 
 
 

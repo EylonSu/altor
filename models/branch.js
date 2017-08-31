@@ -236,14 +236,14 @@ branchSchema.methods.GetOpenSpots = function(iServiceId, iMonth)
 				var shiftOpenSpots = iShift.shift.GetOpenSpots(service);
 				if (iWorkday.date.getFullYear() == today.getFullYear() && iWorkday.date.getMonth() == today.getMonth() && iWorkday.date.getDate() == today.getDate() )// if the workdy is today
 				{
-                   var relevantShiftOpenSpots =  shiftOpenSpots.filter(function (date)
+                    shiftOpenSpots =  shiftOpenSpots.filter(function (date)
                     {
 						return ((date.getHours() > today.getHours()) || (date.getHours() == today.getHours() && date.getMinutes() >= today.getMinutes()))
                     })
 				}
-				if (relevantShiftOpenSpots.length > 0)
+				if (shiftOpenSpots.length > 0)
 				{
-					temp.push(relevantShiftOpenSpots);
+					temp.push(shiftOpenSpots);
 				}
 			});
 			if (temp.length > 0)
