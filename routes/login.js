@@ -6,12 +6,16 @@ module.exports = function (router, passport) {
     });
 
     router.get('/loginSuccess', function(req,res){
-        if (req.user.email == "admin")
+        if (req.user.email == "admin") {
             res.redirect('/admin');
-        else if (req.user.role == 'manager')
+        }
+        else if (req.user.role == 'manager') {
             res.redirect('/manage-business');
-        else
-        res.redirect('/index');
+
+        }
+        else {
+            res.redirect('/index');
+        }
     });
 
     // process the signup form

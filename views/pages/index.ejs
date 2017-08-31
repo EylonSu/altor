@@ -18,86 +18,131 @@
         }
 
         @-webkit-keyframes spin {
-            0% { -webkit-transform: rotate(0deg); }
-            100% { -webkit-transform: rotate(360deg); }
+            0% {
+                -webkit-transform: rotate(0deg);
+            }
+            100% {
+                -webkit-transform: rotate(360deg);
+            }
         }
 
         @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
         }
     </style>
     <script src="js/index.js"></script>
 </head>
-
-<div class="container">
-    <div class="row">
-        <div class="text-center">
-            <div class="col-sm-8 col-sm-offset-2">
-                <div class="intro-message">
-                    <h1 class="title-one"><%= title %></h1>
-                    <h3>Mange your life</h3>
-                    <h2><%= messege%></h2>
-                    <hr class="intro-divider">
-                    <form action="/searchResults" method="get">
-                        <div class="input-group">
-                            <input type="text" class="form-control" placeholder="Search" name="srchItem" id="srchItem">
-                            <div class="input-group-btn">
-                                <button class="btn btn-default" type="submit">
-                                    <i class="glyphicon glyphicon-search"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </form>
+<section id="home">
+    <div id="main-carousel" class="carousel slide" data-ride="carousel">
+        <div class="carousel-inner">
+            <div class="item active text-center"
+                 style="background-image: url('images/slider/slide2.jpg'); height: 535px;">
+                <div class="carousel-caption">
+                    <h2 class="heading animated bounceInDown">ALTOR</h2>
+                    <p class="animated bounceInUp">Manage your life</p>
+                    <% if (!user) { %>
+                    <p class="animated bounceInUp">
+                        You are not signed it!
+                    </p>
+                    <p class="animated bounceInUp">
+                        <a href="/client-sign-up" class="btn btn-default slider-btn animated bounceInUp" role="button">Client
+                            Sign Up</a>
+                        <a href="/business-sign-up" class="btn btn-default slider-btn animated bounceInUp"
+                           role="button">Business Sign Up</a>
+                    </p>
+                    <p class="animated bounceInUp">
+                        OR:
+                    </p>
+                    <p class="animated bounceInUp">
+                        <a href='/login' class="btn btn-default slider-btn animated bounceInUp" role="button">Log in</a>
+                    </p>
+                    <% } else if (user) { %>
+                    <p class="text-lead animated bounceInUp">
+                        Welcome back, <%= user.getFullName() %>!
+                    </p>
+                    <a class="btn btn-default slider-btn animated fadeIn" href="#searchBusiness">Get Started</a>
+                    <% } %>
                 </div>
+            </div>
+        </div><!--/.carousel-inner-->
+    </div>
+</section>
+<!--Appointments table-->
+<% if (user && user.role == 'client') { %>
+<section id="searchBusiness">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 col-md-offset-3 text-center">
+                <h3 class="title-two">Search businesses</h3>
+                <form action="/searchResults" method="get">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Search" name="srchItem" id="srchItem">
+                        <div class="input-group-btn">
+                            <button class="btn btn-default" type="submit">
+                                <i class="glyphicon glyphicon-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
-</div>
-
-<!--Appointments table-->
- <% if (user && user.role == 'client') { %>
-<section id ="appTable">
-<div class="container">
-    <div class="row">
-
-        <% if (user.appointments.length > 0){ %>
-        <div class="text-center">
-            <h1 class="title-one">Your upcoming appointments</h1>
+</section>
+<section id="appTable">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+            <% if (user.appointments.length > 0){ %>
+            <div class="text-center">
+                <h1 class="title-two">Your upcoming appointments</h1>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>Branch name</th>
+                        <th>Date & Time</th>
+                        <th>Service</th>
+                        <th>More actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <% var i = 0 %>
+                    <% user.appointments.forEach(function(app){ %>
+                    <tr id="cancel_row_<%= i %>">
+                        <td><%= app.branch_name %></td>
+                        <td><%= moment(app.date_and_time).format('dddd, MMMM Do YYYY, h:mm:ss a') %></td>
+                        <td><%= app.service.name %></td>
+                        <td>
+                            <button onclick="confirmCancel('/deleteAppointment?appToDel=<%= JSON.stringify(app) %>&userId=<%=user._id.toString()%>',<%= i %>)"
+                                    type="button" class="btn btn-danger">Cancel Appointment
+                            </button>
+                            <br/>
+                            <button style="margin-top: 10px"
+                                    onclick="confirmReplacment('/appOfferedFoReplacement?offeredApp=<%= JSON.stringify(app) %>&clientId=<%= user._id.toString() %>,'<%= i %>)"
+                                    type="button" class="btn btn-warning">Switch Appointment
+                            </button>
+                        </td>
+                    </tr>
+                    <% i++ %>
+                    <% }); %>
+                    </tbody>
+                </table>
+            </div>
+            </div>
+            <!--Appointments table-->
+            <% } else { %>
+            <div class="text-center">
+                <h1 class="title-one">No upcoming appointments. Schedule one now!</h1>
+            </div>
+            <% } %>
         </div>
-        <div class="table-responsive">
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Branch name</th>
-                    <th>Date & Time</th>
-                    <th>Service</th>
-                    <th>More actions</th>
-                </tr>
-            </thead>
-            <tbody>
-            <% var i = 0%>
-                <% user.appointments.forEach(function(app){ %>
-                <tr id="cancel_row_<%=i%>">
-                    <td><%= app.branch_name %></td>
-                    <td><%= moment(app.date_and_time).format( 'dddd, MMMM Do YYYY, h:mm:ss a') %></td>
-                    <td><%= app.service.name %></td>
-                    <td><button  onclick="confirmCancel('/deleteAppointment?appToDel=<%= JSON.stringify(app)%>&userId=<%=user._id.toString()%>',<%=i%>)" type="button" class="btn btn-danger">Cancel Appointment</button></br><button style="margin-top: 10px"  onclick="confirmReplacment('/appOfferedFoReplacement?offeredApp=<%= JSON.stringify(app)%>&clientId=<%= user._id.toString()%>',<%=i%>)" type="button" class="btn btn-warning">Switch Appointment</button></td>
-                </tr>
-            <%i++%>
-                <% }); %>
-            </tbody>
-        </table>
-        </div>
-        </span>
-        <!--Appointments table-->
-        <% } else {%>
-        <div class="text-center">
-            <h1 class="title-one">No upcoming appointments. Schedule one now!</h1>
-        </div>
-        <% } %>
     </div>
-</div>
 </section>
 <% } %>
 
@@ -105,56 +150,69 @@
 <!--replace table -->
 
 <% if (user && user.role == 'client') { %>
-<section id="replace"></section>
-<div class="container">
-    <div class="row">
-
-        <% if (user.waiting_for_confirim.length > 0){ %>
-        <div class="text-center">
-            <h1 class="title-one">Interchangeable appointments that waiting for approval</h1>
+<section id="replace">
+    <div class="container">
+        <div class="row">
+            <% if (user.waiting_for_confirim.length > 0){ %>
+            <div class="text-center">
+                <h1 class="title-one">Interchangeable appointments that waiting for approval</h1>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>Branch name</th>
+                        <th> Date & Time</th>
+                        <th>Service</th>
+                        <th>Approve</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <% var i = 0 %>
+                    <% user.waiting_for_confirim.forEach(function(apps){ %>
+                    <tr id="approve_row_<%= i %>">
+                        <td><%= apps.newApp.branch_name %></td>
+                        <td>
+                            Current: <%= moment(apps.oldApp.date_and_time).format('dddd, MMMM Do YYYY, h:mm:ss a') %> </br>
+                            Suggested: <%= moment(apps.newApp.date_and_time).format('dddd, MMMM Do YYYY, h:mm:ss a') %></td>
+                        <td><%= apps.oldApp.service.name %></td>
+                        <!--<td>Suggested: <%= moment(apps.newApp.date_and_time).format('dddd, MMMM Do YYYY, h:mm:ss a') %></td>-->
+                        <td>
+                            <button onclick="switchApps('<%= JSON.stringify(apps) %>')" type="button"
+                                    class="btn btn-success">Approve replacement
+                            </button>
+                        </td>
+                    </tr>
+                    <% i++ %>
+                    <% }); %>
+                    </tbody>
+                </table>
+            </div>
+            <!--Appointments table-->
+            <% } else { %>
+            <div class="text-center">
+                <h1 class="title-one">You have no replacement offers</h1>
+            </div>
+            <% } %>
         </div>
-        <div class="table-responsive">
-        <table class="table table-striped">
-            <thead>
-            <tr>
-                <th>Branch name</th>
-                <th> Date & Time</th>
-                <th>Service</th>
-                <th>Approve</th>
-            </tr>
-            </thead>
-            <tbody>
-            <% var i = 0%>
-            <% user.waiting_for_confirim.forEach(function(apps){ %>
-            <tr id="approve_row_<%=i%>">
-                <td><%= apps.newApp.branch_name%></td>
-                <td>Current: <%= moment(apps.oldApp.date_and_time).format( 'dddd, MMMM Do YYYY, h:mm:ss a') %> </br>Suggested: <%= moment(apps.newApp.date_and_time).format( 'dddd, MMMM Do YYYY, h:mm:ss a') %></td>
-                <td><%= apps.oldApp.service.name %></td>
-                <!--<td>Suggested: <%= moment(apps.newApp.date_and_time).format( 'dddd, MMMM Do YYYY, h:mm:ss a') %></td>-->
-                <td><button  onclick="switchApps('<%= JSON.stringify(apps)%>')" type="button" class="btn btn-success">Approve replacement</button></td>
-            </tr>
-            <%i++%>
-            <% }); %>
-            </tbody>
-        </table>
-        </div>
-        </span>
-        <!--Appointments table-->
-        <% } else {%>
-        <div class="text-center">
-            <h1 class="title-one">You have no replacement offers</h1>
-        </div>
-        <% } %>
     </div>
-</div>
+</section>
+<!-- User is manager -->
+<% } else if (user && user.role == 'manager') { %>
+<section id="managerIndexSection">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <p>You are a manager!</p>
+            </div>
+        </div>
+    </div>
 </section>
 <% } %>
 
 
-
-
 <!--!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!-->
-<div class="modal fade" id="confCancel" >
+<div class="modal fade" id="confCancel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -170,14 +228,16 @@
             <div class="modal-footer">
                 <div class="text-center"></div>
                 <div id="loader" class="loader" style="display: none"></div>
-                <button id="cancel" type="button" onclick="ajaxRequestForCancel()" class="btn btn-primary">Cancel Appointment</button>
+                <button id="cancel" type="button" onclick="ajaxRequestForCancel()" class="btn btn-primary">Cancel
+                    Appointment
+                </button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
 </div>
 
-<div class="modal fade" id="confReplacment" >
+<div class="modal fade" id="confReplacment">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -193,7 +253,9 @@
             <div class="modal-footer">
                 <div class="text-center"></div>
                 <div id="loader2" class="loader" style="display: none"></div>
-                <button id="Confirm" type="button" onclick="ajaxRequestForReplacmentOffer()" class="btn btn-primary">Confirm offer to replacement</button>
+                <button id="Confirm" type="button" onclick="ajaxRequestForReplacmentOffer()" class="btn btn-primary">
+                    Confirm offer to replacement
+                </button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
         </div>
@@ -201,7 +263,7 @@
 </div>
 
 
-<div class="modal fade" id="successCancel" >
+<div class="modal fade" id="successCancel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -218,14 +280,12 @@
 </div>
 
 
-
-<div class="modal fade" id="switchAppApproved" >
+<div class="modal fade" id="switchAppApproved">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">The appointment was successfully replaced!</h5>
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <span aria-hidden="true">&times;</span>
             </div>
             <div class="modal-body">
                 <a type="button" class="btn btn-secondary" href="/index">Close</a>
@@ -235,7 +295,7 @@
 </div>
 
 
-<div class="modal fade" id="successOffer" >
+<div class="modal fade" id="successOffer">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -252,7 +312,7 @@
 </div>
 
 <% if (user && isNewApp == 'true') { %>
-<div class="modal fade" id="successSetApp" >
+<div class="modal fade" id="successSetApp">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -267,7 +327,6 @@
                 <p><%= day %>, <%= month %>  <%= monthDay %>  <%= year %> </p>
                 <p>at</p>
                 <p><%= hour %>:<%= min %></p>
-
             </div>
             <div class="modal-footer">
                 <div class="text-center"></div>
@@ -277,8 +336,6 @@
     </div>
 </div>
 <% } %>
-
-
 <% if (user && isNewApp == 'true') { %>
 <script>
     $('#successSetApp').modal('show');
