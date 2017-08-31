@@ -16,7 +16,7 @@ function createBranchFromNetwork(network, manager) {
     createdBranch.address.city = network.address.city;
     createdBranch.address.street = network.address.street;
     createdBranch.address.number = network.address.number;
-    createdBranch.picture_path = network.picture_path;
+    createdBranch.pictureB64 = network.pictureB64;
 
     return createdBranch;
 }
@@ -91,7 +91,7 @@ module.exports = function (passport)
             passReqToCallback: true // allows us to pass in the req from our route (lets us check if a user is logged in or not)
         },
         function (req, email, password, done)
-        {
+		{
             if (email)
                 email = email.toLowerCase(); // Use lower-case e-mails to avoid case-sensitive e-mail matching
 
@@ -137,7 +137,8 @@ module.exports = function (passport)
                             network.address.country = req.body.country;
                             network.address.city = req.body.city;
                             network.address.street = req.body.street;
-                            network.address.number = req.body.streetNumber;
+							network.address.number = req.body.streetNumber;
+							network.pictureB64 = req.files[0].b64;
                             var branch = createBranchFromNetwork(network, newManager);
                             branch.save();
                             network.branches.push(branch.id);

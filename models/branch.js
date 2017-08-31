@@ -6,7 +6,7 @@ var branchSchema = mongoose.Schema(
 		managers: [{ type: [mongoose.Schema.Types.ObjectId], ref: "User", required: true }],
 		email: { type: String, required: true, trim: true },
 		phone: { type: String },
-		picture_path: { type: String },
+		pictureB64: { type: String },
 		address: {
 			country: String,
 			city: String,

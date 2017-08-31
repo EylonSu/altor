@@ -9,7 +9,7 @@
             <div class="alert alert-danger"><%= message %></div>
             <% } %>
             <!-- SignUp FORM -->
-            <form action="/business-sign-up" id="businessSignUpForm" method="post">
+            <form action="/business-sign-up" id="businessSignUpForm" method="post" enctype="multipart/form-data">
                 <div class="form-group">
                     <label>Business Name</label>
                     <input type="text" class="form-control" name="name" required>
@@ -28,7 +28,7 @@
                 </div>
                 <div class="form-group">
                     <label>Enter logo-picture path</label>
-                    <input type="text" class="form-control" name="picturePath">
+                    <input type="file" class="form-control" name="pictureFile" >
                 </div>
                 <div class="form-group">
                     <label>Phone</label>
