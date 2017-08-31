@@ -37,12 +37,12 @@
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                     <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="/"><h1><img src="images/logo.png" height="50" alt="logo"></h1></a>
+                <a class="navbar-brand" href="/"><h1><img src="images/logonew.png" height="50" alt="logo"></h1></a>
             </div>
             <div class="collapse navbar-collapse">
                 <% if (user) { %>
                 <ul class="nav navbar-nav navbar-right">
-                    <li class="scroll"><a href='/index'>Hello <%= user.getFullName() %></a></li>
+                    <li class="scroll"><a href='/settings'>Hello <%= user.getFullName() %></a></li>
                     <% if (user && user.role == 'client') { %>
                     <li class="scroll" id="messageCount"><a onclick="openMessagesModal()"><%if(count>0){%><%=count%><%}else{%>No<%}%> incoming messages</a></li>
                     <li class="scroll"><a href='/index#replace'>Replacement offers </a></li>

@@ -4,7 +4,9 @@
 <div class="container">
     <div class="row">
         <div class="col-md-6">
-            <h1 class="title-one"><span class="fa fa-sign-in"></span>Business sign up</h1>
+            <div class="text-center">
+                <h1 class="title-one"><span class="fa fa-sign-in"></span>Business sign up</h1>
+            </div>
             <% if (message.length > 0) { %>
             <div class="alert alert-danger"><%= message %></div>
             <% } %>
@@ -31,7 +33,7 @@
                     <input type="text" class="form-control" name="category" required>
                 </div>
                 <div class="form-group">
-                    <label>Enter logo-picture path</label>
+                    <label>Upload branch's logo</label>
                     <input type="file" class="form-control" name="pictureFile" >
                 </div>
                 <div class="form-group">
