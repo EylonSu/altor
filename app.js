@@ -39,6 +39,8 @@ var api = require('./routes/api')(router);
 var messages = require('./routes/messages')(router);
 var manageBusiness = require('./routes/manage-business')(router);
 var businessQueueStatus = require('./routes/business-queue-status')(router);
+var settings = require('./routes/settings')(router);
+
 /// ====================other routing==========================
 var routes = require('./routes/routes')(router);
 
