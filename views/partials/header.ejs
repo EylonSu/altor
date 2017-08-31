@@ -40,19 +40,26 @@
                 <a class="navbar-brand" href="/"><h1><img src="images/logo.png" height="50" alt="logo"></h1></a>
             </div>
             <div class="collapse navbar-collapse">
-                <ul class="nav navbar-nav navbar-right">
-                    <% if (user && user.role == 'manager') { %>
-                    <li class="scroll"><a href="/manage-business">Manage</a></li>
-                    <% } %>
-                </ul>
                 <% if (user) { %>
                 <ul class="nav navbar-nav navbar-right">
-                    <% if (user) { %>
+                    <li class="scroll"><a href='/index'>Hello <%= user.getFullName() %></a></li>
+                    <% if (user && user.role == 'client') { %>
                     <li class="scroll" id="messageCount"><a onclick="openMessagesModal()"><%if(count>0){%><%=count%><%}else{%>No<%}%> incoming messages</a></li>
                     <li class="scroll"><a href='/index#replace'>Replacement offers </a></li>
                     <li class="scroll"><a href='/index#appTable'>Upcoming Appointments</a></li>
                     <%}%>
-                    <li class="scroll"><a href='/index'>Hello <%= user.email.substring(0, user.email.indexOf("@")) %></a></li>
+                    <% if (user && user.role == 'manager') { %>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                               aria-expanded="false">Manage<span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li class="scroll"><a href="/business-queue-status">Queue Status</a></li>
+                                <li class="scroll"><a href="/assign-shifts">Assign Shifts</a></li>
+                                <li class="scroll"><a href="/manage-shifts">Manage Shift Prototypes</a></li>
+                                <li class="scroll"><a href="/manage-services">Manage Given Services</a></li>
+                            </ul>
+                        </li>
+                    <% } %>
                     <li class="scroll"><a href='/logout'>Log out</a></li>
                 </ul>
                 <% } else { %>
@@ -65,8 +72,6 @@
                             <li class="scroll"><a href="/business-sign-up">Business Sign Up</a></li>
                         </ul>
                     </li>
-                </ul>
-                <ul class="nav navbar-nav navbar-right">
                     <li class="scroll"><a href='/login'>Log in</a></li>
                 </ul>
                 <% } %>

@@ -150,7 +150,7 @@ module.exports = function (passport)
                                     return done(err);
 
                                 network.managers.push(newManager.id);
-                                console.log(newManager.name + "was saved");
+                                console.log(newManager.first_name + " was saved");
                                 return done(null, newManager);
                             });
                         }
