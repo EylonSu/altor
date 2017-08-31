@@ -22,7 +22,6 @@
     <![endif]-->
 </head>
 <% layout('boilerplate') %>
-
 <div class="container">
     <% if (wizardMode) { %>
     <div class="row">
@@ -186,6 +185,7 @@
                                        <th>Actions</th>
                                    </tr>
                                    </thead>
+                                   <tbody id="appointmentsTblBody"></tbody>
                                </table>
                             </div>
                         </div>
@@ -196,3 +196,47 @@
             </div>
     </div>
 </div>
+
+<!-- Send Messages Modal -->
+<div class="modal fade" id="sendMessagetoSpecificClientModal" tabindex="-1" role="dialog" aria-labelledby="sendMessageModal">
+    <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Send messages</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label>Enter the message:</label>
+                                <textarea id="text2sendToSpecifClient" class="form-control" rows="5"></textarea>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button onclick="sendSms()" class="btn btn-info" name="action" value="update">Send</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="modal fade" id="successfullySend" tabindex="-1" role="dialog" aria-labelledby="sendMessageModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">The message sent successfully</h4>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+        </form>
+    </div>
+</div>
+
