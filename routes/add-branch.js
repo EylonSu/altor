@@ -299,7 +299,8 @@ module.exports = function (router, passport) {
                         else {
                             res.render('pages/assign-shifts', {
                                 user: req.user,
-                                shifts: network.branches[0].default_shifts
+                                shifts: network.branches[0].default_shifts,
+                                wizardMode: req.query.wizardMode
                             });
                         }
                     });
@@ -317,7 +318,7 @@ module.exports = function (router, passport) {
                             messege: "אירעה תקלה במערכת. אנא נסה שנית"
                         });
                     }
-                    res.render('pages/assign-shifts', {user: req.user, shifts: network.branches[0].default_shifts});
+                    res.render('pages/assign-shifts', {user: req.user, shifts: network.branches[0].default_shifts, wizardMode: req.query.wizardMode});
                 });
         }]);
 
