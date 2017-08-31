@@ -153,6 +153,7 @@ module.exports = function (passport)
 
                                 network.managers.push(newManager.id);
                                 console.log(newManager.first_name + " was saved");
+                                req.session.wizardMode = true;
                                 return done(null, newManager);
                             });
                         }
