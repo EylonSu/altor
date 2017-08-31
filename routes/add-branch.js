@@ -32,7 +32,8 @@ module.exports = function (router, passport) {
                 res.render('pages/manage-services', {
                     title: 'Altor | Manage services',
                     user: req.user,
-                    services: network.branches[0].services
+                    services: network.branches[0].services,
+                    wizardMode: req.query.wizardMode
                 });
             });
     });
@@ -149,7 +150,7 @@ module.exports = function (router, passport) {
                         messege: "אירעה תקלה במערכת. אנא נסה שנית"
                     });
                 }
-                res.render('pages/manage-shifts', {user: req.user, shifts: network.branches[0].default_shifts});
+                res.render('pages/manage-shifts', {user: req.user, shifts: network.branches[0].default_shifts, wizardMode: req.query.wizardMode});
             });
     });
 
@@ -231,7 +232,7 @@ module.exports = function (router, passport) {
                         messege: "אירעה תקלה במערכת. אנא נסה שנית"
                     });
                 }
-                res.render('pages/assign-shifts', {user: req.user, shifts: network.branches[0].default_shifts});
+                res.render('pages/assign-shifts', {user: req.user, shifts: network.branches[0].default_shifts, wizardMode: req.query.wizardMode});
             });
     });
 

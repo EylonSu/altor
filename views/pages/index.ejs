@@ -79,6 +79,7 @@
         <div class="row">
             <div class="col-md-6 col-md-offset-3 text-center">
                 <h3 class="title-two">Search businesses</h3>
+                <p class="text-lead"><%= messege %></p>
                 <form action="/searchResults" method="get">
                     <div class="input-group">
                         <input type="text" class="form-control" placeholder="Search" name="srchItem" id="srchItem">
@@ -339,5 +340,14 @@
 <% if (user && isNewApp == 'true') { %>
 <script>
     $('#successSetApp').modal('show');
+</script>
+<% } else if (messege.length > 0) { %>
+<script>
+    $(document).ready(function () {
+        // Handler for .ready() called.
+        $('html, body').animate({
+            scrollTop: $('#searchBusiness').offset().top
+        }, 'slow');
+    });
 </script>
 <% } %>

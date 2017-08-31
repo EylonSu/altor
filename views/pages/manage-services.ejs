@@ -6,6 +6,23 @@
         <div class="col-md-12 text-center">
             <h1 class="title-one">Manage provided services</h1>
         </div>
+    </div>
+            <% if (wizardMode) { %>
+        <div class="row">
+        <div clas="col-md-6 col-md-offset-3 text-center">
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Wizard Mode</h3>
+                </div>
+                <div class="panel-body"><p>
+                        In this page you can manage the different services your business offers. <br />
+                        Click add service to start adding services.<br />
+                        When you're done adding services, continue to <a href="/manage-shifts?wizardMode=true">Create shift prototypes</a>
+                    </p></div>
+            </div>
+        </div>
+        </div>
+            <% } %>
         <div class="col-md-6 col-md-offset-3 text-center">
             <% if (services.length <= 0) {%>
             <p class="text-muted">You have yet to add any services!</p>
@@ -62,4 +79,13 @@
                 }
             }
         })});
+    $.urlParam = function(name){
+        var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+        if (results==null){
+            return null;
+        }
+        else{
+            return decodeURI(results[1]) || 0;
+        }
+    }
 </script>

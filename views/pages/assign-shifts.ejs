@@ -22,7 +22,24 @@
     <![endif]-->
 </head>
 <% layout('boilerplate') %>
+
 <div class="container">
+    <% if (wizardMode) { %>
+    <div class="row">
+        <div clas="col-md-6 col-md-offset-3 text-center">
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Wizard Mode</h3>
+                </div>
+                <div class="panel-body"><p>
+                        In this page you can assign the shifts you created to the relevant workday. <br />
+                        Click a date on the calendar, define the shift time and click ok.<br />
+                        You're all ready to start using <strong>ALTOR!</strong>
+                    </p></div>
+            </div>
+        </div>
+    </div>
+    <% } %>
     <div class="row">
         <div class="col-lg-12">
             <div id='calendar'></div>
@@ -179,5 +196,3 @@
             </div>
     </div>
 </div>
-
-
