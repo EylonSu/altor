@@ -104,4 +104,19 @@ module.exports = function (router)
 			);
 		}
 	});
+
+
+    router.get('/getWorkDayAppointments', function (req, res){
+
+    	var workdayId = req.query.workdayId;
+
+        Network.findOne({ '_id': req.user.networks_own[0] })
+               .populate('branches')
+               .exec(function (err, network)
+               {
+                   var branch = network.branches[0];
+				   var workDay = branch.FindWorkdayById(workdayId);
+				   res.send(workDay.appointments);
+			   });
+	});
 }

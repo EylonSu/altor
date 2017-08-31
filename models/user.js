@@ -20,5 +20,10 @@ userSchema.methods.generateHash = PassportUtils.generateHash;
 // checking if password is valid
 userSchema.methods.validPassword = PassportUtils.validPassword;
 
+// Get full name
+userSchema.methods.getFullName = function () {
+    return this.first_name + ' ' + this.last_name;
+};
+
 // create the model for users and expose it to our app
 module.exports = mongoose.model('User', userSchema);

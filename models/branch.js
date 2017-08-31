@@ -224,19 +224,26 @@ branchSchema.methods.GetOpenSpots = function(iServiceId, iMonth)
 	var res = [];
 	var service = this.GetServiceById(iServiceId);
 	var i = 0;
-
+	today = new Date();
 	this.workdays.forEach(function (iWorkday)
 	{
-		if (iWorkday.date.getFullYear() == iMonth.getFullYear() && iWorkday.date.getMonth() == iMonth.getMonth())
+		if (iWorkday.date.getFullYear() == iMonth.getFullYear() && iWorkday.date.getMonth() == iMonth.getMonth() &&
+			(iWorkday.date.getDate() >= today.getDate() || iWorkday.date.getMonth() > today.getMonth() || iWorkday.date.getFullYear() > today.getFullYear()  ))
 		{
 			var temp = [];
-
 			iWorkday.shifts.forEach(function (iShift)
 			{
 				var shiftOpenSpots = iShift.shift.GetOpenSpots(service);
-				if (shiftOpenSpots.length > 0)
+				if (iWorkday.date.getFullYear() == today.getFullYear() && iWorkday.date.getMonth() == today.getMonth() && iWorkday.date.getDate() == today.getDate() )// if the workdy is today
 				{
-					temp.push(shiftOpenSpots);
+                   var relevantShiftOpenSpots =  shiftOpenSpots.filter(function (date)
+                    {
+						return ((date.getHours() > today.getHours()) || (date.getHours() == today.getHours() && date.getMinutes() >= today.getMinutes()))
+                    })
+				}
+				if (relevantShiftOpenSpots.length > 0)
+				{
+					temp.push(relevantShiftOpenSpots);
 				}
 			});
 			if (temp.length > 0)

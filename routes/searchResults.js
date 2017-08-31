@@ -37,7 +37,7 @@ module.exports = function (router)
                 searchResults.sort(function (a, b)
                 {
                     return a.howMuchSimilar < b.howMuchSimilar;
-                })
+                });
 
                 res.render('pages/searchResults', {
                     title: 'Search results for "' + query + '"',

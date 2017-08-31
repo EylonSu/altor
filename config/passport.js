@@ -126,6 +126,8 @@ module.exports = function (passport)
                             var newManager = new Manager();
                             newManager.role = 'manager';
                             newManager.email = email;
+                            newManager.first_name = req.body.firstName;
+                            newManager.last_name = req.body.lastName;
                             newManager.password = newManager.generateHash(password);
                             newManager.joinDate = new Date();
                             newManager.phone = req.body.phone;
@@ -149,7 +151,7 @@ module.exports = function (passport)
                                     return done(err);
 
                                 network.managers.push(newManager.id);
-                                console.log(newManager.name + "was saved");
+                                console.log(newManager.first_name + " was saved");
                                 return done(null, newManager);
                             });
                         }

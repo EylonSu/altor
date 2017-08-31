@@ -40,7 +40,7 @@ module.exports = function (router, passport)
 		next();
 	},
 		passport.authenticate('manager-signup', {
-			successRedirect: '/manage-services', // redirect to the manage services
+			successRedirect: '/manage-services?wizardMode=true', // redirect to the manage services
 			failureRedirect: '/business-sign-up', // redirect back to the signup page if there is an error
 			failureFlash: true // allow flash messages
 		})

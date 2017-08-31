@@ -46,9 +46,6 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="dropdown">
-                                        <!--<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">-->
-                                        <!--Pick a time-->
-                                        <!--<span class="caret"></span>-->
                                         </button>
                                         <select id="openSpots" onchange="setTime()" class="form-control"></select>
                                     </div>
@@ -210,7 +207,7 @@
                     <h3 class="heading animated bounceInDown">Contact information:</h3>
                     <p class="heading animated bounceInDown">Phone: <%= branch.phone %></p>
                     <p class="heading animated bounceInDown">Email: <%= branch.email %></p>
-                    <p class="heading animated bounceInDown" id="address">Address: <%= address %> <button class=" btn btn-primarye glyphicon glyphicon-map-marker" type="button" onclick="showMap()">Show on map</button></p>
+                    <p class="heading animated bounceInDown"> Address:<span id="address"> <%= address %> </span><button class=" btn btn-primarye glyphicon glyphicon-map-marker" type="button" onclick="showMap()">Show on map</button></p>
 
                     <!--</div>-->
                     <!--<div class="col-lg-6">-->

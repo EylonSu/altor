@@ -6,6 +6,7 @@
 var cancelurl = "";
 var replacelurl = "";
 var trID ;
+
 function  confirmCancel(url, id)
 {
     $('#confCancel').modal('show');

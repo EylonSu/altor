@@ -22,7 +22,24 @@
     <![endif]-->
 </head>
 <% layout('boilerplate') %>
+
 <div class="container">
+    <% if (wizardMode) { %>
+    <div class="row">
+        <div clas="col-md-6 col-md-offset-3 text-center">
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Wizard Mode</h3>
+                </div>
+                <div class="panel-body"><p>
+                        In this page you can assign the shifts you created to the relevant workday. <br />
+                        Click a date on the calendar, define the shift time and click ok.<br />
+                        You're all ready to start using <strong>ALTOR!</strong>
+                    </p></div>
+            </div>
+        </div>
+    </div>
+    <% } %>
     <div class="row">
         <div class="col-lg-12">
             <div id='calendar'></div>
@@ -100,7 +117,8 @@
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-info" name="action" value="update">Update shift</button>
                     <button type="submit" class="btn btn-warning" name="action" value="delete">Delete shift</button>
-                    <button type="button" class="btn btn-default" data-dismiss="modal" onclick="openMessageModal()">Send message to shift's customers</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal" onclick="openMessageModal()">Send message</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal" onclick="openAppsModal()">Today appointments</button>
                 </div>
             </div>
         </form>
@@ -145,3 +163,36 @@
     </div>
 </div>
 
+
+<!-- Send Messages Modal -->
+<div class="modal fade" id="showAppsModal" tabindex="-1" role="dialog" aria-labelledby="sendMessageModal">
+    <div class="modal-dialog" role="document">
+            <input type="hidden" id="workdayId" name="workdayId" value="@" />
+            <input type="hidden" id="shiftId" name="shiftId" value="@" />
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">WorkDay Appointments</h4>
+                </div>
+                <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                               <table class="table table-bordered">
+                                   <thead>
+                                   <tr>
+                                       <th>Client</th>
+                                       <th>Time</th>
+                                       <th>Service</th>
+                                       <th>Actions</th>
+                                   </tr>
+                                   </thead>
+                               </table>
+                            </div>
+                        </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">close</button>
+                </div>
+            </div>
+    </div>
+</div>

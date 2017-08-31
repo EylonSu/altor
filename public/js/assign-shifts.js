@@ -10,6 +10,24 @@ function openMessageModal()
 	$('#sendMessageModal').modal('show');
 }
 
+function openAppsModal()
+{
+    var workdayId = document.forms["shiftEditionForm"]["workdayId"].value;
+    $.ajax({
+        type: "GET",
+        url: '/getWorkDayAppointments',
+        data:{ workdayId : document.forms["shiftEditionForm"]["workdayId"].value },
+        success: function (data, status)
+        {
+            $('#showAppsModal').modal('show');
+        },
+        error:function (err)
+        {
+
+        }
+    });
+
+}
 $(document).ready(function ()
 {
 	// page is now ready, initialize the calendar...

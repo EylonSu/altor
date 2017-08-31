@@ -129,7 +129,7 @@ module.exports = function (router, passport)
 		Branch.findById(branchId, function (err, branch)
 		{
 			var events = getScheduledEvents(branch, serviceId, month);
-			res.send(events); //don't forget to reset the timezone to jerusalem...
+			res.send(events);
 		})
 	});
 
