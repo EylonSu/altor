@@ -1,5 +1,6 @@
 var LocalStrategy = require('passport-local').Strategy;
 var PassportUtils = require('./passport-utils');
+var Request = require('request');
 
 var User = require('../models/user');
 var Manager = require('../models/manager');
@@ -221,7 +222,8 @@ module.exports = function (passport)
                             {
                                 if (err)
                                     return done(err);
-
+								var msg = "Welcome to ALTOR, " + newClient.first_name + '!';
+								sendSms(newClient.phone, msg, req.headers.host);
                                 return done(null, newClient);
                             });
                         }
@@ -233,5 +235,31 @@ module.exports = function (passport)
                     return done(null, req.user);
                 }
             });
-        }));
+		}));
+
+	function sendSms(iPhone, iText2send, iHost)
+	{
+		Request(
+			{
+				method: 'POST',
+				url: '/sendSMS',
+				baseUrl: 'http://' + iHost,
+				form: {
+					target: iPhone,
+					message: iText2send
+				}
+			},
+			function (error, response, body)
+			{
+				if (error)
+				{
+					console.log(error);
+				}
+				if (!error && response.statusCode == 200)
+				{
+					console.log(body)
+				}
+			}
+		);
+	}
 };
