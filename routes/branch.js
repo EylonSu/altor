@@ -256,8 +256,6 @@ module.exports = function (router, passport)
                 {
                     res.send("yheeee");
                 }
-
-
             });
         });
 

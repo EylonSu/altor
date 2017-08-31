@@ -1,10 +1,11 @@
 module.exports = function (router, passport)
 {
-	router.get('/getSMS', function (req, res, next)
+	router.get('/seetings', function (req, res, next)
 	{
-		var a = {};
-		a.phone = "0525953639";
-		a.message = "helllo mannn";
-		res.json(a);
+		res.render('pages/index', {
+			title: 'Altor | Error!',
+			user: req.user,
+			messege: "אירעה תקלה במערכת. אנא נסה שנית"
+		});
 	});
 };
