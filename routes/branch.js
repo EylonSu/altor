@@ -142,11 +142,10 @@ module.exports = function (router, passport)
 	router.get('/deleteAppointment', function (req, res)
 	{
 		var appToDel = JSON.parse(req.query.appToDel);
-
+		var userId = req.query.userId;
 		Branch.findById(appToDel.branch, function (err, branch)
 		{
-
-			var newBranch = branch.delAppointment(appToDel);
+			var newBranch = branch.delAppointment(appToDel,userId);
 			if (newBranch)
 			{
 				branch = newBranch;
@@ -158,11 +157,8 @@ module.exports = function (router, passport)
 						console.log(err);
 					} else
 					{
-
 						Client.findById(req.user._id.toString(), function (err, client)
 						{
-
-							//var user =  req.user;
 							var j;
 							for (j = 0; j < client.appointments.length; j++)
 							{
@@ -173,15 +169,11 @@ module.exports = function (router, passport)
 									break;
 								}
 							}
-
-							//client.appointments[j].markModified('service');
-							//client = user;
 							client.save(function (err)
 							{
 								if (err)
 								{
-									//TODO: because the branch is allready updated we need to delete the appointment from the branch... fuck it
-
+									throw ("error");
 						            console.log(err);
 						        }else{
                                     res.send("yhaaa");

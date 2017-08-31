@@ -3,14 +3,13 @@
 var mServiceId;
 var mAvailbleEvents;
 var mChosenDate;
-var mCurrentMonth;
-var mUpdated = false;
 var mBranchId;
 var mChoosenDate;
 var mEventAfterRenderHelper = true;
 var mCalendar;
 var mOfferedApps;
 var appToSwitch;
+var isMapInitialized = false;
 $.fn.bindFirst = function (name, fn)
 {
 	this.on(name, fn);
@@ -26,6 +25,16 @@ $(document).ready(function ()
 {
 	mBranchId = getUrlParameter('branch');
 	mCalendar = $('#calendar');
+    $("#map").on("shown.bs.modal", function () {
+        var currentCenter = map.getCenter();  // Get current center before resizing
+        google.maps.event.trigger(map, "resize");
+        map.setCenter(currentCenter);
+    });
+    var adr = $("#address").text();
+    if(!isMapInitialized){
+        initializeMap(adr);
+        isMapInitialized = true;
+    }
 });
 
 function switchRequest(index)
@@ -234,7 +243,6 @@ function make2chars(iNum)
 function getOpenSpotsPerDate(iDate)
 {
 	var res;
-	//mCalendar.fullCalendar('refetchEvents');
 	mAvailbleEvents = mCalendar.fullCalendar('clientEvents');
 
 	mAvailbleEvents.forEach(function myfunction(iEvent)
@@ -273,8 +281,8 @@ var getUrlParameter = function getUrlParameter(sParam)
 function  showMap()
 {
     $('#map').modal('show');
-    var adr = $("#address").text();
-    initializeMap(adr);
+
+
 }
 
 function showApp()

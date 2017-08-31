@@ -102,16 +102,29 @@ workDaySchema.methods.AddAppintmnt = function (appintmnt)
 	return this;
 };
 
-workDaySchema.methods.delAppintmnt = function (appToDel)
+workDaySchema.methods.delAppintmnt = function (appToDel, userId)
 {
+	this.delAppointmentFromAppArr(appToDel, userId);
 	var relevantShiftIndex = this.getShiftIndexByTime(new Date(appToDel.date_and_time));
 	var res = this.shifts[relevantShiftIndex].shift.delFromAvailbleArrs(appToDel);
 	this.shifts[relevantShiftIndex].shift = res.shift;
-	//this.delAppFromAppList(appToDel)
 
 	return this;
 };
 
+workDaySchema.methods.delAppointmentFromAppArr = function (appToDel, userId)
+{
+    for(var i=0; i < this.appointments.length; i++ ){
+        if ((new Date(this.appointments[i].date_and_time).getTime() == new Date(appToDel.date_and_time).getTime())
+            &&   (this.appointments[i].service._id.toString() == appToDel.service._id.toString())
+            && (this.appointments[i].client.toString() ==  userId)){
+
+            this.appointments.splice(i, 1);
+            break;
+        }
+    }
+
+}
 workDaySchema.methods.offerAppForReplacment = function (offeredApp, clientId)
 {
 	for(var i=0; i < this.appointments.length; i++ ){

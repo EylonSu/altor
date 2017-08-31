@@ -82,7 +82,7 @@
                     <td><%= app.branch_name %></td>
                     <td><%= moment(app.date_and_time).format( 'dddd, MMMM Do YYYY, h:mm:ss a') %></td>
                     <td><%= app.service.name %></td>
-                    <td><button  onclick="confirmCancel('/deleteAppointment?appToDel=<%= JSON.stringify(app)%>',<%=i%>)" type="button" class="btn btn-danger">Cancel Appointment</button></br><button style="margin-top: 10px"  onclick="confirmReplacment('/appOfferedFoReplacement?offeredApp=<%= JSON.stringify(app)%>&clientId=<%= user._id.toString()%>',<%=i%>)" type="button" class="btn btn-warning">Switch Appointment</button></td>
+                    <td><button  onclick="confirmCancel('/deleteAppointment?appToDel=<%= JSON.stringify(app)%>&userId=<%=user._id.toString()%>',<%=i%>)" type="button" class="btn btn-danger">Cancel Appointment</button></br><button style="margin-top: 10px"  onclick="confirmReplacment('/appOfferedFoReplacement?offeredApp=<%= JSON.stringify(app)%>&clientId=<%= user._id.toString()%>',<%=i%>)" type="button" class="btn btn-warning">Switch Appointment</button></td>
                 </tr>
             <%i++%>
                 <% }); %>

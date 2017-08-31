@@ -164,12 +164,12 @@ branchSchema.methods.AddAppintmnt = function (date, appintmnt)
 		return "no such workday";
 };
 
-branchSchema.methods.delAppointment = function (appToDel)
+branchSchema.methods.delAppointment = function (appToDel,userId)
 {
 	var workday = this.findWorkday(new Date(appToDel.date_and_time));
 	if (workday)
 	{
-		workday = workday.delAppintmnt(appToDel);
+		workday = workday.delAppintmnt(appToDel,userId);
 		return this;
 	}
 	else
