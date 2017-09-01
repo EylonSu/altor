@@ -10,14 +10,16 @@
             <h2 class="title-two">Currently Serving:</h2>
         </div>
             <% if (currentAppointments.length > 0) { %>
+        <div class="col-md-12">
             <% for (var i = 0; i < currentAppointments.length; i++) { %>
             <div class="well well-lg">
                 <p><strong><%= currentAppointments[i].customerName %></strong> <br> <%= currentAppointments[i].startTime %>
                     -<%= currentAppointments[i].endTime %></p>
             </div>
-            <% }
-            }
-            else { %>
+            <% } %>
+        </div>
+        <% } %>
+           <% else { %>
             <p>You don't have any appointments right now! </p>
             <% } %>
         </div>
