@@ -5,18 +5,16 @@
             <h1 class="title-one">Queue status</h1>
         </div>
     </div>
-    <div class="row">
+    <div class="row text-center">
         <div class="col-md-12 text-center">
             <h2 class="title-two">Currently Serving:</h2>
         </div>
             <% if (currentAppointments.length > 0) { %>
             <% for (var i = 0; i < currentAppointments.length; i++) { %>
-        <div class="col-md-4">
             <div class="well well-lg">
                 <p><strong><%= currentAppointments[i].customerName %></strong> <br> <%= currentAppointments[i].startTime %>
                     -<%= currentAppointments[i].endTime %></p>
             </div>
-        </div>
             <% }
             }
             else { %>
