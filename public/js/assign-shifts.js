@@ -72,12 +72,12 @@ function openAppsModal()
         	var index = 0;
         	//time service actions
         	$.each(data || [], function(index, appointment) {
-        		var last_name= appointment.client.last_name;
-        		var first_name =appointment.client.first_name;
+        		var last_name = appointment.client.last_name;
+        		var first_name = appointment.client.first_name;
                 appointment.client = appointment.client._id;
                 var child = '<tr><td>' +
+                    first_name + ' ' +
 					last_name +
-					first_name +
 					'</td> <td>'+
 					moment(appointment.date_and_time).format('hh:mm') +
 					'</td><td>' +
