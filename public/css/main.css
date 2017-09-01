@@ -358,7 +358,7 @@ h1, h2, h3, h4, h5, h6 {
 	color: #f6f6f6;
 	display: inline-block;
 	font-family: roboto;
-	font-size: 55px;
+	font-size: 80px;
 	font-weight: 800;
 	margin-bottom: 40px;
 	text-shadow: none;
@@ -372,8 +372,8 @@ h1, h2, h3, h4, h5, h6 {
 #main-carousel .carousel-inner p {
 	color: #f6f6f6;
 	font-family: roboto;
-	font-size: 24px;
-	font-weight: 300;
+	font-size: 36px;
+	font-weight: bold;
 	margin-top: 0;
 	text-shadow:none;
 }
@@ -1558,4 +1558,8 @@ h1, h2, h3, h4, h5, h6 {
 .clear {
 	clear: both;
 	height: 60px;
+}
+
+.heading {
+	text-shadow: 0 1px 1px black !important;
 }
