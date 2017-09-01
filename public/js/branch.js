@@ -212,6 +212,10 @@ function initCalendar()
 				openSpotsJQ.append(listItem);
 			});
 
+
+			var selectedTime = openSpotsJQ.find(":selected").text()
+			$('#setAppintmntForm').find('#Time').attr('value', selectedTime);
+
 			$('#setAppintmnt').modal('show');
 		}
 	});
