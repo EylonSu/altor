@@ -31,6 +31,7 @@
                     <h3 class="panel-title">Business creation wizard</h3>
                 </div>
                 <div class="panel-body"><p>
+                        After you finished setting up your business' services and shift prototypes, it's time to let your customers see that you're available! <br/>
                         In this page you can assign the shifts you created to the relevant workday. <br />
                         Click a date on the calendar, define the shift time and click ok.<br />
                         You're all ready to start using <strong>ALTOR!</strong>
@@ -62,7 +63,6 @@
                         <% shifts.forEach(function(shift){ %>
                         <option value="<%= shift.id %>"><%= shift.title %></option>
                         <% }); %>
-                        <option value="custom">Custom shift</option>
                     </select>
                 </div>
                     <!-- TODO: Validate shift hours are valid -->
