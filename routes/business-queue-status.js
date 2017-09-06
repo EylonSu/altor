@@ -91,7 +91,7 @@ module.exports = function (router, passport)
                     });
                 }
                 var sortedWorkdays = sortWorkdays(network.branches[0].workdays);
-                res.render('pages/business-queue-status', { title: 'Altor', user: req.user, currentAppointments: getCurrentAppointments(sortedWorkdays), upcomingAppointments:getUpcomingAppointments(sortedWorkdays), moment: moment});
+                res.render('pages/business-queue-status', { title: 'Altor', user: req.user, currentAppointments: getCurrentAppointments(sortedWorkdays), upcomingAppointments:getUpcomingAppointments(sortedWorkdays), moment: moment, branch: network.branches[0]});
             });
 	});
 };
